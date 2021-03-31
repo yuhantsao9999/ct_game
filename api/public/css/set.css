@@ -1,0 +1,276 @@
+body {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.header-wapper {
+    display: block;
+    width: 100%;
+    box-shadow: 0 4px 10px 4px rgb(19 35 47 / 30%);
+    border-bottom-color: rgb(219, 219, 219);
+    border-bottom-style: solid;
+    border-bottom-width: 1.5px;
+    background-color: white;
+}
+
+.logo {
+    padding-left: 10%;
+    padding-top: 0.3%;
+    /* padding-bottom: 0.25%; */
+}
+
+.content-wapper {
+    background-image: url('https://compthinking.csie.ntnu.edu.tw/wp-content/uploads/2020/12/Bebras-2_bg.png');
+    display: flex;
+    background-position: center top;
+    margin: auto;
+    height: 85vh;
+    padding-top: 3%;
+}
+.setting-wapper {
+    width: 40%;
+    margin-left: 5%;
+    margin-right: 5%;
+}
+
+.title {
+    width: 100%;
+}
+
+.footer-wapper {
+    width: 100%;
+    box-shadow: 0 -5px 6px rgb(19 35 47 / 30%);
+    border-top-color: rgb(219, 219, 219);
+    border-top-style: solid;
+    border-top-width: 1.5px;
+}
+.footer {
+    width: 100%;
+    text-align: center;
+    margin-top: 15px;
+}
+.copyright {
+    font-family: '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, 'Noto Sans',
+        sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+    font-size: 20px;
+    color: #475b69;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+/* input */
+*,
+*:before,
+*:after {
+    box-sizing: border-box;
+}
+
+html {
+    overflow-y: scroll;
+}
+
+a {
+    text-decoration: none;
+    color: #70ad46;
+    transition: 0.5s ease;
+}
+a:hover {
+    color: #6fad46a2;
+}
+
+.form {
+    background: #f2f2f2;
+    padding: 40px;
+    width: 100%;
+    height: 75%;
+    border-radius: 30px;
+    box-shadow: 0 4px 10px 4px rgba(19, 35, 47, 0.3);
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 20px;
+    margin-block-start: auto;
+}
+
+.tab-content > div:last-child {
+    display: none;
+}
+.subtitle {
+    font-size: 45px;
+    color: black;
+    font-weight: 300;
+    margin: 0 0 30px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+}
+
+h1 {
+    text-align: center;
+    color: black;
+    font-weight: 300;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+}
+p {
+    color: #f5550d;
+    font-size: 18px;
+    margin: 5px;
+    padding-left: 5px;
+    padding-right: 0;
+}
+
+label {
+    position: absolute;
+    transform: translateY(6px);
+    left: 13px;
+    color: rgba(255, 255, 255, 0.5);
+    transition: all 0.25s ease;
+    -webkit-backface-visibility: hidden;
+    pointer-events: none;
+    font-size: 22px;
+}
+label .req {
+    margin: 2px;
+    color: #70ad46;
+}
+
+label.active {
+    transform: translateY(50px);
+    left: 2px;
+    font-size: 14px;
+}
+label.active .req {
+    opacity: 0;
+}
+
+label.highlight {
+    color: #ffffff;
+}
+
+input,
+textarea,
+select {
+    font-size: 22px;
+    display: block;
+    width: 100%;
+    height: 100%;
+    padding: 15px 20px;
+    background: none;
+    background-image: none;
+    border-radius: 10px;
+    border: 1px solid #a0b3b0;
+    color: black;
+    transition: border-color 0.25s ease, box-shadow 0.25s ease;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+}
+input:focus,
+textarea:focus {
+    outline: 0;
+    border-color: #70ad46;
+}
+
+textarea {
+    border: 2px solid #a0b3b0;
+    resize: vertical;
+}
+
+.check-wrap {
+    /* position: relative; */
+    margin-bottom: 3%;
+    display: flex;
+}
+
+.field-wrap {
+    position: relative;
+    margin-bottom: 3%;
+}
+
+#random-team-id-list {
+    font-size: 20px;
+    font-weight: bold;
+    text-decoration: none;
+    letter-spacing: 0.1em;
+    float: left;
+}
+#random-team-id-list2 {
+    font-size: 20px;
+    font-weight: bold;
+    text-decoration: none;
+    letter-spacing: 0.1em;
+    display: inline-block;
+}
+.button-wapper {
+    display: flex;
+    justify-content: flex-end;
+}
+.button {
+    border: 0;
+    outline: none;
+    border-radius: 0;
+    padding: 15px 0;
+    font-size: 2rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    background: #70ad46;
+    color: #ffffff;
+    transition: all 0.5s ease;
+    border-radius: 10px;
+    -webkit-appearance: none;
+}
+.button:hover,
+.button:focus {
+    background: #5c8f3a;
+}
+
+.button-block {
+    display: block;
+    width: 100%;
+    /* margin-top: 2em; */
+}
+.start {
+    border: 0;
+    outline: none;
+    border-radius: 0;
+    padding: 15px 0;
+    font-size: 2em;
+    /* font-weight: 600; */
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    background: #ffc001;
+    color: black;
+    transition: all 0.5s ease;
+    border-radius: 10px;
+    -webkit-appearance: none;
+}
+.start:hover,
+.start:focus {
+    background: #cf9d04f6;
+}
+.copy {
+    /* border: 0; */
+    outline: none;
+    border-radius: 0;
+    padding: 15px 0;
+    font-size: 1.5rem;
+    /* font-weight: 600; */
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    background: #f2f2f2;
+    color: black;
+    transition: all 0.5s ease;
+    border-radius: 10px;
+    -webkit-appearance: none;
+}
+.copy:hover,
+.copy:focus {
+    background: #9c9c9c;
+}
+.start-block {
+    /* float: right; */
+    /* display: block; */
+    /* width: 30%; */
+    margin-left: 10px;
+    padding: 10px;
+}

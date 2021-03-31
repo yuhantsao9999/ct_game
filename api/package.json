@@ -1,0 +1,25 @@
+{
+  "name": "node-with-react",
+  "version": "1.0.0",
+  "description": "project react with nodejs",
+  "main": "app.js",
+  "scripts": {
+    "start": "node server.bundle.js",
+    "build": "webpack",
+    "dev": "nodemon ./app.js localhost 3080"
+  },
+  "author": "yuhan",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "mongodb": "^3.6.3",
+    "multer": "^1.4.2",
+    "ramda": "^0.27.1",
+    "request": "^2.88.2"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.7"
+  }
+}

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="./css/start.css" />
+        <title>CT Game setting page</title>
+    </head>
+    <body>
+        <!-- header -->
+        <div class="header-wapper">
+            <a href="./main"> <img class="logo" src="./assets/image/beaver.png" alt="logo" /></a>
+        </div>
+        <!-- content -->
+        <div class="content-wapper">
+            <div class="beaver-wapper">
+                <img class="beaver" src="./assets/image/西瓜棋_小海狸.png" alt="" />
+            </div>
+            <div class="login-wapper">
+                <img class="title" src="./assets/image/西瓜棋_標題.png" alt="" />
+                <!-- input -->
+                <div class="form">
+                    <div class="tab-content">
+                        <h1>來下棋吧！</h1>
+
+                        <form action="/checkActivityExist" method="POST">
+                            <div class="field-wrap">
+                                <input id="activityName" name="activityName" placeholder="請輸入活動名稱" required />
+                            </div>
+                            <button type="submit" class="button button-block">活動開始</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="robot-wapper">
+                <img class="robot" src="./assets/image/西瓜棋_機器人.png" alt="" />
+            </div>
+        </div>
+
+        <!-- footer -->
+        <div class="footer-wapper">
+            <div class="footer">
+                <div class="copyright">© 2021 VIPLab, National Taiwan Normal University.</div>
+            </div>
+        </div>
+    </body>
+    <script type="text/javascript" src="./js/start.js"></script>
+</html>

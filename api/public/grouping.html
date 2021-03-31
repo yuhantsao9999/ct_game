@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="./css/grouping.css" />
+        <title>CT Game setting page</title>
+    </head>
+    <body>
+        <body>
+            <!-- header -->
+            <div class="header-wapper">
+                <a href="./main"> <img class="logo" src="./assets/image/beaver.png" alt="logo" /></a>
+            </div>
+            <!-- content -->
+            <div class="content-wapper">
+                <div class="beaver-wapper">
+                    <img class="beaver" src="./assets/image/西瓜棋_小海狸.png" alt="" />
+                </div>
+                <div class="setting-wapper">
+                    <button onclick="setUp()">Edit Team</button>
+                    <button onclick="setDown()">Save Team</button>
+                    <p id="status">對戰模式</p>
+                    <div id="team"></div>
+                    <button onclick="firstRound()" id="first">First Round</button>
+                    <button onclick="secondRound()" id="second">Second Round</button>
+                    <button onclick="thirdRound()" id="third">Third Round</button>
+                    <button onclick="finalRound()" id="final">Final Round</button>
+                </div>
+            </div>
+            <!-- footer -->
+            <div class="footer-wapper">
+                <div class="footer">
+                    <div class="copyright">© 2021 VIPLab, National Taiwan Normal University.</div>
+                </div>
+            </div>
+        </body>
+    </body>
+    <script type="text/javascript" src="js/grouping.js"></script>
+    <script
+        src="https://code.jquery.com/jquery-1.6.2.min.js"
+        integrity="sha256-0W0HoDU0BfzslffvxQomIbx0Jfml6IlQeDlvsNxGDE8="
+        crossorigin="anonymous"
+    ></script>
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/jquery-bracket/0.11.1/jquery.bracket.min.js"
+        integrity="sha512-BgJKmxJA3rvUEa00GOdL9BJm5+lu6V7Gx2K0qWDitRi0trcA+kS/VYJuzlqlwGJ0eUeIopW4T9faczsg8hzE/g=="
+        crossorigin="anonymous"
+    ></script>
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/jquery-bracket/0.11.1/jquery.bracket.min.css"
+        integrity="sha512-8QbEO8yS//4kwUDxGu/AS49R2nVILw83kYCtgxBYk+Uw0B9S4R0RgSwvhGLwMaZuYzhhR5ZHR9dA2cDgphRTgg=="
+        crossorigin="anonymous"
+    />
+
+    <!-- <script type="text/javascript" src="./index.js"></script> -->
+</html>
