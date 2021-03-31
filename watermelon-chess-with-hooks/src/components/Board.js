@@ -2,7 +2,7 @@ import React from 'react';
 import Chess from './Chess';
 import { getChessPosition, isOneOfAbleReceive } from '../utils';
 
-function Board(props) {
+function Board (props) {
     let {
         boardWidth,
         chesses,

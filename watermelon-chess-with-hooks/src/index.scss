@@ -12,7 +12,7 @@ body {
     padding-top: 10px;
     padding-left: 15%;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     flex-wrap: nowrap;
     justify-content: flex-start;
     position: relative;
@@ -99,24 +99,55 @@ body {
     label {
         font-size: 25px;
     }
-
-    .btns {
+    .player{
+        margin-left: 15px;
+        .btns {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: nowrap;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            margin-top: 25px;
+            margin-bottom: 25px;
+            button {
+                outline: none;
+                border: 1px solid #333;
+                color: #333;
+                font-size: 20px;
+                width: 25%;
+                margin: 5px;
+                padding: 8px 15px;
+                border-radius: 6px;
+            }
+        }
+        .steps {
+            #step {
+                width: 50%;
+            }
+            display: flex;
+            flex-direction: row;
+            flex-wrap: nowrap;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 25px;
+            margin-bottom: 25px;
+        }
+    }
+    .nameList {
         display: flex;
-        flex-direction: row;
-        flex-wrap: nowrap;
-        justify-content: space-between;
-        align-items: center;
-        width: 90%;
-        margin-top: 25px;
-        margin-bottom: 25px;
-
-        button {
-            outline: none;
-            border: 1px solid #333;
-            color: #333;
-            font-size: 20px;
-            padding: 8px 15px;
-            border-radius: 6px;
+        flex-direction: column;
+        border-width: 2px;
+        border-style: solid;
+        border-color:#9396996f;
+        border-radius:10px;
+        margin-bottom: 10px;
+        height: 130px;
+        .up {
+            margin-left: 5px;
+            height: 50%;
+            display: flex;
+            align-items: center;
         }
     }
 }

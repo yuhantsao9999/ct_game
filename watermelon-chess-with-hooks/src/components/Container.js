@@ -40,7 +40,6 @@ const Container = () => {
             <ContentWapper>
                 <ContextStoreProvider>
                     <Game />
-                    <TeamList />
                 </ContextStoreProvider>
             </ContentWapper>
             <Footer />

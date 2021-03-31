@@ -67,6 +67,40 @@ const battleOfTheRest = (size, round) => {
     return scoreArr;
 };
 
+const viewBattle = (team1, team2) => {
+    // TODO : ask the user whether to view battle or not 
+    if (confirm('Want to view battle detail ?')) {
+        window.open(`http://localhost:3080/watermelonChess?playerA=${team1}&playerB=${team2}`);
+    } else {
+        return
+    }
+}
+
+const addContextMentu = () => {
+    teamContainerArr = document.getElementsByClassName("teamContainer")
+    for (teamContainer of teamContainerArr) {
+        teamContainer.addEventListener('contextmenu', function (e) {
+            let teamArr = []
+            let scoreArr = []
+            for (team of this.getElementsByClassName("team")) {
+                for (label of team.getElementsByClassName("label")) {
+                    teamArr.push(label.innerHTML)
+                }
+                for (score of team.getElementsByClassName("score")) {
+                    scoreArr.push(score.innerHTML)
+                }
+            }
+            if (scoreArr[0] == "--" || scoreArr[1] == "--") {
+                window.alert("Can't view battle if a team has no score.")
+                e.preventDefault();
+                return
+            }
+            viewBattle(teamArr[0], teamArr[1])
+            e.preventDefault();
+        }, true);
+    }
+}
+
 // simulate battle result from calling api
 const battleOfTwoTeam = (data) => {
     const { round, match } = data;
@@ -171,9 +205,14 @@ const plot = (data, edit = false) => {
                 init: data,
                 centerConnectors: true,
                 onMatchClick: battleOfTwoTeam,
+                teamWidth: 95,
+                scoreWidth: 20,
+                roundMargin: 20,
+                matchMargin: 10,
             });
         });
     }
+    addContextMentu()
 };
 
 const teamGenerate = (defaultTeamNum = 16) => {
