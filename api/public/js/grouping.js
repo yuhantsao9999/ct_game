@@ -75,34 +75,36 @@ const battleOfTheRest = (size, round) => {
 
 const viewDetailOrShowResult = (team1, team2) => {
     if (confirm(`觀看 ${team1} 和 ${team2} 的對戰過程嗎？`)) {
-        window.open(`http://localhost:3080/watermelonChess?playerA=${team1}&playerB=${team2}`);
+        window.open(`http://140.122.164.194:3080/watermelonChess?playerA=${team1}&playerB=${team2}`);
     }
-}
+};
 
 // simulate battle result from calling api
 const battleOfTwoTeam = (data) => {
     const { round, match } = data;
-    const team1 = document.getElementsByClassName('round')[round].childNodes[match].childNodes[0].childNodes[0].childNodes[0].innerText
-    const team2 = document.getElementsByClassName('round')[round].childNodes[match].childNodes[0].childNodes[1].childNodes[0].innerText
-    if (team1 === 'TBD' || team2 === 'TBD'){
-        window.alert("Can't battle with TBD team.") 
-        return
+    const team1 = document.getElementsByClassName('round')[round].childNodes[match].childNodes[0].childNodes[0]
+        .childNodes[0].innerText;
+    const team2 = document.getElementsByClassName('round')[round].childNodes[match].childNodes[0].childNodes[1]
+        .childNodes[0].innerText;
+    if (team1 === 'TBD' || team2 === 'TBD') {
+        window.alert("Can't battle with TBD team.");
+        return;
     }
-    viewDetailOrShowResult(team1, team2)
+    viewDetailOrShowResult(team1, team2);
     const scoreI = getRandomInt(100);
-        const scoreII = getRandomInt(100);
+    const scoreII = getRandomInt(100);
 
-        // update result of this round
-        globalData['results'][round][match] = [
-            scoreI >= scoreII ? 1 : 0,
-            scoreII >= scoreI ? 1 : 0,
-            { round: round, match: match },
-        ];
+    // update result of this round
+    globalData['results'][round][match] = [
+        scoreI >= scoreII ? 1 : 0,
+        scoreII >= scoreI ? 1 : 0,
+        { round: round, match: match },
+    ];
 
-        // initialize result of next round
-        globalData['results'][round + 1][match] = [, , { round: round + 1, match: match }];
+    // initialize result of next round
+    globalData['results'][round + 1][match] = [, , { round: round + 1, match: match }];
 
-        plot(globalData, false);
+    plot(globalData, false);
 };
 
 // initialize next round match info
