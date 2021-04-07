@@ -77,26 +77,16 @@ export default function InputSlider(prop) {
                         min={Number(min)}
                         max={Number(max)}
                     />
-                    {console.log(_id, value)}
                 </Grid>
-                <Grid item id={_id}>
-                    {value}
-                    {/* <Input
-                        // id={_id}
-                        className={classes.input}
-                        value={value}
-                        margin="dense"
-                        onChange={handleInputChange}
-                        onBlur={handleBlur}
-                        inputProps={{
-                            step: 1,
-                            min: min,
-                            max: max,
-                            type: 'number',
-                            'aria-labelledby': 'input-slider',
-                        }}
-                    /> */}
-                </Grid>
+                {_id === 'step' ? (
+                    <Grid item id={_id}>
+                        {value}
+                    </Grid>
+                ) : (
+                    <Grid item id={_id}>
+                        {value / 100}
+                    </Grid>
+                )}
             </Grid>
         </div>
     );

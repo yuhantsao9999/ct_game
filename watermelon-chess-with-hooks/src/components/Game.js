@@ -384,9 +384,9 @@ const Buttons = (props) => {
     }
     const title = { step: '步數', speed: '速度' };
     const id = { step: 'step', speed: 'speed' };
-    const defaultValue = { step: '1', speed: '1' };
-    const max = { step: '60', speed: '2' };
-    const min = { step: '0', speed: '0' };
+    const defaultValue = { step: '60', speed: '100' };
+    const max = { step: '60', speed: '200' };
+    const min = { step: '0', speed: '25' };
     return (
         <div className="player">
             <div className="steps">
@@ -416,7 +416,7 @@ const Buttons = (props) => {
                     <option value="1500">0.5</option>
                     <option value="1000">1</option>
                     <option value="500">1.5</option>
-                    <option value="250">2</option>
+                    <option value="250">2</option>快
                 </select> */}
             </div>
             <div className="btns">

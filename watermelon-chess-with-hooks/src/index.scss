@@ -95,12 +95,6 @@ body {
             }
         }
     }
-    // #step {
-    //     width: 100%;
-    // }
-    // #speed {
-    //     width: 100%;
-    // }
     label {
         font-size: 25px;
     }
@@ -120,14 +114,10 @@ body {
                 margin: 1vh;
                 margin-right: 5px;
             }
+            svg:hover {
+                color: rgb(101, 105, 101);
+            }
         }
-        // .steps {
-        //     display: flex;
-        //     flex-direction: column;
-        //     flex-wrap: nowrap;
-        //     justify-content: wrap-reverse;
-        //     align-items: center;
-        // }
     }
     .nameList {
         display: flex;
