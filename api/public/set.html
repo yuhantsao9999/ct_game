@@ -10,25 +10,28 @@
         <body>
             <!-- header -->
             <div class="header-wapper">
-                <a href="./main"> <img class="logo" src="./assets/image/beaver.png" alt="logo" /></a>
+                <div class="logoWapper">
+                    <a href="./main"> <img class="logo" src="./assets/image/beaver.png" alt="logo" /></a>
+                    <h1>西瓜棋遊戲</h1>
+                </div>
             </div>
             <!-- content -->
             <div class="content-wapper">
                 <div class="setting-wapper">
-                    <div class="subtitle">建立活動</div>
+                    <div class="title">建立活動</div>
                     <!-- input -->
                     <div class="form">
-                        <div class="subtitle">活動設定</div>
+                        <div class="title">活動設定</div>
                         <div class="tab-content">
-                            <h1>活動名稱</h1>
+                            <div class="subtitle">活動名稱</div>
                             <div class="check-wrap">
                                 <input id="activityName" placeholder="請輸入活動名稱" required style="width: 60%" />
-                                <button class="copy start-block" onclick="getHint()">檢查活動名稱是否有效</button>
+                                <button class="copy start-block" onclick="getHint()">檢查活動名稱</button>
                             </div>
                             <p>請先檢查活動名稱是否有效，再產出小組代碼，避免與其他活動重複產出代碼</p>
                             <p id="hint"></p>
 
-                            <h1>小組數量</h1>
+                            <div class="subtitle">小組數量</div>
                             <div class="field-wrap">
                                 <input id="total-team-number" placeholder="請輸入參與小組數量" required />
                             </div>
@@ -47,7 +50,7 @@
                     </div>
                 </div>
                 <div class="setting-wapper">
-                    <div class="subtitle">小組代碼</div>
+                    <div class="title">小組代碼</div>
 
                     <div class="form">
                         <div class="tab-content">
@@ -72,4 +75,5 @@
         </body>
     </body>
     <script type="text/javascript" src="js/set.js"></script>
+    <script type="text/javascript" src="js/checkLocalStorage.js"></script>
 </html>

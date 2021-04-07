@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import LogoSrc from '../assets/images/beaver.png';
 
 const HeadWrapper = styled.div`
+    height: 10vh;
     display: flex;
     width: 100%;
     border-bottom-color: rgb(219, 219, 219);
@@ -11,14 +12,15 @@ const HeadWrapper = styled.div`
     background-color: white;
 `;
 const TextWapper = styled.h1`
-    display: block;
+    display: flex;
     color: black;
     font-weight: 600;
     letter-spacing: 0.1em;
+    align-items: center;
 `;
 
 const LogoImage = styled.img`
-    padding-left: 15%;
+    padding-left: 10%;
 `;
 
 const Header = () => {

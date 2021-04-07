@@ -2,7 +2,7 @@ import React from 'react';
 import Chess from './Chess';
 import { getChessPosition, isOneOfAbleReceive } from '../utils';
 
-function Board (props) {
+function Board(props) {
     let {
         boardWidth,
         chesses,
@@ -50,7 +50,7 @@ function Board (props) {
                             left: chessLeft + 'px',
                         }}
                         onClick={() => {
-                            console.log('chesses.map', chessData);
+                            // console.log('chesses.map', chessData);
                             handleClickChessWrap(chessData);
                         }}
                     >

@@ -9,7 +9,10 @@
     <body>
         <!-- header -->
         <div class="header-wapper">
-            <a href="./main"> <img class="logo" src="./assets/image/beaver.png" alt="logo" /></a>
+            <div class="logoWapper">
+                <a href="./main"> <img class="logo" src="./assets/image/beaver.png" alt="logo" /></a>
+                <h1>西瓜棋遊戲</h1>
+            </div>
         </div>
         <!-- content -->
         <div class="content-wapper">
@@ -22,13 +25,13 @@
                 <div class="form">
                     <div class="tab-content">
                         <h1>來下棋吧！</h1>
-
-                        <form action="/checkActivityExist" method="POST">
-                            <div class="field-wrap">
-                                <input id="activityName" name="activityName" placeholder="請輸入活動名稱" required />
-                            </div>
-                            <button type="submit" class="button button-block">活動開始</button>
-                        </form>
+                        <!-- <form action="/checkActivityExist" method="POST"> -->
+                        <div class="field-wrap">
+                            <input id="activityName" name="activityName" placeholder="請輸入活動名稱" required />
+                        </div>
+                        <p id="error_Activity"></p>
+                        <button type="submit" class="button button-block" onclick="loginActivity()">活動開始</button>
+                        <!-- </form> -->
                     </div>
                 </div>
             </div>
@@ -45,4 +48,5 @@
         </div>
     </body>
     <script type="text/javascript" src="./js/start.js"></script>
+    <script type="text/javascript" src="js/checkLocalStorage.js"></script>
 </html>

@@ -1,14 +1,12 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import Game from './Game';
-import TeamList from './TeamList';
-import Buttons from './Buttons';
 import Header from './Header';
 import Footer from './Footer';
 
 const Wrapper = styled.div`
     width: 100%;
-    min-height: 100%;
+    height: 85vh;
 `;
 
 const ContentWapper = styled.div`

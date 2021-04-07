@@ -1,4 +1,10 @@
 let globalData;
+(() => {
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const activityName = urlParams.get('id');
+    document.getElementById('activityName').innerHTML = `${activityName}`;
+})();
 
 // data initialize
 const dataGenerate = (teamNum) => {
@@ -68,38 +74,42 @@ const battleOfTheRest = (size, round) => {
 };
 
 const viewBattle = (team1, team2) => {
-    // TODO : ask the user whether to view battle or not 
-    if (confirm('Want to view battle detail ?')) {
+    // TODO : ask the user whether to view battle or not
+    if (confirm(`觀看 ${team1} 和 ${team2} 的對戰過程嗎？`)) {
         window.open(`http://localhost:3080/watermelonChess?playerA=${team1}&playerB=${team2}`);
     } else {
-        return
+        return;
     }
-}
+};
 
-const addContextMentu = () => {
-    teamContainerArr = document.getElementsByClassName("teamContainer")
+const addContextMenu = () => {
+    teamContainerArr = document.getElementsByClassName('teamContainer');
     for (teamContainer of teamContainerArr) {
-        teamContainer.addEventListener('contextmenu', function (e) {
-            let teamArr = []
-            let scoreArr = []
-            for (team of this.getElementsByClassName("team")) {
-                for (label of team.getElementsByClassName("label")) {
-                    teamArr.push(label.innerHTML)
+        teamContainer.addEventListener(
+            'contextmenu',
+            function (e) {
+                let teamArr = [];
+                let scoreArr = [];
+                for (team of this.getElementsByClassName('team')) {
+                    for (label of team.getElementsByClassName('label')) {
+                        teamArr.push(label.innerHTML);
+                    }
+                    for (score of team.getElementsByClassName('score')) {
+                        scoreArr.push(score.innerHTML);
+                    }
                 }
-                for (score of team.getElementsByClassName("score")) {
-                    scoreArr.push(score.innerHTML)
+                if (scoreArr[0] == '--' || scoreArr[1] == '--') {
+                    window.alert('請先進行對戰，再觀看對戰過程');
+                    e.preventDefault();
+                    return;
                 }
-            }
-            if (scoreArr[0] == "--" || scoreArr[1] == "--") {
-                window.alert("Can't view battle if a team has no score.")
+                viewBattle(teamArr[0], teamArr[1]);
                 e.preventDefault();
-                return
-            }
-            viewBattle(teamArr[0], teamArr[1])
-            e.preventDefault();
-        }, true);
+            },
+            true
+        );
     }
-}
+};
 
 // simulate battle result from calling api
 const battleOfTwoTeam = (data) => {
@@ -195,6 +205,10 @@ const plot = (data, edit = false) => {
                 disableToolbar: true,
                 centerConnectors: true,
                 save: saveFn,
+                teamWidth: 90,
+                scoreWidth: 20,
+                roundMargin: 40,
+                matchMargin: 40,
             });
         });
     } else {
@@ -205,18 +219,19 @@ const plot = (data, edit = false) => {
                 init: data,
                 centerConnectors: true,
                 onMatchClick: battleOfTwoTeam,
-                teamWidth: 95,
+                teamWidth: 90,
                 scoreWidth: 20,
-                roundMargin: 20,
-                matchMargin: 10,
+                roundMargin: 40,
+                matchMargin: 50,
             });
         });
     }
-    addContextMentu()
+
+    addContextMenu();
 };
 
 const teamGenerate = (defaultTeamNum = 16) => {
-    globalData = dataGenerate(16);
+    globalData = dataGenerate(8);
     plot(globalData);
 };
 

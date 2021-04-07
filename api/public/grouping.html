@@ -10,7 +10,33 @@
         <body>
             <!-- header -->
             <div class="header-wapper">
-                <a href="./main"> <img class="logo" src="./assets/image/beaver.png" alt="logo" /></a>
+                <div class="logoWapper">
+                    <a href="./main"> <img class="logo" src="./assets/image/beaver.png" alt="logo" /></a>
+                    <h1>西瓜棋遊戲</h1>
+                    <div class="info-wapper">
+                        <div class="activityName" id="activityName">使用者</div>
+                        <button class="logOutButton" onclick="logOut()">
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="16"
+                                height="16"
+                                fill="currentColor"
+                                class="bi bi-box-arrow-right"
+                                viewBox="0 0 16 16"
+                            >
+                                <path
+                                    fill-rule="evenodd"
+                                    d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0v2z"
+                                />
+                                <path
+                                    fill-rule="evenodd"
+                                    d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3z"
+                                />
+                            </svg>
+                            登出
+                        </button>
+                    </div>
+                </div>
             </div>
             <!-- content -->
             <div class="content-wapper">
@@ -65,7 +91,7 @@
                         <button class="roundButton" onclick="firstRound()" id="first">First Round</button>
                         <button class="roundButton" onclick="secondRound()" id="second">Second Round</button>
                         <button class="roundButton" onclick="thirdRound()" id="third">Third Round</button>
-                        <button class="roundButton" onclick="finalRound()" id="final">Final Round</button>
+                        <!-- <button class="roundButton" onclick="finalRound()" id="final">Final Round</button> -->
                     </div>
                 </div>
             </div>
@@ -78,6 +104,7 @@
         </body>
     </body>
     <script type="text/javascript" src="js/grouping.js"></script>
+    <script type="text/javascript" src="js/checkLocalStorage.js"></script>
     <script
         src="https://code.jquery.com/jquery-1.6.2.min.js"
         integrity="sha256-0W0HoDU0BfzslffvxQomIbx0Jfml6IlQeDlvsNxGDE8="
@@ -94,6 +121,4 @@
         integrity="sha512-8QbEO8yS//4kwUDxGu/AS49R2nVILw83kYCtgxBYk+Uw0B9S4R0RgSwvhGLwMaZuYzhhR5ZHR9dA2cDgphRTgg=="
         crossorigin="anonymous"
     />
-
-    <!-- <script type="text/javascript" src="./index.js"></script> -->
 </html>

@@ -9,7 +9,10 @@
     <body>
         <!-- header -->
         <div class="header-wapper">
-            <a href="./main"> <img class="logo" src="./assets/image/beaver.png" alt="logo" /></a>
+            <div class="logoWapper">
+                <a href="./main"> <img class="logo" src="./assets/image/beaver.png" alt="logo" /></a>
+                <h1>西瓜棋遊戲</h1>
+            </div>
         </div>
         <!-- content -->
         <div class="content-wapper">
@@ -23,12 +26,13 @@
                     <div class="tab-content">
                         <h1>來下西瓜棋吧！</h1>
 
-                        <form action="/checkUser" method="POST">
-                            <div class="field-wrap">
-                                <input id="userId" name="userId" placeholder="請輸入登入代碼！" required />
-                            </div>
-                            <button type="submit" class="button button-block">登入</button>
-                        </form>
+                        <!-- <form action="/checkUser" method="POST"> -->
+                        <div class="field-wrap">
+                            <input id="userId" name="userId" placeholder="請輸入登入代碼！" required />
+                        </div>
+                        <p id="error_signIn"></p>
+                        <button type="submit" class="button button-block" onclick="signIn()">登入</button>
+                        <!-- </form> -->
                     </div>
                 </div>
             </div>

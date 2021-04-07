@@ -9,13 +9,17 @@ body {
 }
 
 .game {
-    padding-top: 10px;
-    padding-left: 15%;
+    // padding-top: 10px;
+    // padding-left: 15%;
     display: flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
-    justify-content: flex-start;
-    position: relative;
+    margin: auto;
+    // flex-direction: row;
+    // flex-wrap: nowrap;
+    // justify-content: flex-start;
+    // position: relative;
+    height: 85vh;
+    justify-content: center;
+    align-items: center;
     .board {
         float: left;
     }
@@ -27,10 +31,15 @@ body {
         font-size: 24px;
         margin-bottom: 20px;
     }
+    p {
+        font-size: 10px;
+    }
 
     .next-step,
     .winner {
-        position: absolute;
+        // position: absolute;
+        font-size: 20px;
+        margin: 10px;
         top: 40px;
         right: 20px;
         display: flex;
@@ -59,6 +68,7 @@ body {
         border-color: #2ea738;
         border-radius: 10px;
         position: relative;
+        height: min-content;
 
         .chess-wrap {
             position: absolute;
@@ -85,21 +95,16 @@ body {
             }
         }
     }
-    #step {
-        padding: 8px 15px;
-        margin-left: 10px;
-        font-size: 20px;
-        border-radius: 10px;
-    }
-    #speed {
-        padding: 8px 15px;
-        font-size: 20px;
-        border-radius: 10px;
-    }
+    // #step {
+    //     width: 100%;
+    // }
+    // #speed {
+    //     width: 100%;
+    // }
     label {
         font-size: 25px;
     }
-    .player{
+    .player {
         margin-left: 15px;
         .btns {
             display: flex;
@@ -110,37 +115,28 @@ body {
             width: 100%;
             margin-top: 25px;
             margin-bottom: 25px;
-            button {
-                outline: none;
-                border: 1px solid #333;
-                color: #333;
-                font-size: 20px;
+            .btnItem {
                 width: 25%;
-                margin: 5px;
-                padding: 8px 15px;
-                border-radius: 6px;
+                margin: 1vh;
+                margin-right: 5px;
             }
         }
-        .steps {
-            #step {
-                width: 50%;
-            }
-            display: flex;
-            flex-direction: row;
-            flex-wrap: nowrap;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 25px;
-            margin-bottom: 25px;
-        }
+        // .steps {
+        //     display: flex;
+        //     flex-direction: column;
+        //     flex-wrap: nowrap;
+        //     justify-content: wrap-reverse;
+        //     align-items: center;
+        // }
     }
     .nameList {
         display: flex;
+        min-width: 50vh;
         flex-direction: column;
         border-width: 2px;
         border-style: solid;
-        border-color:#9396996f;
-        border-radius:10px;
+        border-color: #9396996f;
+        border-radius: 10px;
         margin-bottom: 10px;
         height: 130px;
         .up {

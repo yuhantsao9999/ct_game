@@ -32,7 +32,7 @@ const TeamListItem = styled.div`
     border-style: solid;
     border-color: black;
     border-radius: 999em;
-    background-color: ${props => props.teamColor}
+    background-color: ${(props) => props.teamColor};
     /* transition: background 0.3s ease; */
 `;
 
@@ -64,20 +64,32 @@ const BeEatenYellowChesses = styled.div`
 // const urlParams = new URLSearchParams(window.location.search);
 // const date = urlParams.get('date');
 
-const TeamList = () => {
+const TeamList = (props) => {
+    let { sides, winnerSide } = props;
     const result = useContext(ContextStore);
     let params = queryString.parse(window.location.search);
 
     return (
         <Wrapper>
+            {/*獲勝方*/}
+            {sides.includes(winnerSide) && (
+                <div className="winner">
+                    <span>獲勝方是：</span>
+                    <button
+                        style={{
+                            backgroundColor: winnerSide === 0 ? '#d80f0f' : '#f5f516',
+                        }}
+                    />
+                </div>
+            )}
             <div className="nameList">
                 <div className="up">
                     <TeamListItem teamColor="#d80f0f"></TeamListItem>
                     {params.playerA}
                 </div>
                 <BeEatenChessesWrapper>
-                    {result.red.map((item, i) => (
-                        <BeEatenRedChesses key={`beEatenRedChesses-${item}-${i}`}></BeEatenRedChesses>
+                    {result.yellow.map((item, i) => (
+                        <BeEatenYellowChesses key={`beEatenYellowChesses-${item}-${i}`}></BeEatenYellowChesses>
                     ))}
                 </BeEatenChessesWrapper>
             </div>
@@ -87,12 +99,12 @@ const TeamList = () => {
                     {params.playerB}
                 </div>
                 <BeEatenChessesWrapper>
-                    {result.yellow.map((item, i) => (
-                        <BeEatenYellowChesses key={`beEatenYellowChesses-${item}-${i}`}></BeEatenYellowChesses>
+                    {result.red.map((item, i) => (
+                        <BeEatenRedChesses key={`beEatenRedChesses-${item}-${i}`}></BeEatenRedChesses>
                     ))}
                 </BeEatenChessesWrapper>
             </div>
-        </Wrapper >
+        </Wrapper>
     );
 };
 

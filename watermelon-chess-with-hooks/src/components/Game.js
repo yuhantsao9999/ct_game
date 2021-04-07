@@ -1,12 +1,13 @@
 import React, { useState, useContext, useEffect } from 'react';
 import Board from './Board';
 import TeamList from './TeamList';
-import { chessIndex } from '../constant/chessIndex';
+import { dummyData } from '../constant/chessIndex';
 import { chessesDefault, findBeEatenChesses, getAbleReceive, getNewChesses, isOneOfAbleReceive } from '../utils';
 import _ from 'lodash';
 import { ContextStore } from './Container';
+import Slider from './Slider';
 
-function Game () {
+function Game() {
     const { red, setRed, yellow, setYellow } = useContext(ContextStore);
     let boardWidth = document.documentElement.clientWidth * 0.45;
     let r = 0.0463 * boardWidth; // 棋子的半径
@@ -25,136 +26,138 @@ function Game () {
             latestMoveChessName: null, // 最新移动的棋子的名称
         },
     ]);
-    let [actions, setActions] = useState([
-        {
-            from: {
-                name: 'S1',
-                siblings: ['S2', 'S3', 'S4', 'C3'],
-                side: 1,
-                picture: chessIndex.yellow[1].picture,
-            },
-            to: {
-                name: 'C3',
-                siblings: ['C5', 'C2', 'S1', 'C4'],
-                side: null,
-                picture: null,
-            },
-        },
-        {
-            from: {
-                name: 'N3',
-                siblings: ['N2', 'N1', 'N4', 'C1'],
-                side: 0,
-                picture: chessIndex.red[2].picture,
-            },
-            to: {
-                name: 'C1',
-                siblings: ['N3', 'C2', 'C5', 'C4'],
-                side: null,
-                picture: null,
-            },
-        },
-        {
-            from: {
-                name: 'C3',
-                siblings: ['C5', 'C2', 'S1', 'C4'],
-                side: 1,
-                picture: chessIndex.yellow[1].picture,
-            },
-            to: {
-                name: 'C5',
-                siblings: ['C1', 'C2', 'C3', 'C4'],
-                side: null,
-                picture: null,
-            },
-        },
-        {
-            from: {
-                name: 'C1',
-                siblings: ['N3', 'C2', 'C5', 'C4'],
-                side: 0,
-                picture: chessIndex.red[2].picture,
-            },
-            to: {
-                name: 'C2',
-                siblings: ['C1', 'W4', 'C3', 'C5'],
-                side: null,
-                picture: null,
-            },
-        },
-        {
-            from: {
-                name: 'C5',
-                siblings: ['C1', 'C2', 'C3', 'C4'],
-                side: 1,
-                picture: chessIndex.yellow[1].picture,
-            },
-            to: {
-                name: 'C1',
-                siblings: ['N3', 'C2', 'C5', 'C4'],
-                side: null,
-                picture: null,
-            },
-        },
-        {
-            from: {
-                name: 'C2',
-                siblings: ['C1', 'W4', 'C3', 'C5'],
-                side: 0,
-                picture: chessIndex.red[2].picture,
-            },
-            to: {
-                name: 'C5',
-                siblings: ['C1', 'C2', 'C3', 'C4'],
-                side: null,
-                picture: null,
-            },
-        },
-        {
-            from: {
-                name: 'C1',
-                siblings: ['N3', 'C2', 'C5', 'C4'],
-                side: 1,
-                picture: chessIndex.yellow[1].picture,
-            },
-            to: {
-                name: 'N3',
-                siblings: ['N2', 'N1', 'N4', 'C1'],
-                side: null,
-                picture: null,
-            },
-        },
-        {
-            from: {
-                name: 'C5',
-                siblings: ['C1', 'C2', 'C3', 'C4'],
-                side: 0,
-                picture: chessIndex.red[2].picture,
-            },
-            to: {
-                name: 'C1',
-                siblings: ['N3', 'C2', 'C5', 'C4'],
-                side: null,
-                picture: null,
-            },
-        },
-    ]);
+    let [actions, setActions] = useState(dummyData);
+    // [
+    // {
+    //     from: {
+    //         name: 'S1',
+    //         siblings: ['S2', 'S3', 'S4', 'C3'],
+    //         side: 1,
+    //         picture: chessIndex.red[1].picture,
+    //     },
+    //     to: {
+    //         name: 'C3',
+    //         siblings: ['C5', 'C2', 'S1', 'C4'],
+    //         side: null,
+    //         picture: null,
+    //     },
+    // },
+    // {
+    //     from: {
+    //         name: 'N3',
+    //         siblings: ['N2', 'N1', 'N4', 'C1'],
+    //         side: 0,
+    //         picture: chessIndex.yellow[2].picture,
+    //     },
+    //     to: {
+    //         name: 'C1',
+    //         siblings: ['N3', 'C2', 'C5', 'C4'],
+    //         side: null,
+    //         picture: null,
+    //     },
+    // },
+    // {
+    //     from: {
+    //         name: 'C3',
+    //         siblings: ['C5', 'C2', 'S1', 'C4'],
+    //         side: 1,
+    //         picture: chessIndex.red[1].picture,
+    //     },
+    //     to: {
+    //         name: 'C5',
+    //         siblings: ['C1', 'C2', 'C3', 'C4'],
+    //         side: null,
+    //         picture: null,
+    //     },
+    // },
+    // {
+    //     from: {
+    //         name: 'C1',
+    //         siblings: ['N3', 'C2', 'C5', 'C4'],
+    //         side: 0,
+    //         picture: chessIndex.yellow[2].picture,
+    //     },
+    //     to: {
+    //         name: 'C2',
+    //         siblings: ['C1', 'W4', 'C3', 'C5'],
+    //         side: null,
+    //         picture: null,
+    //     },
+    // },
+    // {
+    //     from: {
+    //         name: 'C5',
+    //         siblings: ['C1', 'C2', 'C3', 'C4'],
+    //         side: 1,
+    //         picture: chessIndex.red[1].picture,
+    //     },
+    //     to: {
+    //         name: 'C1',
+    //         siblings: ['N3', 'C2', 'C5', 'C4'],
+    //         side: null,
+    //         picture: null,
+    //     },
+    // },
+    // {
+    //     from: {
+    //         name: 'C2',
+    //         siblings: ['C1', 'W4', 'C3', 'C5'],
+    //         side: 0,
+    //         picture: chessIndex.yellow[2].picture,
+    //     },
+    //     to: {
+    //         name: 'C5',
+    //         siblings: ['C1', 'C2', 'C3', 'C4'],
+    //         side: null,
+    //         picture: null,
+    //     },
+    // },
+    // {
+    //     from: {
+    //         name: 'C1',
+    //         siblings: ['N3', 'C2', 'C5', 'C4'],
+    //         side: 1,
+    //         picture: chessIndex.red[1].picture,
+    //     },
+    //     to: {
+    //         name: 'N3',
+    //         siblings: ['N2', 'N1', 'N4', 'C1'],
+    //         side: null,
+    //         picture: null,
+    //     },
+    // },
+    // {
+    //     from: {
+    //         name: 'C5',
+    //         siblings: ['C1', 'C2', 'C3', 'C4'],
+    //         side: 0,
+    //         picture: chessIndex.yellow[2].picture,
+    //     },
+    //     to: {
+    //         name: 'C1',
+    //         siblings: ['N3', 'C2', 'C5', 'C4'],
+    //         side: null,
+    //         picture: null,
+    //     },
+    // },
+    // ]
     let [index, setIndex] = useState(0);
     let [pick, setPick] = useState(true);
 
-    function move () {
+    function move() {
         if (pick) moveFrom();
         else moveTo();
         pick === true ? setPick(false) : setPick(true);
     }
-    function moveFrom () {
+    function moveFrom() {
         handleClickChess(actions[index].from);
     }
-    function moveTo () {
+    function moveTo() {
+        // console.log(actions);
         handleClickChessWrap(actions[index].to);
         if (index < actions.length - 1) setIndex(index + 1);
     }
-    function handleClickChess (chessData) {
+    function handleClickChess(chessData) {
         if (sides.includes(winnerSide)) return; // 已经有人胜出了，返回
         if (chessData.side !== history[history.length - 1].currentSide) return; // 如果点击的不是当前可下方，返回
 
@@ -166,9 +169,9 @@ function Game () {
     }
 
     // 处理点击落子点
-    function handleClickChessWrap (chessData) {
-        console.log('handleClickChessWrap');
-        console.log(clickedChess);
+    function handleClickChessWrap(chessData) {
+        // console.log('handleClickChessWrap');
+        // console.log(clickedChess);
         // 已经有人胜出了，返回
         if (sides.includes(winnerSide)) return;
 
@@ -210,12 +213,12 @@ function Game () {
         // 有棋子被吃掉
         // 先执行将被吃掉棋子闪动几下的动画
         setHistory(newHistory);
-        setTimeout(() => {
-            shiningAnimation(newChesses, beEatenChesses, 6, newCurrentSide, newHistory, chessData.name);
-        }, 100);
+        // setTimeout(() => {
+        shiningAnimation(newChesses, beEatenChesses, 0, newCurrentSide, newHistory, chessData.name);
+        // }, 30);
     }
 
-    function shiningAnimation (
+    function shiningAnimation(
         newChesses,
         beEatenChesses,
         shiningTimes,
@@ -250,12 +253,11 @@ function Game () {
                     latestMoveChessName
                 );
                 setHistory(cashHistory);
-
                 //新增淘汰旗子
                 if (newCurrentSide === 0) {
-                    setRed([...red, 0]);
+                    setYellow([...yellow, ...beEatenChesses]);
                 } else {
-                    setYellow([...yellow, 1]);
+                    setRed([...red, ...beEatenChesses]);
                 }
 
                 // 判断有没有胜出方
@@ -265,7 +267,7 @@ function Game () {
         }, 500);
     }
 
-    function getWinner (newHistory, newCurrentSide) {
+    function getWinner(newHistory, newCurrentSide) {
         let winner = null; // 获胜方的side
         let newCurrentSideCount = 0; // 被吃掉方剩下的棋子个数
 
@@ -287,7 +289,7 @@ function Game () {
      * 从当前棋子布局中删除掉 被吃掉的棋子（被吃掉的棋子side设为null），返回更新后的 history
      * @param beEatenChesses : 被吃掉的棋子
      */
-    function getNewHistoryAfterDeleteBeEatenChesses (beEatenChesses, newHistory, newCurrentSide, latestMoveChessName) {
+    function getNewHistoryAfterDeleteBeEatenChesses(beEatenChesses, newHistory, newCurrentSide, latestMoveChessName) {
         let newChesses = _.cloneDeep(newHistory[newHistory.length - 1].chesses);
         for (let chessItem of newChesses) {
             if (beEatenChesses.includes(chessItem.name)) {
@@ -303,7 +305,7 @@ function Game () {
         return newHistory;
     }
 
-    function changeCashChesses (cashChesses, beEatenChesses, newCurrentSide) {
+    function changeCashChesses(cashChesses, beEatenChesses, newCurrentSide) {
         cashChesses = _.cloneDeep(cashChesses);
         for (let chessItem of cashChesses) {
             if (beEatenChesses.includes(chessItem.name)) {
@@ -339,11 +341,12 @@ function Game () {
             document.body.removeChild(script);
         };
     }, []);
+
     return (
         <div className="game">
             <div className="board">
                 {/*下一步*/}
-                {winnerSide === null && (
+                {/* {winnerSide === null && (
                     <div className="next-step">
                         <span>下一步：</span>
                         <button
@@ -352,19 +355,7 @@ function Game () {
                             }}
                         />
                     </div>
-                )}
-
-                {/*獲勝方*/}
-                {sides.includes(winnerSide) && (
-                    <div className="winner">
-                        <span>獲勝方是：</span>
-                        <button
-                            style={{
-                                backgroundColor: winnerSide === 0 ? '#144181' : '#e5e8e9',
-                            }}
-                        />
-                    </div>
-                )}
+                )} */}
 
                 <Board
                     boardWidth={boardWidth + 'px'}
@@ -380,7 +371,7 @@ function Game () {
             </div>
             <div className="buttonBlock">
                 <Buttons move={move} />
-                <TeamList />
+                <TeamList sides={sides} winnerSide={winnerSide} />
             </div>
         </div>
     );
@@ -388,34 +379,52 @@ function Game () {
 
 const Buttons = (props) => {
     let { move } = props;
-    function replay () {
+    function replay() {
         window.location.reload();
     }
-
+    const title = { step: '步數', speed: '速度' };
+    const id = { step: 'step', speed: 'speed' };
+    const defaultValue = { step: '1', speed: '1' };
+    const max = { step: '60', speed: '2' };
+    const min = { step: '0', speed: '0' };
     return (
         <div className="player">
             <div className="steps">
-                <label>
+                <Slider
+                    title={title.step}
+                    _id={id.step}
+                    defaultValue={defaultValue.step}
+                    max={max.step}
+                    min={min.step}
+                ></Slider>
+                <Slider
+                    title={title.speed}
+                    _id={id.speed}
+                    defaultValue={defaultValue.speed}
+                    max={max.speed}
+                    min={min.speed}
+                ></Slider>
+                {/* <label>`
                     步數:
                     <input id="step" type="number" />
-                </label>
+                </label> */}
 
                 {/* 調整速度 */}
-                <select id="speed">
+                {/* <select id="speed">
                     <option value="1000">-- 速度 --</option>
                     <option value="2000">0.25</option>
                     <option value="1500">0.5</option>
                     <option value="1000">1</option>
                     <option value="500">1.5</option>
                     <option value="250">2</option>
-                </select>
+                </select> */}
             </div>
             <div className="btns">
-                <button id="restart" onClick={replay}>
+                <div id="restart" onClick={replay}>
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
-                        width="16"
-                        height="16"
+                        width="50"
+                        height="50"
                         fill="currentColor"
                         class="bi bi-arrow-repeat"
                         viewBox="0 0 16 16"
@@ -426,43 +435,44 @@ const Buttons = (props) => {
                             d="M8 3c-1.552 0-2.94.707-3.857 1.818a.5.5 0 1 1-.771-.636A6.002 6.002 0 0 1 13.917 7H12.9A5.002 5.002 0 0 0 8 3zM3.1 9a5.002 5.002 0 0 0 8.757 2.182.5.5 0 1 1 .771.636A6.002 6.002 0 0 1 2.083 9H3.1z"
                         />
                     </svg>
-                </button>
-                <button id="next" onClick={() => move()}>
+                </div>
+                <div id="next" onClick={() => move()}>
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
-                        width="16"
-                        height="16"
+                        width="50"
+                        height="50"
                         fill="currentColor"
-                        class="bi bi-skip-backward-btn-fill"
+                        class="bi bi-arrow-down-square-fill"
                         viewBox="0 0 16 16"
                     >
-                        <path d="M0 10V2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm4.79-6.907A.5.5 0 0 0 4 3.5v5a.5.5 0 0 0 .79.407L7.5 6.972V8.5a.5.5 0 0 0 .79.407L11 6.972V8.5a.5.5 0 0 0 1 0v-5a.5.5 0 0 0-1 0v1.528L8.29 3.093a.5.5 0 0 0-.79.407v1.528L4.79 3.093z" />
+                        <path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm6.5 4.5v5.793l2.146-2.147a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.5.5 0 1 1 .708-.708L7.5 10.293V4.5a.5.5 0 0 1 1 0z" />
                     </svg>
-                </button>
-                <button id="play">
+                </div>
+                {/* 播放 */}
+                <div id="play">
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
-                        width="16"
-                        height="16"
+                        width="50"
+                        height="50"
                         fill="currentColor"
                         class="bi bi-play-btn-fill"
                         viewBox="0 0 16 16"
                     >
                         <path d="M0 12V4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm6.79-6.907A.5.5 0 0 0 6 5.5v5a.5.5 0 0 0 .79.407l3.5-2.5a.5.5 0 0 0 0-.814l-3.5-2.5z" />
                     </svg>
-                </button>
-                <button id="stop">
+                </div>
+                <div id="stop">
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
-                        width="16"
-                        height="16"
+                        width="50"
+                        height="50"
                         fill="currentColor"
                         class="bi bi-pause-btn-fill"
                         viewBox="0 0 16 16"
                     >
                         <path d="M0 12V4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm6.25-7C5.56 5 5 5.56 5 6.25v3.5a1.25 1.25 0 1 0 2.5 0v-3.5C7.5 5.56 6.94 5 6.25 5zm3.5 0c-.69 0-1.25.56-1.25 1.25v3.5a1.25 1.25 0 1 0 2.5 0v-3.5C11 5.56 10.44 5 9.75 5z" />
                     </svg>
-                </button>
+                </div>
             </div>
         </div>
     );

@@ -32,7 +32,7 @@ import styled from 'styled-components';
 const Buttons = (props) => {
     let { move } = props;
     // 点击 重玩
-    function replay () {
+    function replay() {
         window.location.reload();
     }
 

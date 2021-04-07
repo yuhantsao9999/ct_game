@@ -3,7 +3,6 @@ const R = require('ramda');
 const { MongoClient } = mongodb;
 require('dotenv').config();
 const { DB_URI } = process.env;
-console.log(DB_URI);
 let _client = null;
 
 class Model {
