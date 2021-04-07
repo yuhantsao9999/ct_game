@@ -73,15 +73,6 @@ const battleOfTheRest = (size, round) => {
     return scoreArr;
 };
 
-const viewBattle = (team1, team2) => {
-    // TODO : ask the user whether to view battle or not
-    if (confirm(`觀看 ${team1} 和 ${team2} 的對戰過程嗎？`)) {
-        window.open(`http://localhost:3080/watermelonChess?playerA=${team1}&playerB=${team2}`);
-    } else {
-        return;
-    }
-};
-
 const viewDetailOrShowResult = (team1, team2) => {
     if (confirm(`觀看 ${team1} 和 ${team2} 的對戰過程嗎？`)) {
         window.open(`http://localhost:3080/watermelonChess?playerA=${team1}&playerB=${team2}`);
