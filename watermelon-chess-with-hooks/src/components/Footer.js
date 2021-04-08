@@ -41,7 +41,7 @@ const Footer = () => {
     return (
         <FootWrapper>
             <CopyrightWapper>
-                <Copyright>© 2021 VIPLab, National Taiwan Normal University.</Copyright>
+                <Copyright>© 國立臺灣師範大學  資訊工程系  VIPLab</Copyright>
             </CopyrightWapper>
         </FootWrapper>
     );

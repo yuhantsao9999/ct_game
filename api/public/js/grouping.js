@@ -75,7 +75,7 @@ const battleOfTheRest = (size, round) => {
 
 const viewDetailOrShowResult = (team1, team2) => {
     if (confirm(`觀看 ${team1} 和 ${team2} 的對戰過程嗎？`)) {
-        window.open(`http://140.122.164.194:3080/watermelonChess?playerA=${team1}&playerB=${team2}`);
+        window.open(`/watermelonChess?playerA=${team1}&playerB=${team2}`);
     }
 };
 

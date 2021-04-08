@@ -25,7 +25,7 @@ const click = (next) => {
 
 const play = () => {
     // console.log('step: ', document.getElementById('step').innerHTML);
-    console.log('speed2: ', 1000 / document.getElementById('speed').innerHTML);
+    // console.log('speed2: ', 1000 / document.getElementById('speed').innerHTML);
     // <option value="1000">-- 速度 --</option>
     // <option value="2000">0.25</option>
     // <option value="1500">0.5</option>
