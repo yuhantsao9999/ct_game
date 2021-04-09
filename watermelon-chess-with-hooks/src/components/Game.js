@@ -254,7 +254,7 @@ function Game() {
                 );
                 setHistory(cashHistory);
                 //新增淘汰旗子
-                if (newCurrentSide === 0) {
+                if (newCurrentSide === 1) {
                     setYellow([...yellow, ...beEatenChesses]);
                 } else {
                     setRed([...red, ...beEatenChesses]);
@@ -384,8 +384,8 @@ const Buttons = (props) => {
     }
     const title = { step: '步數', speed: '速度' };
     const id = { step: 'step', speed: 'speed' };
-    const defaultValue = { step: '60', speed: '100' };
-    const max = { step: '60', speed: '200' };
+    const defaultValue = { step: '100', speed: '100' };
+    const max = { step: '100', speed: '200' };
     const min = { step: '0', speed: '25' };
     return (
         <div className="player">

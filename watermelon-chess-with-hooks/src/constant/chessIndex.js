@@ -460,76 +460,6 @@ export const dummyData = [
             picture: null,
         },
     },
-    // {
-    //     from: {
-    //         name: 'N2',
-    //         siblings: sibilingIndex['N2'],
-    //         side: 0,
-    //         picture: chessIndex.yellow[1].picture,
-    //     },
-    //     to: {
-    //         name: 'N3',
-    //         siblings: sibilingIndex['N3'],
-    //         side: null,
-    //         picture: null,
-    //     },
-    // },
-    // {
-    //     from: {
-    //         name: 'N3',
-    //         siblings: sibilingIndex['N3'],
-    //         side: 1,
-    //         picture: chessIndex.yellow[3].picture,
-    //     },
-    //     to: {
-    //         name: 'N1',
-    //         siblings: sibilingIndex['N1'],
-    //         side: null,
-    //         picture: null,
-    //     },
-    // },
-    // {
-    //     from: {
-    //         name: 'C2',
-    //         siblings: sibilingIndex['C2'],
-    //         side: 0,
-    //         picture: chessIndex.red[3].picture,
-    //     },
-    //     to: {
-    //         name: 'C3',
-    //         siblings: sibilingIndex['C3'],
-    //         side: null,
-    //         picture: null,
-    //     },
-    // },
-    // {
-    //     from: {
-    //         name: 'C4',
-    //         siblings: sibilingIndex['C4'],
-    //         side: 1,
-    //         picture: chessIndex.yellow[2].picture,
-    //     },
-    //     to: {
-    //         name: 'C1',
-    //         siblings: sibilingIndex['C1'],
-    //         side: null,
-    //         picture: null,
-    //     },
-    // },
-    // {
-    //     from: {
-    //         name: 'C3',
-    //         siblings: sibilingIndex['C3'],
-    //         side: 0,
-    //         picture: chessIndex.red[3].picture,
-    //     },
-    //     to: {
-    //         name: 'C2',
-    //         siblings: sibilingIndex['C2'],
-    //         side: null,
-    //         picture: null,
-    //     },
-    // },
     {
         from: {
             name: 'N2',
@@ -614,48 +544,6 @@ export const dummyData = [
             picture: null,
         },
     },
-    // {
-    //     from: {
-    //         name: 'E4',
-    //         siblings: sibilingIndex['E4'],
-    //         side: 1,
-    //         picture: chessIndex.yellow[1].picture,
-    //     },
-    //     to: {
-    //         name: 'E3',
-    //         siblings: sibilingIndex['E3'],
-    //         side: null,
-    //         picture: null,
-    //     },
-    // },
-    // {
-    //     from: {
-    //         name: 'E2',
-    //         siblings: sibilingIndex['E2'],
-    //         side: 0,
-    //         picture: chessIndex.red[1].picture,
-    //     },
-    //     to: {
-    //         name: 'E4',
-    //         siblings: sibilingIndex['E4'],
-    //         side: null,
-    //         picture: null,
-    //     },
-    // },
-    // {
-    //     from: {
-    //         name: 'C4',
-    //         siblings: sibilingIndex['C4'],
-    //         side: 1,
-    //         picture: chessIndex.yellow[1].picture,
-    //     },
-    //     to: {
-    //         name: 'E2',
-    //         siblings: sibilingIndex['E2'],
-    //         side: null,
-    //         picture: null,
-    //     },
-    // },
     {
         from: {
             name: 'N3',

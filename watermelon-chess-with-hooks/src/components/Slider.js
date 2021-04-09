@@ -25,18 +25,6 @@ export default function InputSlider(prop) {
         setValue(newValue);
     };
 
-    const handleInputChange = (event) => {
-        setValue(event.target.value === '' ? '' : Number(event.target.value));
-    };
-
-    const handleBlur = () => {
-        if (value < 0) {
-            setValue(min);
-        } else if (value > max) {
-            setValue(max);
-        }
-    };
-
     return (
         <div className={classes.root}>
             <Typography id="input-slider" gutterBottom>
@@ -84,7 +72,7 @@ export default function InputSlider(prop) {
                     </Grid>
                 ) : (
                     <Grid item id={_id}>
-                        {value / 100}
+                        {(value / 100).toFixed(1)}
                     </Grid>
                 )}
             </Grid>
