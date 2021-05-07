@@ -33,7 +33,6 @@
                                     name="upload"
                                     id="upload"
                                     class="upload-box"
-                                    accept=".aia"
                                     placeholder="選擇檔案"
                                     onchange="processSelectedFiles(this)"
                                 />
@@ -41,6 +40,7 @@
                             <p>檔案格式僅支援 aia</p>
                             <p id="file-return"></p>
                         </div>
+                        <!-- //傳給品逵解壓縮 -->
                         <button onclick="uploadTeamFile()" type="submit" class="button button-block">上傳</button>
                     </div>
                 </div>
@@ -51,6 +51,7 @@
         </div>
 
         <!-- footer -->
+        <!-- accept=".aia" -->
         <div class="footer-wapper">
             <div class="footer">
                 <div class="copyright">© 國立臺灣師範大學  資訊工程系  VIPLab</div>
@@ -59,4 +60,50 @@
     </body>
     <script type="text/javascript" src="js/upload.js"></script>
     <script type="text/javascript" src="js/checkLocalStorage.js"></script>
+    <script src="./js/convertToPython/google-blockly/blockly_uncompressed.js"></script>
+    <!-- <script src="../../tests/generators/unittest.js"></script> -->
+    <!-- <script src="../../msg/messages.js"></script> -->
+    <!-- <script src="../../blocks/logic.js"></script> -->
+    <script src="./js/convertToPython/google-blockly/blocks/logic.js"></script>
+    <script src="./js/convertToPython/google-blockly/blocks/loops.js"></script>
+    <script src="./js/convertToPython/google-blockly/blocks/math.js"></script>
+    <script src="./js/convertToPython/google-blockly/blocks/text.js"></script>
+    <script src="./js/convertToPython/google-blockly/blocks/lists.js"></script>
+    <script src="./js/convertToPython/google-blockly/blocks/colour.js"></script>
+    <script src="./js/convertToPython/google-blockly/blocks/variables.js"></script>
+    <script src="./js/convertToPython/google-blockly/blocks/procedures.js"></script>
+    <script src="./js/convertToPython/google-blockly/generators/python.js"></script>
+    <!-- <script src="../../tests/generators/unittest_python.js"></script> -->
+    <script src="./js/convertToPython/google-blockly/generators/python/logic.js"></script>
+    <script src="./js/convertToPython/google-blockly/generators/python/loops.js"></script>
+    <script src="./js/convertToPython/google-blockly/generators/python/math.js"></script>
+    <script src="./js/convertToPython/google-blockly/generators/python/text.js"></script>
+    <script src="./js/convertToPython/google-blockly/generators/python/lists.js"></script>
+    <script src="./js/convertToPython/google-blockly/generators/python/colour.js"></script>
+    <script src="./js/convertToPython/google-blockly/generators/python/variables.js"></script>
+    <script src="./js/convertToPython/google-blockly/generators/python/procedures.js"></script>
+    <script src="./js/convertToPython/google-blockly/msg/js/en.js"></script>
+    <script>
+        function generate() {
+            // Parse the XML into a tree.
+            // xmlText 檔案解壓縮後拿到 xml
+            // var xmlText = document.getElementById('xml_input').value;
+            const xmlText = '';
+            console.log('xmlText', xmlText);
+            try {
+                var xml = Blockly.Xml.textToDom(xmlText);
+            } catch (e) {
+                alert(e);
+                return;
+            }
+            // Create a headless workspace.
+            var demoWorkspace = new Blockly.Workspace();
+            Blockly.Xml.domToWorkspace(xml, demoWorkspace);
+            // 傳 code 給後端
+            var code = Blockly.Python.workspaceToCode(demoWorkspace);
+            console.log('code', code);
+            // fetch 給後端
+            // document.getElementById('code_output').value = code;
+        }
+    </script>
 </html>
