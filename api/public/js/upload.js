@@ -12,9 +12,9 @@ const uploadTeamFile = () => {
     console.log('teamId,teamName', teamId, teamName);
     if (teamId && teamName) {
         const data = {
-            teamId,
             teamName,
         };
+        console.log('teamId  teamName data', data);
         const formData = new FormData();
         for (file of input.files) {
             formData.append('files', file, file.name);
