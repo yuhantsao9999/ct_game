@@ -7,13 +7,13 @@ const uploadTeamFile = () => {
     const getUrlString = location.href;
     const url = new URL(getUrlString);
     const teamId = url.searchParams.get('userId');
-
+    const teamName = url.searchParams.get('teamName');
     const input = document.querySelector('input[type="file"]');
 
     if (teamId && teamName) {
         const data = {
             teamId,
-            teamNmae,
+            teamName,
         };
         const formData = new FormData();
         for (file of input.files) {
