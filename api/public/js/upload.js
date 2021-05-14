@@ -18,7 +18,7 @@ const uploadTeamFile = () => {
         for (file of input.files) {
             formData.append('files', file, file.name);
         }
-        formData.append('data', data);
+        formData.append('data', JSON.stringify(data));
         fetch('http://140.122.164.194:5000/upload', {
             mode: 'cors',
             method: 'post',
@@ -41,7 +41,7 @@ const uploadTeamFile = () => {
                 code = Blockly.Python.workspaceToCode(demoWorkspace);
 
                 let newFormData = new FormData();
-                newFormData.append('team_name', 'test_name');
+                newFormData.append('team_name', JSON.stringify(data));
                 newFormData.append('code', code);
 
                 fetch('http://140.122.164.194:5000/save', {
@@ -54,29 +54,29 @@ const uploadTeamFile = () => {
                     })
                     .then((response) => {
                         console.log(response);
+                        // fetch('/api/uploadFile', {
+                        //     method: 'post',
+                        //     body: formData,
+                        // })
+                        //     .then((response) => {
+                        //         console.log('uploadFile response', response);
+                        //         return response;
+                        //     })
+                        //     .then((response) => {
+                        //         if (response.status == 200) {
+                        //             console.log('Success:', response);
+                        //             alert(`完成提交！`);
+                        //         }
+                        //     })
+                        //     .catch((error) => {
+                        //         console.error('Error:', error);
+                        //     });
                     })
                     .catch((err) => {
                         console.log('error', err);
+                        alert(`上傳失敗請重新上傳`);
                     });
             });
-        // fetch('/api/uploadFile', {
-        //     method: 'post',
-        //     body: formData,
-        // })
-        //     .then((response) => {
-        //         console.log('uploadFile response', response);
-        //         return response;
-        //     })
-        //     .then((response) => {
-        //         if (response.status == 200) {
-        //             console.log('Success:', response);
-        //             alert(`完成提交！`);
-        //         }
-        //     })
-        //     .catch((error) => {
-        //         console.error('Error:', error);
-        //         alert(`上傳失敗`);
-        //     });
     } else {
         alert('請登入');
         window.location.href = './main';
