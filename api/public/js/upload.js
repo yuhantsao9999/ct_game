@@ -14,12 +14,11 @@ const uploadTeamFile = () => {
         const data = {
             teamName,
         };
-        console.log('teamId  teamName data', data);
         const formData = new FormData();
         for (file of input.files) {
             formData.append('files', file, file.name);
         }
-        formData.append('data', JSON.stringify(data));
+        formData.append('data', data);
         fetch('http://140.122.164.194:5000/upload', {
             mode: 'cors',
             method: 'post',
