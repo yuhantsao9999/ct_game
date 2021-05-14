@@ -6,10 +6,10 @@ function processSelectedFiles(fileInput) {
 const uploadTeamFile = () => {
     const getUrlString = location.href;
     const url = new URL(getUrlString);
-    const teamId = url.searchParams.get('userId');
+    const teamId = url.searchParams.get('teamId');
     const teamName = url.searchParams.get('teamName');
     const input = document.querySelector('input[type="file"]');
-
+    console.log('teamId,teamName', teamId, teamName);
     if (teamId && teamName) {
         const data = {
             teamId,
