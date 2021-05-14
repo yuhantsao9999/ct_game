@@ -23,11 +23,12 @@ const insertOne = async (req) => {
     return doc ? { error: false } : { error: true };
 };
 
-const findLatest = async (req) => {
+const findTeamName = async (req) => {
     const data = req.body;
-    const cursor = await Users.find(data, { $orderby: { created_at: -1 } });
-    const latestDoc = await cursor.next();
-    return latestDoc ? { error: false, data: latestDoc } : { error: true };
+    const { teamId } = data;
+    const cursor = await Users.find(data, { $orderby: { teamId: teamId } });
+    const docArr = await cursor.next();
+    return docArr ? { error: false, data: docArr } : { error: true };
 };
 
 const findActivityName = async (req) => {
@@ -48,7 +49,7 @@ const find = async (req) => {
 module.exports = {
     uploadFile,
     insertOne,
-    findLatest,
+    findTeamName,
     findActivityName,
     find,
 };

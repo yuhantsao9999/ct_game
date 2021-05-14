@@ -27,9 +27,22 @@ const signIn = () => {
                 localStorage.setItem('userId', data.userId);
                 window.location = `/select`;
             } else {
-                console.log('checkUser data.userId', data.userId);
-                localStorage.setItem('userId', data.userId);
-                window.location = `/upload?userId=${data.userId}`;
+                const teamId = data.userId;
+                fetch('/findTeamName', {
+                    method: 'post',
+                    body: JSON.stringify({ teamId }),
+                    headers: {
+                        'content-type': 'application/json',
+                    },
+                })
+                    .then((response) => {
+                        return response.json();
+                    })
+                    .then((response) => {
+                        localStorage.setItem('userId', response.teamId);
+                        window.location = `/upload?teamId=${response.teamId}&teamName=${response.teamName}`;
+                    })
+                    .catch((error) => console.error('Error:', error));
             }
         })
         .catch((err) => {
