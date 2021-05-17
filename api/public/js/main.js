@@ -40,7 +40,7 @@ const signIn = () => {
                     })
                     .then((response) => {
                         localStorage.setItem('userId', response.teamId);
-                        window.location = `/upload?teamId=${response.teamId}&teamName=${response.teamName}`;
+                        window.location = `/upload?teamId=${response.teamId}&activityName=${response.activityName}&teamName=${response.teamName}`;
                     })
                     .catch((error) => console.error('Error:', error));
             }

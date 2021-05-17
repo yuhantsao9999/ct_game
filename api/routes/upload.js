@@ -1,6 +1,7 @@
 const express = require('express');
 const multer = require('multer');
 const { uploadFile } = require('../controller/teamData');
+const { insertOneCode } = require('../controller/storePythonCode');
 const router = express.Router();
 
 const upload = multer({
@@ -12,7 +13,7 @@ const upload = multer({
     },
 });
 
-router.post('/uploadFile', upload.single('files'), async (req, res) => {
+router.post('/uploadFileName', upload.single('files'), async (req, res) => {
     const result = await uploadFile(req);
     if (result.error) {
         console.log(`upload error`);
@@ -21,6 +22,13 @@ router.post('/uploadFile', upload.single('files'), async (req, res) => {
         console.log(`upload succcessfully`);
         res.send('upload successfully');
     }
+});
+
+router.post('/insertPythonCode', async (req, res) => {
+    const result = await insertOneCode(req);
+    if (result.error) {
+        res.status(404).send('Insert error');
+    } else res.send('Insert successfully');
 });
 
 module.exports = router;

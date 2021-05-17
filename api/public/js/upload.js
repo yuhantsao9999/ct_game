@@ -8,10 +8,11 @@ const uploadTeamFile = () => {
     const url = new URL(getUrlString);
     const teamId = url.searchParams.get('teamId');
     const teamName = url.searchParams.get('teamName');
+    const activityName = url.searchParams.get('activityName');
     const input = document.querySelector('input[type="file"]');
-    console.log('teamId,teamName', teamId, teamName);
     if (teamId && teamName) {
         const data = {
+            teamId,
             teamName,
         };
         const formData = new FormData();
@@ -40,42 +41,43 @@ const uploadTeamFile = () => {
 
                 code = Blockly.Python.workspaceToCode(demoWorkspace);
 
-                let newFormData = new FormData();
-                newFormData.append('team_name', JSON.stringify(data));
-                newFormData.append('code', code);
-
-                fetch('http://140.122.164.194:5000/save', {
-                    mode: 'cors',
+                fetch('/api/insertPythonCode', {
                     method: 'post',
-                    body: newFormData,
+                    body: JSON.stringify({
+                        teamId,
+                        activityName,
+                        teamName,
+                        pythonCode: code,
+                    }),
+                    headers: {
+                        'content-type': 'application/json',
+                    },
                 })
                     .then((response) => {
-                        return response.text();
+                        return response;
                     })
                     .then((response) => {
                         console.log(response);
-                        // fetch('/api/uploadFile', {
-                        //     method: 'post',
-                        //     body: formData,
-                        // })
-                        //     .then((response) => {
-                        //         console.log('uploadFile response', response);
-                        //         return response;
-                        //     })
-                        //     .then((response) => {
-                        //         if (response.status == 200) {
-                        //             console.log('Success:', response);
-                        //             alert(`完成提交！`);
-                        //         }
-                        //     })
-                        //     .catch((error) => {
-                        //         console.error('Error:', error);
-                        //     });
+                        fetch('/api/uploadFileName', {
+                            method: 'post',
+                            body: formData,
+                        })
+                            .then((response) => {
+                                console.log('uploadFileName response', response);
+                                return response;
+                            })
+                            .then((response) => {
+                                if (response.status == 200) {
+                                    console.log('Success:', response);
+                                    alert(`完成提交！`);
+                                }
+                            })
+                            .catch((error) => {
+                                alert(`上傳失敗請重新上傳`);
+                                console.error('Error:', error);
+                            });
                     })
-                    .catch((err) => {
-                        console.log('error', err);
-                        alert(`上傳失敗請重新上傳`);
-                    });
+                    .catch((error) => console.error('Error:', error));
             });
     } else {
         alert('請登入');

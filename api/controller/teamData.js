@@ -1,6 +1,7 @@
 const Users = require('../models/Users');
 
 const uploadFile = async (req) => {
+    console.log();
     const { teamId } = JSON.parse(req.body.data);
     const { originalname } = req.file;
     const updateData = {
