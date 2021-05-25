@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useContext } from 'react';
 import queryString from 'query-string';
-// import { useRouteMatch, useParams, useLocation } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 // import { useLocation } from 'react-router';
 // import { useSelector, useDispatch } from 'react-redux';
 // import { TagCategoryDataContext } from '../../contexts';
@@ -60,14 +60,14 @@ const BeEatenYellowChesses = styled.div`
     background-position: center;
 `;
 
-// const dummyTeamList = { playerA: '于立隊  5-2', playerB: '喻文隊  10-1' };
 // const urlParams = new URLSearchParams(window.location.search);
-// const date = urlParams.get('date');
 
 const TeamList = (props) => {
     let { sides, winnerSide } = props;
     const result = useContext(ContextStore);
-    let params = queryString.parse(window.location.search);
+    // let params = queryString.parse(window.location.search);
+    const { playerA } = useParams();
+    const { playerB } = useParams();
 
     return (
         <Wrapper>
@@ -85,7 +85,7 @@ const TeamList = (props) => {
             <div className="nameList">
                 <div className="up">
                     <TeamListItem teamColor="#d80f0f"></TeamListItem>
-                    {params.playerA}
+                    {playerA}
                 </div>
                 <BeEatenChessesWrapper>
                     {result.yellow.map((item, i) => (
@@ -96,7 +96,7 @@ const TeamList = (props) => {
             <div className="nameList">
                 <div className="up">
                     <TeamListItem teamColor="#f5f516"></TeamListItem>
-                    {params.playerB}
+                    {playerB}
                 </div>
                 <BeEatenChessesWrapper>
                     {result.red.map((item, i) => (

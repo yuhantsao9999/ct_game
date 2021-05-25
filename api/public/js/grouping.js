@@ -75,17 +75,21 @@ const battleOfTheRest = (size, round) => {
 
 const viewDetailOrShowResult = (team1, team2) => {
     if (confirm(`觀看 ${team1} 和 ${team2} 的對戰過程嗎？`)) {
-        window.open(`/watermelonChess?playerA=${team1}&playerB=${team2}`);
+        // window.open(`/watermelonChess/${team1}/${team2}`);
+        //TODO:FIX HOST TO 3080
+        window.open(`http://localhost:3000/watermelonChess/${team1}/${team2}`);
     }
 };
 
 // simulate battle result from calling api
 const battleOfTwoTeam = (data) => {
     const { round, match } = data;
-    const team1 = document.getElementsByClassName('round')[round].childNodes[match].childNodes[0].childNodes[0]
-        .childNodes[0].innerText;
-    const team2 = document.getElementsByClassName('round')[round].childNodes[match].childNodes[0].childNodes[1]
-        .childNodes[0].innerText;
+    const team1 =
+        document.getElementsByClassName('round')[round].childNodes[match].childNodes[0].childNodes[0].childNodes[0]
+            .innerText;
+    const team2 =
+        document.getElementsByClassName('round')[round].childNodes[match].childNodes[0].childNodes[1].childNodes[0]
+            .innerText;
     if (team1 === 'TBD' || team2 === 'TBD') {
         window.alert("Can't battle with TBD team.");
         return;
