@@ -5,6 +5,7 @@ const pages = {
     main: require('./routes/main'),
     select: require('./routes/select'),
     start: require('./routes/start'),
+    convertCode: require('./routes/convertCode'),
 };
 
 module.exports = {

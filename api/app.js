@@ -13,6 +13,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.json({ limit: '50000mb' }));
 app.use(bodyParser.urlencoded({ limit: '50000mb', extended: true }));
 app.use(express.static(path.join(__dirname, '../watermelon-chess-with-hooks/build')));
+app.use(express.static(path.join(__dirname, 'public/assets/image/')));
 
 // app.get('/api/users', (req, res) => {
 //     console.log('api/users called!!!!');
@@ -40,6 +41,7 @@ app.use('/', pages.start);
 app.use('/api', pages.set);
 app.use('/api', pages.upload);
 app.use('/api', pages.grouping);
+app.use('/api', pages.convertCode);
 
 app.get('/watermelonChess', (req, res) => {
     res.sendFile(path.join(__dirname, '../watermelon-chess-with-hooks/build/index.html'));
