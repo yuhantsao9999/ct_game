@@ -50,7 +50,6 @@ function Board(props) {
                             left: chessLeft + 'px',
                         }}
                         onClick={() => {
-                            // console.log('chesses.map', chessData);
                             handleClickChessWrap(chessData);
                         }}
                     >
