@@ -1,5 +1,5 @@
-const RED_CHESS = '../棋子-紅-';
-const YELLOW_CHESS = '../棋子-黃-';
+const RED_CHESS = '/棋子-紅-';
+const YELLOW_CHESS = '/棋子-黃-';
 
 export const chessIndex = {
     red: [

@@ -71,18 +71,19 @@ body {
         height: min-content;
 
         .chess-wrap {
+            //TODO:green-dot,red-dot 改為 style component 後可刪除
             position: absolute;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
 
-            button.chess {
-                border-style: none;
-                outline: none;
-                padding: 0;
-                background-size: contain;
-            }
+            // button.chess {
+            //     border-style: none;
+            //     outline: none;
+            //     padding: 0;
+            //     background-size: contain;
+            // }
 
             .green-dot {
                 position: absolute;
