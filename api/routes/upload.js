@@ -1,7 +1,7 @@
 const express = require('express');
 const multer = require('multer');
 const { uploadFile } = require('../controller/teamData');
-const { insertOneCode } = require('../controller/storePythonCode');
+const { insertOneCode } = require('../controller/convertPythonCode');
 const router = express.Router();
 
 const upload = multer({
