@@ -3,7 +3,7 @@ const fetchBattleProcessStream = async (pythonCodeData) => {
     console.log('pythonCodeData', pythonCodeData);
     if (pythonCodeData) {
         const formData = new FormData();
-        formData.append('pythonCodeData', JSON.stringify({ pythonCodeData }));
+        formData.append('pythonCodeData', JSON.stringify(pythonCodeData));
         fetch('http://140.122.164.194:5000/battle', {
             mode: 'cors',
             method: 'post',
