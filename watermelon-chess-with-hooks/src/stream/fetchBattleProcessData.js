@@ -1,8 +1,6 @@
 const fetchBattleProcessStream = async (pythonCodeData) => {
     console.log('do fetchBattleProcessStream');
     console.log('pythonCodeData', pythonCodeData);
-    console.log('pythonCodeA', pythonCodeA);
-    console.log('pythonCodeB', pythonCodeB);
     if (pythonCodeData) {
         const formData = new FormData();
         formData.append('pythonCodeData', JSON.stringify(pythonCodeData));
