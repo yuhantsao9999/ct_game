@@ -9,7 +9,7 @@ body {
 }
 
 .game {
-    // padding-top: 10px;
+    padding-top: 10px;
     // padding-left: 15%;
     display: flex;
     margin: auto;
@@ -17,9 +17,8 @@ body {
     // flex-wrap: nowrap;
     // justify-content: flex-start;
     // position: relative;
-    height: 85vh;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
     .board {
         float: left;
     }
