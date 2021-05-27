@@ -77,7 +77,9 @@ const viewDetailOrShowResult = (team1, team2) => {
     if (confirm(`觀看 ${team1} 和 ${team2} 的對戰過程嗎？`)) {
         // window.open(`/watermelonChess/${team1}/${team2}`);
         //TODO:FIX HOST TO 3080
-        window.open(`http://localhost:3000/watermelonChess/${team1}/${team2}`);
+        window.open(
+            window.location.protocol + '//' + window.location.hostname + `:3000/watermelonChess/${team1}/${team2}`
+        );
     }
 };
 

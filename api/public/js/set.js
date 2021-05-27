@@ -45,6 +45,7 @@ const isActivityNameExist = async (activityName) => {
                 return response;
             })
             .then((response) => {
+                console.log('set response', response);
                 if (response.status == 409) {
                     return false;
                 } else {
@@ -106,7 +107,11 @@ const insertTeamId = async () => {
 
                 teamLi.appendChild(teamDiv);
 
-                document.getElementById('random-team-id-list').appendChild(teamLi);
+                if (i < 16) {
+                    document.getElementById('random-team-id-list').appendChild(teamLi);
+                } else {
+                    document.getElementById('random-team-id-list2').appendChild(teamLi);
+                }
 
                 fetch('/api/insertTeamId', {
                     method: 'post',
