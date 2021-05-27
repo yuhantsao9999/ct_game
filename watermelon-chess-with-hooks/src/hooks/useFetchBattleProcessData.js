@@ -11,9 +11,7 @@ export const useFetchBattleProcessData = (pythonCodeData) => {
             setIsLoading(true);
 
             try {
-                const fetchBattleProcessDataResult = await fetchBattleProcessStream({
-                    pythonCodeData,
-                });
+                const fetchBattleProcessDataResult = await fetchBattleProcessStream(pythonCodeData);
                 setResult(fetchBattleProcessDataResult);
             } catch (error) {
                 setError(error);
