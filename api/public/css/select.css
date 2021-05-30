@@ -26,7 +26,7 @@ body {
 }
 
 .content-wapper {
-    background-image: url('https://compthinking.csie.ntnu.edu.tw/wp-content/uploads/2020/12/Bebras-2_bg.png');
+    background-image: url('../assets/image/Bebras-2_bg.png');
     display: flex;
     background-position: center top;
     margin: auto;
