@@ -114,19 +114,23 @@ const fetchBattleProcess = async (pythonCodeData) => {
     if (pythonCodeData) {
         const formData = new FormData();
         formData.append('pythonCodeData', JSON.stringify(pythonCodeData));
-        fetch('http://140.122.164.194:5000/battle', {
-            mode: 'cors',
-            method: 'post',
-            body: formData,
-        })
-            .then((response) => {
-                return response.json();
+        try {
+            return fetch('http://140.122.164.194:5000/battle', {
+                mode: 'cors',
+                method: 'post',
+                body: formData,
             })
-            .then((response) => {
-                console.log('battle response', response);
-                return response;
-            })
-            .catch((error) => console.error('Error:', error));
+                .then((response) => {
+                    return response.json();
+                })
+                .then((response) => {
+                    console.log('battle response', response);
+                    return response;
+                })
+                .catch((error) => console.error('Error:', error));
+        } catch (error) {
+            return;
+        }
     }
 };
 // simulate battle result from calling api
@@ -154,7 +158,7 @@ const battleOfTwoTeam = async (data) => {
         pythonCodeA: fetchPythonCodeDataResultOfPlayerA,
         pythonCodeB: fetchPythonCodeDataResultOfPlayerB,
     };
-    const fetchBattleProcessDataResult = await fetchBattleProcess(pythonCodeData);
+    const fetchBattleProcessDataResult = await fetchBattleProcess(pythonCodeData).then((response) => response);
     console.log('fetchBattleProcessDataResult', fetchBattleProcessDataResult);
 
     if (!notShow) {
