@@ -61,42 +61,107 @@ const getRandomTeam = (teamNum) => {
 
 // simulate battle result of all team from calling api
 const battleOfTheRest = (size, round) => {
-    const scoreArr = [];
+    let scoreArr = [];
 
     for (let i = 0; i < size / Math.pow(2, round); i += 2) {
         const hasBattled = Number.isInteger(globalData['results'][round][i / 2][0]);
-        const scoreI = hasBattled ? globalData['results'][round][i / 2][0] : getRandomInt(100);
-        const scoreII = hasBattled ? globalData['results'][round][i / 2][1] : getRandomInt(100);
+        const tmpData = {
+            round: round,
+            match: i / 2,
+            notShow: true,
+        };
 
-        scoreArr.push([scoreI >= scoreII ? 1 : 0, scoreII >= scoreI ? 1 : 0, { round: round, match: i / 2 }]);
+        if (!hasBattled) {
+            battleOfTwoTeam(tmpData);
+        }
     }
+    scoreArr = globalData['results'][round];
     return scoreArr;
 };
 
 const viewDetailOrShowResult = (team1, team2) => {
     if (confirm(`觀看 ${team1} 和 ${team2} 的對戰過程嗎？`)) {
         // window.open(`/watermelonChess/${team1}/${team2}`);
-        //TODO:FIX HOST TO 3080
         window.open(
             window.location.protocol + '//' + window.location.hostname + `:3000/watermelonChess/${team1}/${team2}`
         );
     }
 };
-
+const fetchPythonCode = async (player) => {
+    const data = {
+        teamName: player,
+    };
+    try {
+        return fetch('/api/findOnePythonCode', {
+            method: 'post',
+            body: JSON.stringify(data),
+            headers: {
+                'content-type': 'application/json',
+            },
+        })
+            .then((response) => {
+                return response.json();
+            })
+            .then((response) => {
+                return response.pythonCode;
+            })
+            .catch((error) => console.error('Error:', error));
+    } catch (error) {
+        return;
+    }
+};
+const fetchBattleProcess = async (pythonCodeData) => {
+    if (pythonCodeData) {
+        const formData = new FormData();
+        formData.append('pythonCodeData', JSON.stringify(pythonCodeData));
+        fetch('http://140.122.164.194:5000/battle', {
+            mode: 'cors',
+            method: 'post',
+            body: formData,
+        })
+            .then((response) => {
+                return response.json();
+            })
+            .then((response) => {
+                console.log('battle response', response);
+                return response;
+            })
+            .catch((error) => console.error('Error:', error));
+    }
+};
 // simulate battle result from calling api
-const battleOfTwoTeam = (data) => {
-    const { round, match } = data;
+const battleOfTwoTeam = async (data) => {
+    const { round, match, notShow } = data;
     const team1 =
         document.getElementsByClassName('round')[round].childNodes[match].childNodes[0].childNodes[0].childNodes[0]
             .innerText;
     const team2 =
         document.getElementsByClassName('round')[round].childNodes[match].childNodes[0].childNodes[1].childNodes[0]
             .innerText;
+
     if (team1 === 'TBD' || team2 === 'TBD') {
         window.alert("Can't battle with TBD team.");
         return;
     }
-    viewDetailOrShowResult(team1, team2);
+    //TODO:fetch python code of battle and fetch battle process
+    // 1. POST to node.js (node.js call python and get result of two team)
+    // 2. node.js save result (score included) to db
+    const fetchPythonCodeDataResultOfPlayerA = await fetchPythonCode(team1).then((response) => response);
+    console.log('fetchPythonCodeDataResultOfPlayerA', fetchPythonCodeDataResultOfPlayerA);
+    const fetchPythonCodeDataResultOfPlayerB = await fetchPythonCode(team2).then((response) => response);
+    console.log('fetchPythonCodeDataResultOfPlayerB', fetchPythonCodeDataResultOfPlayerB);
+    const pythonCodeData = {
+        pythonCodeA: fetchPythonCodeDataResultOfPlayerA,
+        pythonCodeB: fetchPythonCodeDataResultOfPlayerB,
+    };
+    const fetchBattleProcessDataResult = await fetchBattleProcess(pythonCodeData);
+    console.log('fetchBattleProcessDataResult', fetchBattleProcessDataResult);
+
+    if (!notShow) {
+        viewDetailOrShowResult(team1, team2);
+    }
+
+    // 3. get socreI, scoreII from db through team1, team2 or other key
     const scoreI = getRandomInt(100);
     const scoreII = getRandomInt(100);
 
@@ -202,6 +267,7 @@ const plot = (data, edit = false) => {
                 init: data,
                 centerConnectors: true,
                 onMatchClick: battleOfTwoTeam,
+                //onMatchHover
                 teamWidth: 90,
                 scoreWidth: 20,
                 roundMargin: 40,
@@ -209,8 +275,6 @@ const plot = (data, edit = false) => {
             });
         });
     }
-
-    addContextMenu();
 };
 
 const teamGenerate = (defaultTeamNum = 16) => {
