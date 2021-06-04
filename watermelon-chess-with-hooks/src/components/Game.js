@@ -26,7 +26,7 @@ function Game() {
     let [history, setHistory] = useState([
         {
             chesses: chessesDefault,
-            currentSide: 1,
+            currentSide: 0,
             latestMoveChessName: null, // 最新移动的棋子的名称
         },
     ]);
@@ -48,17 +48,16 @@ function Game() {
         pick === true ? setPick(false) : setPick(true);
     }
     function moveFrom() {
-        console.log('moveFrom actions', actions);
         handleClickChess(actions[index].from);
     }
     function moveTo() {
-        console.log(actions[index].to);
         handleClickChessWrap(actions[index].to);
         if (index < actions.length - 1) setIndex(index + 1);
     }
     function handleClickChess(chessData) {
         if (sides.includes(winnerSide)) return; // 已经有人胜出了，返回
-        if (chessData.side !== history[history.length - 1].currentSide) return; // 如果点击的不是当前可下方，返回
+        if (chessData.side !== history[history.length - 1].currentSide) return;
+        // 如果点击的不是当前可下方，返回
 
         // 1、改变点击棋子的样式
         setClickedChess(chessData);
@@ -266,12 +265,11 @@ function Game() {
                     latestMoveChessName={history[history.length - 1].latestMoveChessName}
                 />
             </div>
-            {actions.length > 0 ? (
-                <div className="buttonBlock">
-                    <Buttons move={move} />
-                    <TeamList sides={sides} winnerSide={winnerSide} />
-                </div>
-            ) : null}
+
+            <div className="buttonBlock">
+                <Buttons move={move} />
+                <TeamList sides={sides} winnerSide={winnerSide} />
+            </div>
         </div>
     );
 }
