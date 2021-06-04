@@ -77,7 +77,7 @@ const TeamList = (props) => {
                     <span>獲勝方是：</span>
                     <button
                         style={{
-                            backgroundColor: winnerSide === 0 ? '#d80f0f' : '#f5f516',
+                            backgroundColor: winnerSide === 0 ? '#f5f516' : '#d80f0f', //黃：紅
                         }}
                     />
                 </div>

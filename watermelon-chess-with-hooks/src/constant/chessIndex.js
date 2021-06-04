@@ -2,8 +2,8 @@ const Red_CHESS = '/棋子-紅-';
 const Yellow_CHESS = '/棋子-黃-';
 
 export const side = {
-    Red: 1,
-    Yellow: 2,
+    Red: 0,
+    Yellow: 1,
 };
 
 export const chessIndex = {
