@@ -35,11 +35,11 @@ function Game() {
     let [actions, setActions] = useState(initData);
     let [index, setIndex] = useState(0);
     let [pick, setPick] = useState(true);
+
     useEffect(() => {
-        if (result.process) {
-            const convertBattleProcess = matchBattleProcessData(result.process);
-            setActions(convertBattleProcess);
-        }
+        console.log('result.process', result.process);
+        const convertBattleProcess = matchBattleProcessData(result.process);
+        setActions(convertBattleProcess);
     }, [result]);
 
     function move() {
@@ -69,8 +69,6 @@ function Game() {
 
     // 处理点击落子点
     function handleClickChessWrap(chessData) {
-        // console.log('handleClickChessWrap');
-        // console.log(clickedChess);
         // 已经有人胜出了，返回
         if (sides.includes(winnerSide)) return;
 
@@ -240,7 +238,7 @@ function Game() {
             document.body.removeChild(script);
         };
     }, []);
-
+    console.log('actions', actions);
     return (
         <div className="game">
             <div className="board">
@@ -268,10 +266,12 @@ function Game() {
                     latestMoveChessName={history[history.length - 1].latestMoveChessName}
                 />
             </div>
-            <div className="buttonBlock">
-                <Buttons move={move} />
-                <TeamList sides={sides} winnerSide={winnerSide} />
-            </div>
+            {actions.length > 0 ? (
+                <div className="buttonBlock">
+                    <Buttons move={move} />
+                    <TeamList sides={sides} winnerSide={winnerSide} />
+                </div>
+            ) : null}
         </div>
     );
 }
