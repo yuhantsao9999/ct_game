@@ -1,11 +1,15 @@
 import React, { useState, useContext, useEffect } from 'react';
 import Board from './Board';
 import TeamList from './TeamList';
-import { dummyData } from '../constant/chessIndex';
+import styled from 'styled-components';
+import { dummyData, initData } from '../constant/chessIndex';
 import { chessesDefault, findBeEatenChesses, getAbleReceive, getNewChesses, isOneOfAbleReceive } from '../utils';
 import _ from 'lodash';
 import { ContextStore } from './Container';
 import Slider from './Slider';
+import SpeedSlider from './SpeedSlider';
+import { BattleProcessContext } from '../hooks/context';
+import matchBattleProcessData from '../utils/matchBattleProcessData';
 
 function Game() {
     const { red, setRed, yellow, setYellow } = useContext(ContextStore);
@@ -26,123 +30,15 @@ function Game() {
             latestMoveChessName: null, // 最新移动的棋子的名称
         },
     ]);
-    let [actions, setActions] = useState(dummyData);
-    // [
-    // {
-    //     from: {
-    //         name: 'S1',
-    //         siblings: ['S2', 'S3', 'S4', 'C3'],
-    //         side: 1,
-    //         picture: chessIndex.red[1].picture,
-    //     },
-    //     to: {
-    //         name: 'C3',
-    //         siblings: ['C5', 'C2', 'S1', 'C4'],
-    //         side: null,
-    //         picture: null,
-    //     },
-    // },
-    // {
-    //     from: {
-    //         name: 'N3',
-    //         siblings: ['N2', 'N1', 'N4', 'C1'],
-    //         side: 0,
-    //         picture: chessIndex.yellow[2].picture,
-    //     },
-    //     to: {
-    //         name: 'C1',
-    //         siblings: ['N3', 'C2', 'C5', 'C4'],
-    //         side: null,
-    //         picture: null,
-    //     },
-    // },
-    // {
-    //     from: {
-    //         name: 'C3',
-    //         siblings: ['C5', 'C2', 'S1', 'C4'],
-    //         side: 1,
-    //         picture: chessIndex.red[1].picture,
-    //     },
-    //     to: {
-    //         name: 'C5',
-    //         siblings: ['C1', 'C2', 'C3', 'C4'],
-    //         side: null,
-    //         picture: null,
-    //     },
-    // },
-    // {
-    //     from: {
-    //         name: 'C1',
-    //         siblings: ['N3', 'C2', 'C5', 'C4'],
-    //         side: 0,
-    //         picture: chessIndex.yellow[2].picture,
-    //     },
-    //     to: {
-    //         name: 'C2',
-    //         siblings: ['C1', 'W4', 'C3', 'C5'],
-    //         side: null,
-    //         picture: null,
-    //     },
-    // },
-    // {
-    //     from: {
-    //         name: 'C5',
-    //         siblings: ['C1', 'C2', 'C3', 'C4'],
-    //         side: 1,
-    //         picture: chessIndex.red[1].picture,
-    //     },
-    //     to: {
-    //         name: 'C1',
-    //         siblings: ['N3', 'C2', 'C5', 'C4'],
-    //         side: null,
-    //         picture: null,
-    //     },
-    // },
-    // {
-    //     from: {
-    //         name: 'C2',
-    //         siblings: ['C1', 'W4', 'C3', 'C5'],
-    //         side: 0,
-    //         picture: chessIndex.yellow[2].picture,
-    //     },
-    //     to: {
-    //         name: 'C5',
-    //         siblings: ['C1', 'C2', 'C3', 'C4'],
-    //         side: null,
-    //         picture: null,
-    //     },
-    // },
-    // {
-    //     from: {
-    //         name: 'C1',
-    //         siblings: ['N3', 'C2', 'C5', 'C4'],
-    //         side: 1,
-    //         picture: chessIndex.red[1].picture,
-    //     },
-    //     to: {
-    //         name: 'N3',
-    //         siblings: ['N2', 'N1', 'N4', 'C1'],
-    //         side: null,
-    //         picture: null,
-    //     },
-    // },
-    // {
-    //     from: {
-    //         name: 'C5',
-    //         siblings: ['C1', 'C2', 'C3', 'C4'],
-    //         side: 0,
-    //         picture: chessIndex.yellow[2].picture,
-    //     },
-    //     to: {
-    //         name: 'C1',
-    //         siblings: ['N3', 'C2', 'C5', 'C4'],
-    //         side: null,
-    //         picture: null,
-    //     },
-    // },
-    // ]
+    const { result } = useContext(BattleProcessContext);
+
+    let [actions, setActions] = useState(initData);
     let [index, setIndex] = useState(0);
     let [pick, setPick] = useState(true);
+    useEffect(() => {
+        const convertBattleProcess = matchBattleProcessData(result.process);
+        setActions(convertBattleProcess);
+    }, [result.process]);
 
     function move() {
         if (pick) moveFrom();
@@ -150,10 +46,11 @@ function Game() {
         pick === true ? setPick(false) : setPick(true);
     }
     function moveFrom() {
+        console.log('moveFrom actions', actions);
         handleClickChess(actions[index].from);
     }
     function moveTo() {
-        // console.log(actions);
+        console.log(actions[index].to);
         handleClickChessWrap(actions[index].to);
         if (index < actions.length - 1) setIndex(index + 1);
     }
@@ -377,6 +274,30 @@ function Game() {
     );
 }
 
+const ButtonWapper = styled.div`
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-top: 25px;
+    margin-bottom: 25px;
+`;
+const RestartWapper = styled.div`
+    display: flex;
+`;
+const NextWapper = styled.div`
+    display: flex;
+`;
+
+const PlayWapper = styled.div`
+    display: flex;
+`;
+const StopWapper = styled.div`
+    display: flex;
+`;
+
 const Buttons = (props) => {
     let { move } = props;
     function replay() {
@@ -384,7 +305,7 @@ const Buttons = (props) => {
     }
     const title = { step: '步數', speed: '速度' };
     const id = { step: 'step', speed: 'speed' };
-    const defaultValue = { step: '100', speed: '100' };
+    const defaultValue = { step: '1', speed: '100' };
     const max = { step: '100', speed: '200' };
     const min = { step: '0', speed: '25' };
     return (
@@ -397,13 +318,13 @@ const Buttons = (props) => {
                     max={max.step}
                     min={min.step}
                 ></Slider>
-                <Slider
+                <SpeedSlider
                     title={title.speed}
                     _id={id.speed}
-                    defaultValue={defaultValue.speed}
-                    max={max.speed}
-                    min={min.speed}
-                ></Slider>
+                    // defaultValue={defaultValue.speed}
+                    // max={max.speed}
+                    // min={min.speed}
+                ></SpeedSlider>
                 {/* <label>`
                     步數:
                     <input id="step" type="number" />
@@ -419,8 +340,8 @@ const Buttons = (props) => {
                     <option value="250">2</option>快
                 </select> */}
             </div>
-            <div className="btns">
-                <div id="restart" onClick={replay}>
+            <ButtonWapper>
+                <RestartWapper onClick={replay}>
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
                         width="50"
@@ -435,8 +356,8 @@ const Buttons = (props) => {
                             d="M8 3c-1.552 0-2.94.707-3.857 1.818a.5.5 0 1 1-.771-.636A6.002 6.002 0 0 1 13.917 7H12.9A5.002 5.002 0 0 0 8 3zM3.1 9a5.002 5.002 0 0 0 8.757 2.182.5.5 0 1 1 .771.636A6.002 6.002 0 0 1 2.083 9H3.1z"
                         />
                     </svg>
-                </div>
-                <div id="next" onClick={() => move()}>
+                </RestartWapper>
+                <NextWapper onClick={() => move()}>
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
                         width="50"
@@ -447,9 +368,10 @@ const Buttons = (props) => {
                     >
                         <path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm6.5 4.5v5.793l2.146-2.147a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.5.5 0 1 1 .708-.708L7.5 10.293V4.5a.5.5 0 0 1 1 0z" />
                     </svg>
-                </div>
+                </NextWapper>
+
                 {/* 播放 */}
-                <div id="play">
+                <PlayWapper id="play">
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
                         width="50"
@@ -460,8 +382,8 @@ const Buttons = (props) => {
                     >
                         <path d="M0 12V4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm6.79-6.907A.5.5 0 0 0 6 5.5v5a.5.5 0 0 0 .79.407l3.5-2.5a.5.5 0 0 0 0-.814l-3.5-2.5z" />
                     </svg>
-                </div>
-                <div id="stop">
+                </PlayWapper>
+                <StopWapper>
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
                         width="50"
@@ -472,8 +394,8 @@ const Buttons = (props) => {
                     >
                         <path d="M0 12V4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm6.25-7C5.56 5 5 5.56 5 6.25v3.5a1.25 1.25 0 1 0 2.5 0v-3.5C7.5 5.56 6.94 5 6.25 5zm3.5 0c-.69 0-1.25.56-1.25 1.25v3.5a1.25 1.25 0 1 0 2.5 0v-3.5C11 5.56 10.44 5 9.75 5z" />
                     </svg>
-                </div>
-            </div>
+                </StopWapper>
+            </ButtonWapper>
         </div>
     );
 };

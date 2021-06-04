@@ -31,17 +31,17 @@ app.use(express.static(path.join(__dirname, 'public/assets/image/')));
 //     res.send('App Works hihihihi !!!!');
 // });
 
-const { pages } = require('./router');
+const { pages, publicApi } = require('./router');
 
 app.use(express.static('public', { extensions: ['html'] }));
 
 app.use('/', pages.main);
-app.use('/', pages.select);
 app.use('/', pages.start);
 app.use('/api', pages.set);
 app.use('/api', pages.upload);
 app.use('/api', pages.grouping);
-app.use('/api', pages.convertCode);
+app.use('/api', publicApi.convertCode);
+app.use('/api', publicApi.battleProcess);
 
 app.get('/watermelonChess', (req, res) => {
     res.sendFile(path.join(__dirname, '../watermelon-chess-with-hooks/build/index.html'));

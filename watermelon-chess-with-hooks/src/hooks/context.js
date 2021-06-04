@@ -1,33 +1,45 @@
 import * as React from 'react';
-import { useState, createContext, useEffect } from 'react';
-import { useFetchPythonCodeData } from './useFetchPythonCodeOfBattleTeam';
-import { useFetchBattleProcessData } from './useFetchBattleProcessData';
-import { useParams } from 'react-router-dom';
+import { useState, createContext, useEffect, useMemo } from 'react';
+import { useFetchBattleProcess } from './useFetchBattleProcess';
 
-export const BattleProcessProviderContext = createContext(null);
+export const BattleProcessContext = createContext({
+    activityName: '',
+    playerA: '',
+    playerB: '',
+    winner: '',
+    process: [],
+});
 
 export const BattleProcessProvider = ({ children }) => {
-    const { playerA, playerB } = useParams();
-    const [pythonCode, setPythonCodeOfBattleTeam] = useState('');
-    const [battleProcess, setBattleProcess] = useState([]);
+    const [activityName, setActivityName] = useState('');
+    const [playerA, setPlayerA] = useState('');
+    const [playerB, setPlayerB] = useState('');
+    const [result, setResult] = useState({
+        activityName: '',
+        playerA: '',
+        playerB: '',
+        winner: '',
+        process: [],
+    });
 
-    const { result: pythonCodeData } = useFetchPythonCodeData(playerA, playerB);
+    const { result: processData } = useFetchBattleProcess(activityName, playerA, playerB);
+
     useEffect(() => {
-        if (pythonCodeData.pythonCodeA !== '' && pythonCodeData.pythonCodeB !== '') {
-            setPythonCodeOfBattleTeam(pythonCodeData);
-        }
-    }, [pythonCodeData]);
+        setResult(processData);
+    }, [processData]);
 
-    const { result: battleProcessData } = useFetchBattleProcessData(pythonCode);
-
-    useEffect(() => {
-        if (battleProcessData) {
-            console.log('battleProcessData', battleProcessData);
-            setBattleProcess(battleProcessData);
-        }
-    }, [battleProcessData]);
-
-    return (
-        <BattleProcessProviderContext.Provider value={battleProcess}>{children}</BattleProcessProviderContext.Provider>
+    const context = useMemo(
+        () => ({
+            activityName,
+            playerA,
+            playerB,
+            result,
+            setActivityName,
+            setPlayerA,
+            setPlayerB,
+            setResult,
+        }),
+        [activityName, playerA, playerB, result]
     );
+    return <BattleProcessContext.Provider value={context}>{children}</BattleProcessContext.Provider>;
 };

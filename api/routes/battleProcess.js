@@ -1,16 +1,15 @@
 const express = require('express');
-const { findCode } = require('../controller/convertPythonCode');
+const { insertOneProcess, findLatestProcess } = require('../controller/battle');
 const router = express.Router();
 
-router.post('/insertPythonCode', async (req, res) => {
-    const result = await insertOneCode(req);
+router.post('/insertBattleProcess', async (req, res) => {
+    const result = await insertOneProcess(req);
     if (result.error) {
         res.status(404).send('Insert error');
     } else res.send('Insert successfully');
 });
-
-router.post('/findOnePythonCode', async (req, res) => {
-    const result = await findCode(req);
+router.post('/getBattleProcess', async (req, res) => {
+    const result = await findLatestProcess(req);
     if (result.error) {
         res.status(404).send('Not found');
     } else res.send(result.data);

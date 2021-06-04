@@ -24,11 +24,4 @@ router.post('/uploadFileName', upload.single('files'), async (req, res) => {
     }
 });
 
-router.post('/insertPythonCode', async (req, res) => {
-    const result = await insertOneCode(req);
-    if (result.error) {
-        res.status(404).send('Insert error');
-    } else res.send('Insert successfully');
-});
-
 module.exports = router;

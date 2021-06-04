@@ -3,11 +3,14 @@ const pages = {
     grouping: require('./routes/grouping'),
     set: require('./routes/set'),
     main: require('./routes/main'),
-    select: require('./routes/select'),
     start: require('./routes/start'),
-    convertCode: require('./routes/convertCode'),
 };
 
+const publicApi = {
+    convertCode: require('./routes/convertCode'),
+    battleProcess: require('./routes/battleProcess'),
+};
 module.exports = {
     pages,
+    publicApi,
 };

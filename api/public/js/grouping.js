@@ -82,8 +82,15 @@ const battleOfTheRest = (size, round) => {
 const viewDetailOrShowResult = (team1, team2) => {
     if (confirm(`觀看 ${team1} 和 ${team2} 的對戰過程嗎？`)) {
         // window.open(`/watermelonChess/${team1}/${team2}`);
+        //TODO:refactor
+        const getUrlString = location.href;
+        const url = new URL(getUrlString);
+        const activityName = url.searchParams.get('id');
         window.open(
-            window.location.protocol + '//' + window.location.hostname + `:3000/watermelonChess/${team1}/${team2}`
+            window.location.protocol +
+                '//' +
+                window.location.hostname +
+                `:3000/watermelonChess/${activityName}/${team1}/${team2}`
         );
     }
 };
@@ -133,6 +140,32 @@ const fetchBattleProcess = async (pythonCodeData) => {
         }
     }
 };
+const fetchInsertBattleProcess = async (fetchBattleProcessDataResult, activityName, team1, team2) => {
+    const { process, win: winner } = fetchBattleProcessDataResult;
+    const data = {
+        activityName,
+        playerA: team1,
+        playerB: team2,
+        process,
+        winner: winner == 'red' ? team1 : team2,
+    };
+    try {
+        return fetch('/api/insertBattleProcess', {
+            method: 'post',
+            body: JSON.stringify(data),
+            headers: {
+                'content-type': 'application/json',
+            },
+        })
+            .then((response) => {
+                return response;
+            })
+            .then((response) => console.log('Success:', response))
+            .catch((error) => console.error('Error:', error));
+    } catch (error) {
+        return;
+    }
+};
 // simulate battle result from calling api
 const battleOfTwoTeam = async (data) => {
     const { round, match, notShow } = data;
@@ -151,15 +184,47 @@ const battleOfTwoTeam = async (data) => {
     // 1. POST to node.js (node.js call python and get result of two team)
     // 2. node.js save result (score included) to db
     const fetchPythonCodeDataResultOfPlayerA = await fetchPythonCode(team1).then((response) => response);
-    console.log('fetchPythonCodeDataResultOfPlayerA', fetchPythonCodeDataResultOfPlayerA);
     const fetchPythonCodeDataResultOfPlayerB = await fetchPythonCode(team2).then((response) => response);
-    console.log('fetchPythonCodeDataResultOfPlayerB', fetchPythonCodeDataResultOfPlayerB);
     const pythonCodeData = {
         pythonCodeA: fetchPythonCodeDataResultOfPlayerA,
         pythonCodeB: fetchPythonCodeDataResultOfPlayerB,
     };
-    const fetchBattleProcessDataResult = await fetchBattleProcess(pythonCodeData).then((response) => response);
-    console.log('fetchBattleProcessDataResult', fetchBattleProcessDataResult);
+    console.log('pythonCodeData', pythonCodeData);
+    // const fetchBattleProcessDataResult = await fetchBattleProcess(pythonCodeData).then((response) => response);
+    const fetchBattleProcessDataResult = {
+        process: [
+            {
+                step: 1,
+                moving: 'Red',
+                movingBoardIndex: 4,
+                movingTo: 6,
+                movingChessIndex: 3,
+                kill: [],
+            },
+            {
+                step: 2,
+                moving: 'Yellow',
+                movingBoardIndex: 17,
+                movingTo: 13,
+                movingChessIndex: 1,
+                kill: [],
+            },
+            {
+                step: 3,
+                moving: 'Red',
+                movingBoardIndex: 5,
+                movingTo: 8,
+                movingChessIndex: 4,
+                kill: [],
+            },
+        ],
+        totalSteps: 3,
+        win: 'Yellow',
+    };
+    const getUrlString = location.href;
+    const url = new URL(getUrlString);
+    const activityName = url.searchParams.get('id');
+    await fetchInsertBattleProcess(fetchBattleProcessDataResult, activityName, team1, team2);
 
     if (!notShow) {
         viewDetailOrShowResult(team1, team2);
