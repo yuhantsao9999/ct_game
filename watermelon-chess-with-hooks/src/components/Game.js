@@ -36,8 +36,10 @@ function Game() {
     let [index, setIndex] = useState(0);
     let [pick, setPick] = useState(true);
     useEffect(() => {
-        const convertBattleProcess = matchBattleProcessData(result.process);
-        setActions(convertBattleProcess);
+        if (result.process) {
+            const convertBattleProcess = matchBattleProcessData(result.process);
+            setActions(convertBattleProcess);
+        }
     }, [result]);
 
     function move() {
