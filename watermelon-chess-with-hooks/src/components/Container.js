@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import styled from 'styled-components';
-import { Route } from 'react-router-dom';
+import { Route, useParams } from 'react-router-dom';
 import Game from './Game';
 import Header from './Header';
 import Footer from './Footer';
-import { BattleProcessProvider, BattleProcessProviderContext } from '../hooks/context';
+import { BattleProcessProvider, BattleProcessContext } from '../hooks/context';
 
 const Wrapper = styled.div`
     width: 100%;
@@ -32,15 +32,27 @@ export const ContextStoreProvider = ({ children }) => {
     return <ContextStore.Provider value={context}>{children}</ContextStore.Provider>;
 };
 
+const BattleProcessContent = () => {
+    const { setActivityName, setPlayerA, setPlayerB } = useContext(BattleProcessContext);
+    const { activityName, playerA, playerB } = useParams();
+
+    useEffect(() => {
+        setActivityName(activityName);
+        setPlayerA(playerA);
+        setPlayerB(playerB);
+    }, [activityName, playerA, playerB]);
+
+    return <Game />;
+};
 const Container = () => {
     return (
-        <Route path="/watermelonChess/:playerA/:playerB">
+        <Route path="/watermelonChess/:activityName/:playerA/:playerB">
             <Wrapper>
                 <Header />
                 <ContentWapper>
                     <ContextStoreProvider>
                         <BattleProcessProvider>
-                            <Game />
+                            <BattleProcessContent />
                         </BattleProcessProvider>
                     </ContextStoreProvider>
                 </ContentWapper>

@@ -38,7 +38,7 @@ function Game() {
     useEffect(() => {
         const convertBattleProcess = matchBattleProcessData(result.process);
         setActions(convertBattleProcess);
-    }, [result.process]);
+    }, [result]);
 
     function move() {
         if (pick) moveFrom();

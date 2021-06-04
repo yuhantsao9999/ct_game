@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import LogoSrc from '../assets/images/beaver.png';
 
 const HeadWrapper = styled.div`
-    height: 5vh;
+    height: 8vh;
     display: flex;
     width: 100%;
     border-bottom-color: rgb(219, 219, 219);
