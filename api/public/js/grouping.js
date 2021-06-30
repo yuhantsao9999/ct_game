@@ -148,7 +148,7 @@ const fetchInsertBattleProcess = async (fetchBattleProcessDataResult, activityNa
         playerB: team2,
         process,
         totalSteps,
-        winner: winner == 'red' ? team1 : team2,
+        winner: winner == 'Red' ? team1 : team2,
     };
     try {
         return fetch('/api/insertBattleProcess', {
@@ -192,6 +192,7 @@ const battleOfTwoTeam = async (data) => {
     };
     console.log('pythonCodeData', pythonCodeData);
     const fetchBattleProcessDataResult = await fetchBattleProcess(pythonCodeData).then((response) => response);
+    //TODO:上方是線上版，下方是測試資料
     // const fetchBattleProcessDataResult = {
     //     process: [
     //         {

@@ -12,8 +12,7 @@ export const matchBattleProcessData = (process) => {
                     name: boardIndex[process[i].movingBoardIndex], //'E1'
                     siblings: sibilingIndex[boardIndex[process[i].movingBoardIndex]], //sibilingIndex['E1'],
                     side: side[process[i].moving], //0,
-                    //目前線上資料要 -1，report.json 不用 -1
-                    picture: chessIndex[process[i].moving][process[i].movingChessIndex - 1].picture, //chessIndex.Yellow[5].picture,
+                    picture: chessIndex[process[i].moving][process[i].movingChessIndex].picture, //chessIndex.Yellow[5].picture,
                 },
                 to: {
                     name: boardIndex[process[i].movingTo], //'E4',
