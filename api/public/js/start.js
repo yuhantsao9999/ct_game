@@ -2,7 +2,6 @@ const loginActivity = () => {
     const data = {
         activityName: document.getElementById('activityName').value,
     };
-    console.log(data);
     fetch('/checkActivityExist', {
         method: 'POST',
         headers: {

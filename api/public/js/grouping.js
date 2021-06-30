@@ -141,12 +141,13 @@ const fetchBattleProcess = async (pythonCodeData) => {
     }
 };
 const fetchInsertBattleProcess = async (fetchBattleProcessDataResult, activityName, team1, team2) => {
-    const { process, win: winner } = fetchBattleProcessDataResult;
+    const { process, win: winner, totalSteps } = fetchBattleProcessDataResult;
     const data = {
         activityName,
         playerA: team1,
         playerB: team2,
         process,
+        totalSteps,
         winner: winner == 'red' ? team1 : team2,
     };
     try {
@@ -190,37 +191,37 @@ const battleOfTwoTeam = async (data) => {
         pythonCodeB: fetchPythonCodeDataResultOfPlayerB,
     };
     console.log('pythonCodeData', pythonCodeData);
-    const fetchBattleProcessDataResult = await fetchBattleProcess(pythonCodeData).then((response) => response);
-    // const fetchBattleProcessDataResult = {
-    //     process: [
-    //         {
-    //             step: 1,
-    //             moving: 'Red',
-    //             movingBoardIndex: 4,
-    //             movingTo: 6,
-    //             movingChessIndex: 3,
-    //             kill: [],
-    //         },
-    //         {
-    //             step: 2,
-    //             moving: 'Yellow',
-    //             movingBoardIndex: 17,
-    //             movingTo: 13,
-    //             movingChessIndex: 1,
-    //             kill: [],
-    //         },
-    //         {
-    //             step: 3,
-    //             moving: 'Red',
-    //             movingBoardIndex: 5,
-    //             movingTo: 8,
-    //             movingChessIndex: 4,
-    //             kill: [],
-    //         },
-    //     ],
-    //     totalSteps: 3,
-    //     win: 'Yellow',
-    // };
+    // const fetchBattleProcessDataResult = await fetchBattleProcess(pythonCodeData).then((response) => response);
+    const fetchBattleProcessDataResult = {
+        process: [
+            {
+                step: 1,
+                moving: 'Red',
+                movingBoardIndex: 4,
+                movingTo: 6,
+                movingChessIndex: 3,
+                kill: [],
+            },
+            {
+                step: 2,
+                moving: 'Yellow',
+                movingBoardIndex: 17,
+                movingTo: 13,
+                movingChessIndex: 1,
+                kill: [],
+            },
+            {
+                step: 3,
+                moving: 'Red',
+                movingBoardIndex: 5,
+                movingTo: 8,
+                movingChessIndex: 4,
+                kill: [],
+            },
+        ],
+        totalSteps: 3,
+        win: 'Yellow',
+    };
     const getUrlString = location.href;
     const url = new URL(getUrlString);
     const activityName = url.searchParams.get('id');

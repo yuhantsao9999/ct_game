@@ -5,14 +5,15 @@ import styled from 'styled-components';
 import { dummyData, initData } from '../constant/chessIndex';
 import { chessesDefault, findBeEatenChesses, getAbleReceive, getNewChesses, isOneOfAbleReceive } from '../utils';
 import _ from 'lodash';
-import { ContextStore } from './Container';
+import useInterval from '../hooks/useInterval';
 import Slider from './Slider';
 import SpeedSlider from './SpeedSlider';
-import { BattleProcessContext } from '../hooks/context';
-import matchBattleProcessData from '../utils/matchBattleProcessData';
+import { BattleProcessContext, ContextStore, SliderContext } from '../hooks/context';
+import { matchBattleProcessData, matchBoardIndex } from '../utils/matchBattleProcessData';
 
 function Game() {
     const { red, setRed, yellow, setYellow } = useContext(ContextStore);
+    const { speed, setSpeed, specifedStep, setSpecifedStep } = useContext(SliderContext);
     let boardWidth = document.documentElement.clientWidth * 0.45;
     let r = 0.0463 * boardWidth; // 棋子的半径
     let a = (0.5 * boardWidth - r) / 3; // 五个小圆的半径
@@ -20,54 +21,130 @@ function Game() {
     let [clickedChess, setClickedChess] = useState(null); // 当前点击的棋子
     let [ableReceive, setAbleReceive] = useState([]); // 落子点
 
-    let sides = [0, 1]; // 對戰雙方
+    let sides = [0, 1, -1]; // 對戰雙方
     let [winnerSide, setWinnerSide] = useState(null); // 獲勝方
-
     let [history, setHistory] = useState([
         {
             chesses: chessesDefault,
-            currentSide: 0,
+            //TODO:dummyData完記得改回來0
+            currentSide: 0, //初始旗子side
             latestMoveChessName: null, // 最新移动的棋子的名称
         },
     ]);
-    const { result } = useContext(BattleProcessContext);
+    const { result: battleData } = useContext(BattleProcessContext);
 
     let [actions, setActions] = useState(initData);
     let [index, setIndex] = useState(0);
-    let [pick, setPick] = useState(true);
+    let [pick, setPick] = useState(false);
+    const [isPlaying, setPlaying] = useState(false);
+
+    const mappingWinnerIndex = (battleData) => {
+        switch (battleData.winner) {
+            case battleData.playerA:
+                return 0;
+            case battleData.playerB:
+                return 1;
+            default:
+                return -1;
+        }
+    };
 
     useEffect(() => {
-        console.log('result.process', result.process);
-        const convertBattleProcess = matchBattleProcessData(result.process);
+        const convertBattleProcess = matchBattleProcessData(battleData.process);
+        console.log('convertBattleProcess', convertBattleProcess);
         setActions(convertBattleProcess);
-    }, [result]);
 
-    function move() {
+        // TODO: 平手的狀況需處理;
+        // 最後一步給定勝出方 Red: 0,Yellow: 1 ,平手:-1
+        console.log('winnerSide', winnerSide);
+        // if (battleData.process.length !== 0 && index === battleData.process.length + 1) {
+        console.log('battleData.winner', battleData.winner);
+        if (battleData.process.length !== 0 && index === battleData.process.length) {
+            console.log('enter setwinner');
+            const winner = mappingWinnerIndex(battleData);
+            console.log('winner', winner);
+            setWinnerSide(winner);
+        }
+    }, [battleData, index]);
+
+    //     const winner = 1;
+    //     console.log('index', index);
+    //     if (index == 64) {
+    //         setWinnerSide(winner);
+    //     }
+    // }, [index]);
+
+    useEffect(() => {
         if (pick) moveFrom();
         else moveTo();
-        pick === true ? setPick(false) : setPick(true);
-    }
-    function moveFrom() {
-        handleClickChess(actions[index].from);
-    }
-    function moveTo() {
-        handleClickChessWrap(actions[index].to);
-        if (index < actions.length - 1) setIndex(index + 1);
-    }
-    function handleClickChess(chessData) {
-        if (sides.includes(winnerSide)) return; // 已经有人胜出了，返回
-        if (chessData.side !== history[history.length - 1].currentSide) return;
-        // 如果点击的不是当前可下方，返回
+    }, [pick]);
 
-        // 1、改变点击棋子的样式
+    const move = () => {
+        if (sides.includes(winnerSide)) return;
+        setPick((prevPick) => !prevPick);
+    };
+
+    useEffect(() => {
+        //跳到第i步
+
+        for (let i = 0; i < specifedStep * 2; i++) {
+            (function (x) {
+                setTimeout(function () {
+                    setPick((prevPick) => !prevPick);
+                }, 250);
+            })(i);
+        }
+    }, [specifedStep]);
+
+    const play = () => {
+        // 已經有人勝出了，返回
+        if (sides.includes(winnerSide)) return;
+        //用什麼速度播放
+        setPlaying(true);
+        setSpeed(speed);
+    };
+
+    useInterval(
+        () => {
+            if (sides.includes(winnerSide)) return;
+            setPick((prevPick) => !prevPick);
+        },
+
+        isPlaying ? speed : null
+    );
+
+    const stop = () => {
+        setPlaying(false);
+    };
+
+    const moveFrom = () => {
+        handleClickChess(actions[index].from);
+    };
+
+    const moveTo = () => {
+        handleClickChessWrap(actions[index].to, actions[index].kill);
+        if (actions.length > 1 && index < actions.length) setIndex(index + 1);
+    };
+
+    function handleClickChess(chessData) {
+        console.log('開始處理放大囉');
+        // 已經有人勝出了，返回
+        if (sides.includes(winnerSide)) return;
+
+        // 如果点击的不是当前可下方，返回
+        // if (chessData.side !== history[history.length - 1].currentSide) return;
+
+        // 1、改变点击棋子的样式變大
         setClickedChess(chessData);
-        // 2、找落子点
+        // 2、找落子點放綠點點
+        console.log('currentChesses', history[history.length - 1].chesses);
         let newAbleReceive = getAbleReceive(chessData, history[history.length - 1].chesses);
+        // console.log('history[history.length - 1].chesses', history[history.length - 1].chesses);
         setAbleReceive(newAbleReceive);
     }
 
     // 处理点击落子点
-    function handleClickChessWrap(chessData) {
+    function handleClickChessWrap(chessData, killChess) {
         // 已经有人胜出了，返回
         if (sides.includes(winnerSide)) return;
 
@@ -82,7 +159,9 @@ function Game() {
         newChesses = getNewChesses(newChesses, clickedChess, null, null);
 
         // 得到新的下一步玩家
-        let newCurrentSide = history[history.length - 1].currentSide === 0 ? 1 : 0;
+        // let newCurrentSide = history[history.length - 1].currentSide === 0 ? 1 : 0;
+        //TODO:開發版要改成index % 2+ 1
+        let newCurrentSide = index % 2;
 
         // 清空 当前点击的棋子
         setClickedChess(null);
@@ -99,7 +178,10 @@ function Game() {
         });
 
         // 判断有没有棋子被吃掉
-        let beEatenChesses = findBeEatenChesses(newChesses, newCurrentSide);
+        //TODO:改成被吃掉棋子的 index
+        // let beEatenChesses = findBeEatenChesses(newChesses, newCurrentSide);
+        let beEatenChesses = matchBoardIndex(killChess);
+
         // 如果这一步没有棋子被吃掉
         if (beEatenChesses.length === 0) {
             setHistory(newHistory);
@@ -150,36 +232,32 @@ function Game() {
                 );
                 setHistory(cashHistory);
                 //新增淘汰旗子
-                if (newCurrentSide === 1) {
+                if (newCurrentSide === 0) {
                     setYellow([...yellow, ...beEatenChesses]);
                 } else {
                     setRed([...red, ...beEatenChesses]);
                 }
-
-                // 判断有没有胜出方
-                let winner = getWinner(cashHistory, newCurrentSide);
-                setWinnerSide(winner);
             }
         }, 500);
     }
 
-    function getWinner(newHistory, newCurrentSide) {
-        let winner = null; // 获胜方的side
-        let newCurrentSideCount = 0; // 被吃掉方剩下的棋子个数
+    // function getWinner(newHistory, newCurrentSide) {
+    //     let winner = null; // 获胜方的side
+    //     let newCurrentSideCount = 0; // 被吃掉方剩下的棋子个数
 
-        let latestChesses = newHistory[newHistory.length - 1].chesses;
-        for (let latestChessItem of latestChesses) {
-            if (latestChessItem.side === newCurrentSide) {
-                newCurrentSideCount++;
-            }
-        }
-        if (newCurrentSideCount <= 2) {
-            // 如果被吃掉方的棋子只剩下2颗或更少，则对方获胜
-            winner = newCurrentSide === 0 ? 1 : 0;
-        }
+    //     let latestChesses = newHistory[newHistory.length - 1].chesses;
+    //     for (let latestChessItem of latestChesses) {
+    //         if (latestChessItem.side === newCurrentSide) {
+    //             newCurrentSideCount++;
+    //         }
+    //     }
+    //     if (newCurrentSideCount <= 2) {
+    //         // 如果被吃掉方的棋子只剩下2颗或更少，则对方获胜
+    //         winner = newCurrentSide === 0 ? 1 : 0;
+    //     }
 
-        return winner;
-    }
+    //     return winner;
+    // }
 
     /**
      * 从当前棋子布局中删除掉 被吃掉的棋子（被吃掉的棋子side设为null），返回更新后的 history
@@ -228,31 +306,19 @@ function Game() {
     //     setHistory(newHistory);
     // }
 
-    useEffect(() => {
-        const script = document.createElement('script');
-        script.src = '/scripts/autoPlay.js';
-        script.async = true;
-        document.body.appendChild(script);
-        return () => {
-            document.body.removeChild(script);
-        };
-    }, []);
-    console.log('actions', actions);
+    // useEffect(() => {
+    //     const script = document.createElement('script');
+    //     script.src = '/scripts/autoPlay.js';
+    //     script.async = true;
+    //     document.body.appendChild(script);
+    //     return () => {
+    //         document.body.removeChild(script);
+    //     };
+    // }, []);
+
     return (
         <div className="game">
             <div className="board">
-                {/*下一步*/}
-                {/* {winnerSide === null && (
-                    <div className="next-step">
-                        <span>下一步：</span>
-                        <button
-                            style={{
-                                backgroundColor: history[history.length - 1].currentSide === 0 ? '#FF3E41' : '#FCFDAF',
-                            }}
-                        />
-                    </div>
-                )} */}
-
                 <Board
                     boardWidth={boardWidth + 'px'}
                     chesses={history[history.length - 1].chesses}
@@ -267,7 +333,20 @@ function Game() {
             </div>
 
             <div className="buttonBlock">
-                <Buttons move={move} />
+                <Buttons
+                    move={move}
+                    play={play}
+                    stop={stop}
+                    totalStep={actions.length}
+                    setIndex={setIndex}
+                    // setActions={setActions}
+                    // setHistory={setHistory}
+                    // setClickedChess={setClickedChess}
+                    // setAbleReceive={setAbleReceive}
+                    // setPick={setPick}
+                    // setYellow={setYellow}
+                    // setRed={setRed}
+                />
                 <TeamList sides={sides} winnerSide={winnerSide} />
             </div>
         </div>
@@ -299,15 +378,29 @@ const StopWapper = styled.div`
 `;
 
 const Buttons = (props) => {
-    let { move } = props;
+    let {
+        move,
+        play,
+        stop,
+        totalStep,
+        setIndex,
+        setHistory,
+        setActions,
+        setClickedChess,
+        setAbleReceive,
+        setPick,
+        setYellow,
+        setRed,
+    } = props;
     function replay() {
         window.location.reload();
     }
     const title = { step: '步數', speed: '速度' };
     const id = { step: 'step', speed: 'speed' };
-    const defaultValue = { step: '1', speed: '100' };
-    const max = { step: '100', speed: '200' };
+    const defaultValue = { step: '0', speed: '100' };
+    const max = { step: totalStep, speed: '200' };
     const min = { step: '0', speed: '25' };
+
     return (
         <div className="player">
             <div className="steps">
@@ -317,6 +410,14 @@ const Buttons = (props) => {
                     defaultValue={defaultValue.step}
                     max={max.step}
                     min={min.step}
+                    // setActions={setActions}
+                    // setIndex={setIndex}
+                    // setHistory={setHistory}
+                    // setClickedChess={setClickedChess}
+                    // setAbleReceive={setAbleReceive}
+                    // setPick={setPick}
+                    // setYellow={setYellow}
+                    // setRed={setRed}
                 ></Slider>
                 <SpeedSlider
                     title={title.speed}
@@ -324,21 +425,8 @@ const Buttons = (props) => {
                     // defaultValue={defaultValue.speed}
                     // max={max.speed}
                     // min={min.speed}
+                    play={play}
                 ></SpeedSlider>
-                {/* <label>`
-                    步數:
-                    <input id="step" type="number" />
-                </label> */}
-
-                {/* 調整速度 */}
-                {/* <select id="speed">
-                    <option value="1000">-- 速度 --</option>
-                    <option value="2000">0.25</option>
-                    <option value="1500">0.5</option>
-                    <option value="1000">1</option>
-                    <option value="500">1.5</option>
-                    <option value="250">2</option>快
-                </select> */}
             </div>
             <ButtonWapper>
                 <RestartWapper onClick={replay}>
@@ -369,9 +457,9 @@ const Buttons = (props) => {
                         <path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm6.5 4.5v5.793l2.146-2.147a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.5.5 0 1 1 .708-.708L7.5 10.293V4.5a.5.5 0 0 1 1 0z" />
                     </svg>
                 </NextWapper>
-
                 {/* 播放 */}
-                <PlayWapper id="play">
+                {/* {this.state.check ? <button onClick={this.timer}></button> : <div>button not showing </div>} */}
+                <PlayWapper onClick={play}>
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
                         width="50"
@@ -383,7 +471,7 @@ const Buttons = (props) => {
                         <path d="M0 12V4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm6.79-6.907A.5.5 0 0 0 6 5.5v5a.5.5 0 0 0 .79.407l3.5-2.5a.5.5 0 0 0 0-.814l-3.5-2.5z" />
                     </svg>
                 </PlayWapper>
-                <StopWapper>
+                <StopWapper onClick={stop}>
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
                         width="50"

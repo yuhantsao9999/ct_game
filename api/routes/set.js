@@ -4,7 +4,6 @@ const router = express.Router();
 
 router.post('/insertTeamId', async (req, res) => {
     const result = await insertOne(req);
-    console.log();
     if (result.error) {
         res.status(404).send('Insert error');
     } else res.send('Insert successfully');

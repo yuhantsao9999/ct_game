@@ -1,6 +1,5 @@
 import { chessIndex } from '../constant/chessIndex';
 
-//TODO: chessesDefault 圖片與 boardIndex 需要對應
 export const chessesDefault = [
     {
         name: 'N1',
@@ -18,13 +17,13 @@ export const chessesDefault = [
         name: 'N3',
         siblings: ['N2', 'N1', 'N4', 'C1'],
         side: 0,
-        picture: chessIndex.Yellow[3].picture,
+        picture: chessIndex.Yellow[2].picture,
     },
     {
         name: 'N4',
         siblings: ['N1', 'N3', 'E1'],
         side: 0,
-        picture: chessIndex.Yellow[2].picture,
+        picture: chessIndex.Yellow[3].picture,
     },
     {
         name: 'W1',
@@ -42,7 +41,7 @@ export const chessesDefault = [
         name: 'W3',
         siblings: ['W2', 'S2', 'W4'],
         side: 1,
-        picture: chessIndex.Red[4].picture,
+        picture: chessIndex.Red[0].picture,
     },
     {
         name: 'W4',
@@ -54,25 +53,25 @@ export const chessesDefault = [
         name: 'S1',
         siblings: ['S2', 'S3', 'S4', 'C3'],
         side: 1,
-        picture: chessIndex.Red[3].picture,
+        picture: chessIndex.Red[1].picture,
     },
     {
         name: 'S2',
         siblings: ['W3', 'S3', 'S1'],
         side: 1,
-        picture: chessIndex.Red[1].picture,
+        picture: chessIndex.Red[2].picture,
     },
     {
         name: 'S3',
         siblings: ['S1', 'S2', 'S4'],
         side: 1,
-        picture: chessIndex.Red[0].picture,
+        picture: chessIndex.Red[3].picture,
     },
     {
         name: 'S4',
         siblings: ['S1', 'S3', 'E3'],
         side: 1,
-        picture: chessIndex.Red[2].picture,
+        picture: chessIndex.Red[4].picture,
     },
     {
         name: 'E1',

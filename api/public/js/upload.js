@@ -40,7 +40,8 @@ const uploadTeamFile = () => {
                 Blockly.Xml.domToWorkspace(xml, demoWorkspace);
 
                 code = Blockly.Python.workspaceToCode(demoWorkspace);
-
+                // code =
+                //     'C0C1C2C3 = None\nC4C5 = None\nC6C7 = None\n\n\nfor C0C1C2C3 in board[yellow_player]:\n  if C0C1C2C3 != 0 or fun_Alive(C4C52(C0C1C2C3)) == False:\n    score = (score + 100)\n';
                 fetch('/api/insertPythonCode', {
                     method: 'post',
                     body: JSON.stringify({

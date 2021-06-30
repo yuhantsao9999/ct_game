@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState, useContext } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import Slider from '@material-ui/core/Slider';
+import { SliderContext } from '../hooks/context';
 
 const useStyles = makeStyles({
     root: {
@@ -12,19 +13,31 @@ const useStyles = makeStyles({
         width: 42,
     },
 });
+const mappingSpeedIndex = {
+    2: 250,
+    1.75: 375,
+    1.5: 500,
+    1.25: 750,
+    1: 1000,
+    0.75: 1250,
+    0.5: 1500,
+    0.25: 1750,
+};
 
 export default function InputSlider(prop) {
     let { title, _id } = prop;
+    const { speed, setSpeed } = useContext(SliderContext);
     const classes = useStyles();
-    const [value, setValue] = React.useState(Number(1));
+    const [value, setValue] = useState(Number(1));
 
     const handleSliderChange = (event, newValue) => {
         setValue(newValue);
+        setSpeed(mappingSpeedIndex[newValue]);
     };
 
-    function valuetext(value) {
+    const valuetext = (value) => {
         return `${value}`;
-    }
+    };
 
     return (
         <div className={classes.root}>
@@ -55,7 +68,7 @@ export default function InputSlider(prop) {
                         step={0.25}
                         marks
                         min={0.25}
-                        max={3}
+                        max={2}
                         valueLabelDisplay="auto"
                     />
                 </Grid>

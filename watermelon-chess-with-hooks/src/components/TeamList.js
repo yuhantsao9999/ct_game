@@ -6,7 +6,7 @@ import { useParams } from 'react-router-dom';
 // import { useSelector, useDispatch } from 'react-redux';
 // import { TagCategoryDataContext } from '../../contexts';
 import styled, { css } from 'styled-components';
-import { ContextStore } from './Container';
+import { ContextStore } from '../hooks/context';
 
 const Wrapper = styled.div`
     display: flex;
@@ -46,7 +46,7 @@ const BeEatenRedChesses = styled.div`
     width: 50px;
     height: 50px;
     border-radius: 25px;
-    background-image: url(棋子-紅-淘汰棋.png);
+    background-image: url(/棋子-紅-淘汰棋.png);
     background-size: 50px 50px;
     background-position: center;
 `;
@@ -55,7 +55,7 @@ const BeEatenYellowChesses = styled.div`
     width: 50px;
     height: 50px;
     border-radius: 25px;
-    background-image: url(棋子-黃-淘汰棋.png);
+    background-image: url(/棋子-黃-淘汰棋.png);
     background-size: 50px 50px;
     background-position: center;
 `;
@@ -65,6 +65,7 @@ const BeEatenYellowChesses = styled.div`
 const TeamList = (props) => {
     let { sides, winnerSide } = props;
     const result = useContext(ContextStore);
+    // console.log('winner result', result);
     // let params = queryString.parse(window.location.search);
     const { playerA } = useParams();
     const { playerB } = useParams();
@@ -75,11 +76,16 @@ const TeamList = (props) => {
             {sides.includes(winnerSide) && (
                 <div className="winner">
                     <span>獲勝方是：</span>
-                    <button
-                        style={{
-                            backgroundColor: winnerSide === 0 ? '#f5f516' : '#d80f0f', //黃：紅
-                        }}
-                    />
+                    {winnerSide === -1 ? (
+                        <div>平手</div>
+                    ) : (
+                        <button
+                            style={{
+                                backgroundColor:
+                                    winnerSide === 1 ? '#f5f516' : winnerSide === 0 ? '#d80f0f' : '#000000', //黃：紅
+                            }}
+                        />
+                    )}
                 </div>
             )}
             <div className="nameList">
