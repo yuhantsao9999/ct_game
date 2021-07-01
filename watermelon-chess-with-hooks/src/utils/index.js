@@ -5,13 +5,13 @@ export const chessesDefault = [
         name: 'N1',
         siblings: ['N2', 'N3', 'N4'],
         side: 0,
-        picture: chessIndex.Yellow[0].picture,
+        picture: chessIndex.Yellow[5].picture,
     },
     {
         name: 'N2',
         siblings: ['N1', 'N3', 'W1'],
         side: 0,
-        picture: chessIndex.Yellow[1].picture,
+        picture: chessIndex.Yellow[3].picture,
     },
     {
         name: 'N3',
@@ -23,13 +23,13 @@ export const chessesDefault = [
         name: 'N4',
         siblings: ['N1', 'N3', 'E1'],
         side: 0,
-        picture: chessIndex.Yellow[3].picture,
+        picture: chessIndex.Yellow[2].picture,
     },
     {
         name: 'W1',
         siblings: ['W2', 'W4', 'N2'],
         side: 0,
-        picture: chessIndex.Yellow[4].picture,
+        picture: chessIndex.Yellow[0].picture,
     },
     {
         name: 'W2',
@@ -41,7 +41,7 @@ export const chessesDefault = [
         name: 'W3',
         siblings: ['W2', 'S2', 'W4'],
         side: 1,
-        picture: chessIndex.Red[0].picture,
+        picture: chessIndex.Red[4].picture,
     },
     {
         name: 'W4',
@@ -53,19 +53,19 @@ export const chessesDefault = [
         name: 'S1',
         siblings: ['S2', 'S3', 'S4', 'C3'],
         side: 1,
-        picture: chessIndex.Red[1].picture,
+        picture: chessIndex.Red[3].picture,
     },
     {
         name: 'S2',
         siblings: ['W3', 'S3', 'S1'],
         side: 1,
-        picture: chessIndex.Red[2].picture,
+        picture: chessIndex.Red[1].picture,
     },
     {
         name: 'S3',
         siblings: ['S1', 'S2', 'S4'],
         side: 1,
-        picture: chessIndex.Red[3].picture,
+        picture: chessIndex.Red[0].picture,
     },
     {
         name: 'S4',
@@ -77,7 +77,7 @@ export const chessesDefault = [
         name: 'E1',
         siblings: ['N4', 'E2', 'E4'],
         side: 0,
-        picture: chessIndex.Yellow[5].picture,
+        picture: chessIndex.Yellow[2].picture,
     },
     {
         name: 'E2',
