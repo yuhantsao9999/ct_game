@@ -2,7 +2,7 @@ import React, { useState, useContext, useEffect } from 'react';
 import Board from './Board';
 import TeamList from './TeamList';
 import styled from 'styled-components';
-import { dummyData, initData } from '../constant/chessIndex';
+import { initData } from '../constant/chessIndex';
 import { chessesDefault, findBeEatenChesses, getAbleReceive, getNewChesses, isOneOfAbleReceive } from '../utils';
 import _ from 'lodash';
 import useInterval from '../hooks/useInterval';
@@ -26,7 +26,6 @@ function Game() {
     let [history, setHistory] = useState([
         {
             chesses: chessesDefault,
-            //TODO:dummyData完記得改回來0
             currentSide: 0, //初始旗子side
             latestMoveChessName: null, // 最新移动的棋子的名称
         },
@@ -37,7 +36,8 @@ function Game() {
     let [index, setIndex] = useState(0);
     let [pick, setPick] = useState(false);
     const [isPlaying, setPlaying] = useState(false);
-
+    console.log('index', index);
+    //處理獲勝方的狀況 Red: 0,Yellow: 1 ,平手:-1
     const mappingWinnerIndex = (battleData) => {
         switch (battleData.winner) {
             case battleData.playerA:
@@ -51,18 +51,10 @@ function Game() {
 
     useEffect(() => {
         const convertBattleProcess = matchBattleProcessData(battleData.process);
-        console.log('convertBattleProcess', convertBattleProcess);
         setActions(convertBattleProcess);
 
-        // TODO: 平手的狀況需處理;
-        // 最後一步給定勝出方 Red: 0,Yellow: 1 ,平手:-1
-        console.log('winnerSide', winnerSide);
-        // if (battleData.process.length !== 0 && index === battleData.process.length + 1) {
-        console.log('battleData.winner', battleData.winner);
         if (battleData.process.length !== 0 && index === battleData.process.length) {
-            console.log('enter setwinner');
             const winner = mappingWinnerIndex(battleData);
-            console.log('winner', winner);
             setWinnerSide(winner);
         }
     }, [battleData, index]);
@@ -127,7 +119,6 @@ function Game() {
     };
 
     function handleClickChess(chessData) {
-        console.log('開始處理放大囉');
         // 已經有人勝出了，返回
         if (sides.includes(winnerSide)) return;
 
@@ -137,7 +128,6 @@ function Game() {
         // 1、改变点击棋子的样式變大
         setClickedChess(chessData);
         // 2、找落子點放綠點點
-        console.log('currentChesses', history[history.length - 1].chesses);
         let newAbleReceive = getAbleReceive(chessData, history[history.length - 1].chesses);
         // console.log('history[history.length - 1].chesses', history[history.length - 1].chesses);
         setAbleReceive(newAbleReceive);
@@ -160,7 +150,6 @@ function Game() {
 
         // 得到新的下一步玩家
         // let newCurrentSide = history[history.length - 1].currentSide === 0 ? 1 : 0;
-        //TODO:開發版要改成index % 2+ 1
         let newCurrentSide = index % 2;
 
         // 清空 当前点击的棋子
@@ -178,7 +167,6 @@ function Game() {
         });
 
         // 判断有没有棋子被吃掉
-        //TODO:改成被吃掉棋子的 index
         // let beEatenChesses = findBeEatenChesses(newChesses, newCurrentSide);
         let beEatenChesses = matchBoardIndex(killChess);
 
@@ -207,57 +195,39 @@ function Game() {
         let cashChesses = _.cloneDeep(newChesses);
         let cashHistory = _.cloneDeep(newHistory);
 
-        let timer = setInterval(() => {
-            cashHistory = _.cloneDeep(cashHistory);
+        // let timer = setInterval(() => {
+        cashHistory = _.cloneDeep(cashHistory);
 
-            cashChesses = changeCashChesses(cashChesses, beEatenChesses, newCurrentSide);
-            cashHistory.pop();
-            cashHistory.push({
-                chesses: cashChesses,
-                currentSide: newCurrentSide,
-                latestMoveChessName: latestMoveChessName,
-            });
-            setHistory(cashHistory);
+        cashChesses = changeCashChesses(cashChesses, beEatenChesses, newCurrentSide);
+        cashHistory.pop();
+        cashHistory.push({
+            chesses: cashChesses,
+            currentSide: newCurrentSide,
+            latestMoveChessName: latestMoveChessName,
+        });
+        setHistory(cashHistory);
 
-            shiningTimes--;
-            if (shiningTimes < 0) {
-                // 动画执行完了
-                clearInterval(timer);
-                // 去掉被吃掉的棋子
-                cashHistory = getNewHistoryAfterDeleteBeEatenChesses(
-                    beEatenChesses,
-                    cashHistory,
-                    newCurrentSide,
-                    latestMoveChessName
-                );
-                setHistory(cashHistory);
-                //新增淘汰旗子
-                if (newCurrentSide === 0) {
-                    setYellow([...yellow, ...beEatenChesses]);
-                } else {
-                    setRed([...red, ...beEatenChesses]);
-                }
-            }
-        }, 500);
+        // shiningTimes--;
+        // if (shiningTimes < 0) {
+        // 动画执行完了
+        // clearInterval(timer);
+        // 去掉被吃掉的棋子
+        cashHistory = getNewHistoryAfterDeleteBeEatenChesses(
+            beEatenChesses,
+            cashHistory,
+            newCurrentSide,
+            latestMoveChessName
+        );
+        setHistory(cashHistory);
+        //新增淘汰旗子
+        if (newCurrentSide === 0) {
+            setYellow([...yellow, ...beEatenChesses]);
+        } else {
+            setRed([...red, ...beEatenChesses]);
+        }
+        // }
+        // }, 500);
     }
-
-    // function getWinner(newHistory, newCurrentSide) {
-    //     let winner = null; // 获胜方的side
-    //     let newCurrentSideCount = 0; // 被吃掉方剩下的棋子个数
-
-    //     let latestChesses = newHistory[newHistory.length - 1].chesses;
-    //     for (let latestChessItem of latestChesses) {
-    //         if (latestChessItem.side === newCurrentSide) {
-    //             newCurrentSideCount++;
-    //         }
-    //     }
-    //     if (newCurrentSideCount <= 2) {
-    //         // 如果被吃掉方的棋子只剩下2颗或更少，则对方获胜
-    //         winner = newCurrentSide === 0 ? 1 : 0;
-    //     }
-
-    //     return winner;
-    // }
 
     /**
      * 从当前棋子布局中删除掉 被吃掉的棋子（被吃掉的棋子side设为null），返回更新后的 history
@@ -344,8 +314,8 @@ function Game() {
                     // setClickedChess={setClickedChess}
                     // setAbleReceive={setAbleReceive}
                     // setPick={setPick}
-                    // setYellow={setYellow}
-                    // setRed={setRed}
+                    setYellow={setYellow}
+                    setRed={setRed}
                 />
                 <TeamList sides={sides} winnerSide={winnerSide} />
             </div>
@@ -411,13 +381,13 @@ const Buttons = (props) => {
                     max={max.step}
                     min={min.step}
                     // setActions={setActions}
-                    // setIndex={setIndex}
+                    setIndex={setIndex}
                     // setHistory={setHistory}
                     // setClickedChess={setClickedChess}
                     // setAbleReceive={setAbleReceive}
                     // setPick={setPick}
-                    // setYellow={setYellow}
-                    // setRed={setRed}
+                    setYellow={setYellow}
+                    setRed={setRed}
                 ></Slider>
                 <SpeedSlider
                     title={title.speed}

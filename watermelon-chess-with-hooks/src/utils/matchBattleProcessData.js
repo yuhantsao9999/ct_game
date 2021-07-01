@@ -2,7 +2,6 @@ const { chessIndex, boardIndex, sibilingIndex, side } = require('../constant/che
 
 export const matchBattleProcessData = (process) => {
     const chessProcessData = [];
-    console.log('process', process);
 
     if (process.length !== 0) {
         for (let i = 0; i < process.length; i++) {

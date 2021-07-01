@@ -31,8 +31,8 @@ export default function InputSlider(prop) {
         // setAbleReceive,
         // setClickedChess,
         // setPick,
-        // setYellow,
-        // setRed,
+        setYellow,
+        setRed,
     } = prop;
     const classes = useStyles();
     const [value, setValue] = useState(Number(defaultValue));
@@ -50,9 +50,9 @@ export default function InputSlider(prop) {
         // setClickedChess(null);
         // setAbleReceive([]);
         // setActions(dummyData);
-        // setYellow([]);
-        // setRed([]);
-        // setIndex(0);
+        setYellow([]);
+        setRed([]);
+        setIndex(0);
         setValue(newValue);
         // setPick(true);
         setSpecifedStep(newValue);
