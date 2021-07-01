@@ -23,7 +23,7 @@ export const chessesDefault = [
         name: 'N4',
         siblings: ['N1', 'N3', 'E1'],
         side: 0,
-        picture: chessIndex.Yellow[2].picture,
+        picture: chessIndex.Yellow[4].picture,
     },
     {
         name: 'W1',
@@ -77,7 +77,7 @@ export const chessesDefault = [
         name: 'E1',
         siblings: ['N4', 'E2', 'E4'],
         side: 0,
-        picture: chessIndex.Yellow[2].picture,
+        picture: chessIndex.Yellow[1].picture,
     },
     {
         name: 'E2',
