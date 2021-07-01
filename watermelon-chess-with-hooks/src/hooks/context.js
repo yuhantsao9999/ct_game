@@ -27,10 +27,9 @@ export const BattleProcessProvider = ({ children }) => {
         totalSteps: -1,
         process: [],
     });
+    //dummydata 就是 blackBoxData
     // const processData = blackBoxData;
-    //TODO:改用 fetch
     const { result: processData } = useFetchBattleProcess(activityName, playerA, playerB);
-    // console.log('processData', processData);
     useEffect(() => {
         setResult(processData);
     }, [processData]);
@@ -40,7 +39,6 @@ export const BattleProcessProvider = ({ children }) => {
             activityName,
             playerA,
             playerB,
-            //TODO:之後要補上 winner
             winner,
             result,
             setActivityName,
