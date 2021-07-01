@@ -82,7 +82,6 @@ const battleOfTheRest = (size, round) => {
 const viewDetailOrShowResult = (team1, team2) => {
     if (confirm(`觀看 ${team1} 和 ${team2} 的對戰過程嗎？`)) {
         // window.open(`/watermelonChess/${team1}/${team2}`);
-        //TODO:refactor
         const getUrlString = location.href;
         const url = new URL(getUrlString);
         const activityName = url.searchParams.get('id');
@@ -148,7 +147,8 @@ const fetchInsertBattleProcess = async (fetchBattleProcessDataResult, activityNa
         playerB: team2,
         process,
         totalSteps,
-        winner: winner == 'Red' ? team1 : team2,
+        //winner 可能會是"Red",'Yellow','Even'
+        winner: winner == 'Red' ? team1 : winner == 'Yellow' ? team2 : 'No Team',
     };
     try {
         return fetch('/api/insertBattleProcess', {
@@ -181,18 +181,19 @@ const battleOfTwoTeam = async (data) => {
         window.alert("Can't battle with TBD team.");
         return;
     }
-    //TODO:fetch python code of battle and fetch battle process
-    // 1. POST to node.js (node.js call python and get result of two team)
-    // 2. node.js save result (score included) to db
+    // fetch python code of battle and fetch battle process
+    // POST to node.js (node.js call python and get result of two team)
+    // node.js save result (score included) to db
+    //TODO:錯誤處理：fetchPythonCode 有誤要跳 alert
     const fetchPythonCodeDataResultOfPlayerA = await fetchPythonCode(team1).then((response) => response);
     const fetchPythonCodeDataResultOfPlayerB = await fetchPythonCode(team2).then((response) => response);
     const pythonCodeData = {
         pythonCodeA: fetchPythonCodeDataResultOfPlayerA,
         pythonCodeB: fetchPythonCodeDataResultOfPlayerB,
     };
-    console.log('pythonCodeData', pythonCodeData);
+    //利用 python code 取得對戰過程
     const fetchBattleProcessDataResult = await fetchBattleProcess(pythonCodeData).then((response) => response);
-    //TODO:上方是線上版，下方是測試資料
+    // Hint: fetchBattleProcessDataResult 上方是線上版，下方是測試資料
     // const fetchBattleProcessDataResult = {
     //     process: [
     //         {
@@ -226,15 +227,15 @@ const battleOfTwoTeam = async (data) => {
     const getUrlString = location.href;
     const url = new URL(getUrlString);
     const activityName = url.searchParams.get('id');
+    // get socreI, scoreII from db through team1, team2
     await fetchInsertBattleProcess(fetchBattleProcessDataResult, activityName, team1, team2);
 
     if (!notShow) {
         viewDetailOrShowResult(team1, team2);
     }
 
-    // 3. get socreI, scoreII from db through team1, team2 or other key
-    const scoreI = getRandomInt(100);
-    const scoreII = getRandomInt(100);
+    const scoreI = fetchBattleProcessDataResult.win === 'Red' ? 1 : 0;
+    const scoreII = fetchBattleProcessDataResult.win === 'Yellow' ? 1 : 0;
 
     // update result of this round
     globalData['results'][round][match] = [
@@ -259,7 +260,7 @@ const resultsInit = (size, nextRound) => {
     return scoreArr;
 };
 
-// TODO : need auto generate the logic function of each round
+// TODO: need auto generate the logic function of each round
 const firstRound = () => {
     globalData['results'][0] = battleOfTheRest(globalData['size'], 0);
     globalData['results'][1] = resultsInit(globalData['size'], 1);
@@ -348,11 +349,11 @@ const plot = (data, edit = false) => {
     }
 };
 
-const teamGenerate = (defaultTeamNum = 16) => {
-    globalData = dataGenerate(8);
+const teamGenerate = (defaultTeamNum = 8) => {
+    globalData = dataGenerate(defaultTeamNum);
     plot(globalData);
 };
-
+//TODO:取得這個活動有幾組
 window.onload = () => {
     teamGenerate();
 };
