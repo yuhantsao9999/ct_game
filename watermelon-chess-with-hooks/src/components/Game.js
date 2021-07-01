@@ -36,6 +36,8 @@ function Game() {
     let [index, setIndex] = useState(0);
     let [pick, setPick] = useState(false);
     const [isPlaying, setPlaying] = useState(false);
+    const [isToSpecifedStep, setIsToSpecifedStep] = useState(false);
+
     console.log('index', index);
     //處理獲勝方的狀況 Red: 0,Yellow: 1 ,平手:-1
     const mappingWinnerIndex = (battleData) => {
@@ -67,6 +69,7 @@ function Game() {
     // }, [index]);
 
     useEffect(() => {
+        if (sides.includes(winnerSide)) return;
         if (pick) moveFrom();
         else moveTo();
     }, [pick]);
@@ -76,17 +79,31 @@ function Game() {
         setPick((prevPick) => !prevPick);
     };
 
-    useEffect(() => {
-        //跳到第i步
+    // useEffect(() => {
+    //     //跳到第i步
+    //     for (let i = 0; i < specifedStep * 2; i++) {
+    //         (function (x) {
+    //             setTimeout(function () {
+    //                 setPick((prevPick) => !prevPick);
+    //             }, 250);
+    //         })(i);
+    //     }
+    // }, [specifedStep]);
 
-        for (let i = 0; i < specifedStep * 2; i++) {
-            (function (x) {
-                setTimeout(function () {
-                    setPick((prevPick) => !prevPick);
-                }, 250);
-            })(i);
+    useInterval(
+        () => {
+            if (sides.includes(winnerSide)) return;
+            setPick((prevPick) => !prevPick);
+        },
+
+        isToSpecifedStep ? 50 : null
+    );
+
+    useEffect(() => {
+        if (sides.includes(winnerSide) || index == specifedStep) {
+            setIsToSpecifedStep(false);
         }
-    }, [specifedStep]);
+    }, [index, specifedStep, sides, winnerSide]);
 
     const play = () => {
         // 已經有人勝出了，返回
@@ -106,6 +123,7 @@ function Game() {
     );
 
     const stop = () => {
+        setIsToSpecifedStep(false);
         setPlaying(false);
     };
 
@@ -309,9 +327,9 @@ function Game() {
                     stop={stop}
                     totalStep={actions.length}
                     setIndex={setIndex}
-                    // setActions={setActions}
+                    setIsToSpecifedStep={setIsToSpecifedStep}
                     setHistory={setHistory}
-                    // setClickedChess={setClickedChess}
+                    index={index}
                     // setAbleReceive={setAbleReceive}
                     // setPick={setPick}
                     // convertBattleProcess={convertBattleProcess}
@@ -356,11 +374,10 @@ const Buttons = (props) => {
         totalStep,
         setIndex,
         setHistory,
-        // setActions,
-        convertBattleProcess,
-        setClickedChess,
-        setAbleReceive,
-        setPick,
+        setIsToSpecifedStep,
+        index,
+        // setAbleReceive,
+        // setPick,
         setYellow,
         setRed,
     } = props;
@@ -382,8 +399,8 @@ const Buttons = (props) => {
                     defaultValue={defaultValue.step}
                     max={max.step}
                     min={min.step}
-                    // setActions={setActions}
-                    // convertBattleProcess={convertBattleProcess}
+                    index={index}
+                    setIsToSpecifedStep={setIsToSpecifedStep}
                     setIndex={setIndex}
                     setHistory={setHistory}
                     // setClickedChess={setClickedChess}
