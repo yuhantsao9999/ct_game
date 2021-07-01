@@ -26,7 +26,7 @@ export default function InputSlider(prop) {
         max,
         min,
         setIndex,
-        // setHistory,
+        setHistory,
         // setActions,
         // setAbleReceive,
         // setClickedChess,
@@ -39,17 +39,15 @@ export default function InputSlider(prop) {
     const { specifedStep, setSpecifedStep } = useContext(SliderContext);
 
     const handleSliderChange = (event, newValue) => {
-        // setHistory([
-        //     {
-        //         chesses: chessesDefault,
-        //         //TODO:測試完記得改回來0
-        //         currentSide: 1, //初始旗子side
-        //         latestMoveChessName: null, // 最新移动的棋子的名称
-        //     },
-        // ]);
+        setHistory([
+            {
+                chesses: chessesDefault,
+                currentSide: 1, //初始旗子side
+                latestMoveChessName: null, // 最新移动的棋子的名称
+            },
+        ]);
         // setClickedChess(null);
         // setAbleReceive([]);
-        // setActions(dummyData);
         setYellow([]);
         setRed([]);
         setIndex(0);

@@ -310,10 +310,11 @@ function Game() {
                     totalStep={actions.length}
                     setIndex={setIndex}
                     // setActions={setActions}
-                    // setHistory={setHistory}
+                    setHistory={setHistory}
                     // setClickedChess={setClickedChess}
                     // setAbleReceive={setAbleReceive}
                     // setPick={setPick}
+                    // convertBattleProcess={convertBattleProcess}
                     setYellow={setYellow}
                     setRed={setRed}
                 />
@@ -355,7 +356,8 @@ const Buttons = (props) => {
         totalStep,
         setIndex,
         setHistory,
-        setActions,
+        // setActions,
+        convertBattleProcess,
         setClickedChess,
         setAbleReceive,
         setPick,
@@ -381,8 +383,9 @@ const Buttons = (props) => {
                     max={max.step}
                     min={min.step}
                     // setActions={setActions}
+                    // convertBattleProcess={convertBattleProcess}
                     setIndex={setIndex}
-                    // setHistory={setHistory}
+                    setHistory={setHistory}
                     // setClickedChess={setClickedChess}
                     // setAbleReceive={setAbleReceive}
                     // setPick={setPick}
