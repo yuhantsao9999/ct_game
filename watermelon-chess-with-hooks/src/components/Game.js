@@ -96,7 +96,7 @@ function Game() {
             setPick((prevPick) => !prevPick);
         },
 
-        isToSpecifedStep ? 50 : null
+        isToSpecifedStep ? 25 : null
     );
 
     useEffect(() => {
