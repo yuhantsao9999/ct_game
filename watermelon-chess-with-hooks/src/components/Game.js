@@ -9,7 +9,7 @@ import useInterval from '../hooks/useInterval';
 import Slider from './Slider';
 import SpeedSlider from './SpeedSlider';
 import { BattleProcessContext, ContextStore, SliderContext } from '../hooks/context';
-import { matchBattleProcessData, matchBoardIndex } from '../utils/matchBattleProcessData';
+import { matchBattleProcessData, matchBoardIndex, mappingWinnerIndex } from '../utils/matchBattleProcessData';
 
 function Game() {
     const { red, setRed, yellow, setYellow } = useContext(ContextStore);
@@ -26,7 +26,7 @@ function Game() {
     let [history, setHistory] = useState([
         {
             chesses: chessesDefault,
-            currentSide: 0, //初始旗子side
+            currentSide: 0, //初始旗子side 紅
             latestMoveChessName: null, // 最新移动的棋子的名称
         },
     ]);
@@ -36,20 +36,7 @@ function Game() {
     let [index, setIndex] = useState(0);
     let [pick, setPick] = useState(false);
     const [isPlaying, setPlaying] = useState(false);
-    const [isToSpecifedStep, setIsToSpecifedStep] = useState(false);
-
-    console.log('index', index);
-    //處理獲勝方的狀況 Red: 0,Yellow: 1 ,平手:-1
-    const mappingWinnerIndex = (battleData) => {
-        switch (battleData.winner) {
-            case battleData.playerA:
-                return 0;
-            case battleData.playerB:
-                return 1;
-            default:
-                return -1;
-        }
-    };
+    // const [isToSpecifedStep, setIsToSpecifedStep] = useState(false);
 
     useEffect(() => {
         const convertBattleProcess = matchBattleProcessData(battleData.process);
@@ -60,13 +47,6 @@ function Game() {
             setWinnerSide(winner);
         }
     }, [battleData, index]);
-
-    //     const winner = 1;
-    //     console.log('index', index);
-    //     if (index == 64) {
-    //         setWinnerSide(winner);
-    //     }
-    // }, [index]);
 
     useEffect(() => {
         if (sides.includes(winnerSide)) return;
@@ -90,20 +70,21 @@ function Game() {
     //     }
     // }, [specifedStep]);
 
-    useInterval(
-        () => {
-            if (sides.includes(winnerSide)) return;
-            setPick((prevPick) => !prevPick);
-        },
+    // useInterval(
+    //     () => {
+    //         if (sides.includes(winnerSide)) return;
+    //         setPick((prevPick) => !prevPick);
+    //     },
 
-        isToSpecifedStep ? 25 : null
-    );
+    //     isToSpecifedStep ? 25 : null
+    // );
 
-    useEffect(() => {
-        if (sides.includes(winnerSide) || index == specifedStep) {
-            setIsToSpecifedStep(false);
-        }
-    }, [index, specifedStep, sides, winnerSide]);
+    // useEffect(() => {
+    //     if (sides.includes(winnerSide) || index == specifedStep) {
+    //         setIsToSpecifedStep(false);
+    //         setPlaying(false);
+    //     }
+    // }, [index, specifedStep, sides, winnerSide]);
 
     const play = () => {
         // 已經有人勝出了，返回
@@ -123,7 +104,7 @@ function Game() {
     );
 
     const stop = () => {
-        setIsToSpecifedStep(false);
+        // setIsToSpecifedStep(false);
         setPlaying(false);
     };
 
@@ -327,12 +308,10 @@ function Game() {
                     stop={stop}
                     totalStep={actions.length}
                     setIndex={setIndex}
-                    setIsToSpecifedStep={setIsToSpecifedStep}
+                    winnerSide={winnerSide}
                     setHistory={setHistory}
                     index={index}
-                    // setAbleReceive={setAbleReceive}
-                    // setPick={setPick}
-                    // convertBattleProcess={convertBattleProcess}
+                    setWinnerSide={setWinnerSide}
                     setYellow={setYellow}
                     setRed={setRed}
                 />
@@ -367,25 +346,12 @@ const StopWapper = styled.div`
 `;
 
 const Buttons = (props) => {
-    let {
-        move,
-        play,
-        stop,
-        totalStep,
-        setIndex,
-        setHistory,
-        setIsToSpecifedStep,
-        index,
-        // setAbleReceive,
-        // setPick,
-        setYellow,
-        setRed,
-    } = props;
+    let { move, play, stop, totalStep, setIndex, setHistory, setWinnerSide, winnerSide, index, setYellow, setRed } =
+        props;
     function replay() {
         window.location.reload();
     }
     const title = { step: '步數', speed: '速度' };
-    const id = { step: 'step', speed: 'speed' };
     const defaultValue = { step: '0', speed: '100' };
     const max = { step: totalStep, speed: '200' };
     const min = { step: '0', speed: '25' };
@@ -395,28 +361,18 @@ const Buttons = (props) => {
             <div className="steps">
                 <Slider
                     title={title.step}
-                    _id={id.step}
                     defaultValue={defaultValue.step}
                     max={max.step}
                     min={min.step}
                     index={index}
-                    setIsToSpecifedStep={setIsToSpecifedStep}
+                    setWinnerSide={setWinnerSide}
+                    winnerSide={winnerSide}
                     setIndex={setIndex}
                     setHistory={setHistory}
-                    // setClickedChess={setClickedChess}
-                    // setAbleReceive={setAbleReceive}
-                    // setPick={setPick}
                     setYellow={setYellow}
                     setRed={setRed}
                 ></Slider>
-                <SpeedSlider
-                    title={title.speed}
-                    _id={id.speed}
-                    // defaultValue={defaultValue.speed}
-                    // max={max.speed}
-                    // min={min.speed}
-                    play={play}
-                ></SpeedSlider>
+                <SpeedSlider title={title.speed} play={play}></SpeedSlider>
             </div>
             <ButtonWapper>
                 <RestartWapper onClick={replay}>
@@ -441,10 +397,10 @@ const Buttons = (props) => {
                         width="50"
                         height="50"
                         fill="currentColor"
-                        class="bi bi-arrow-down-square-fill"
+                        class="bi bi-skip-end-btn-fill"
                         viewBox="0 0 16 16"
                     >
-                        <path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm6.5 4.5v5.793l2.146-2.147a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.5.5 0 1 1 .708-.708L7.5 10.293V4.5a.5.5 0 0 1 1 0z" />
+                        <path d="M0 12V4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm6.79-6.907A.5.5 0 0 0 6 5.5v5a.5.5 0 0 0 .79.407L9.5 8.972V10.5a.5.5 0 0 0 1 0v-5a.5.5 0 0 0-1 0v1.528L6.79 5.093z" />
                     </svg>
                 </NextWapper>
                 {/* 播放 */}

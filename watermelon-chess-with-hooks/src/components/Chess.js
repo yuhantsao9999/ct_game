@@ -27,7 +27,7 @@ function Chess({ chessData, chessWidth, boxShadow, handleClickChess }) {
                 chessData={chessData}
                 chessWidth={chessWidth}
                 boxShadow={boxShadow}
-                onClick={() => handleClickChess(chessData)}
+                // onClick={() => handleClickChess(chessData)}
             ></Button>
         </ChessWrap>
     );

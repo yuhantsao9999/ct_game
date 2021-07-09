@@ -1,13 +1,12 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import Slider from '@material-ui/core/Slider';
-import Input from '@material-ui/core/Input';
-import VolumeUp from '@material-ui/icons/VolumeUp';
 import { SliderContext } from '../hooks/context';
-import { dummyData, initData } from '../constant/chessIndex';
 import { chessesDefault } from '../utils';
+import { BattleProcessContext } from '../hooks/context';
+import { matchBattleProcessData } from '../utils/matchBattleProcessData';
 
 const useStyles = makeStyles({
     root: {
@@ -19,43 +18,64 @@ const useStyles = makeStyles({
 });
 
 export default function InputSlider(prop) {
-    let {
-        title,
-        _id,
-        defaultValue,
-        max,
-        min,
-        setIndex,
-        setHistory,
-        setIsToSpecifedStep,
-        index,
-        // setClickedChess,
-        // setPick,
-        setYellow,
-        setRed,
-    } = prop;
+    let { title, defaultValue, max, min, setIndex, setHistory, setWinnerSide, winnerSide, index, setYellow, setRed } =
+        prop;
     const classes = useStyles();
+
+    const { result: battleData } = useContext(BattleProcessContext);
+    const convertBattleProcess = matchBattleProcessData(battleData.process);
     const [value, setValue] = useState(Number(defaultValue));
-    const { specifedStep, setSpecifedStep } = useContext(SliderContext);
+
+    useEffect(() => {
+        setValue(index);
+    }, [index]);
 
     const handleSliderChange = (event, newValue) => {
-        if (index > newValue) {
+        //因為要 black box 是給移動後的狀態（才讓最後一部顯示 final 狀態），所以初始狀態自己加上
+        if (newValue == 0) {
             setHistory([
                 {
                     chesses: chessesDefault,
-                    currentSide: 1, //初始旗子side
+                    currentSide: 0, //初始旗子side 紅
                     latestMoveChessName: null, // 最新移动的棋子的名称
                 },
             ]);
-            // setAbleReceive([]);
+            setWinnerSide(null);
             setYellow([]);
             setRed([]);
-            setIndex(0);
+            setIndex(newValue);
+            setValue(newValue);
+        } else {
+            //magic number -1 ，因為要 black box 是給移動後的狀態（才讓最後一部顯示 final 狀態），所以要 -1 取得移動前的狀態
+            let everyChessSizeInCurrentBoard = convertBattleProcess[newValue - 1].currentBoard.map((item) => item.side);
+            //TODO:refactor 更好的寫法
+            let beEatenZero = ['0', '0', '0', '0', '0', '0'];
+            let beEatenOne = ['1', '1', '1', '1', '1', '1'];
+
+            for (let i = 0; i < everyChessSizeInCurrentBoard.length; i++) {
+                if (everyChessSizeInCurrentBoard[i] == 0) {
+                    beEatenZero.pop();
+                }
+                if (everyChessSizeInCurrentBoard[i] == 1) {
+                    beEatenOne.pop();
+                }
+            }
+            setIndex(newValue);
+            setHistory([
+                {
+                    //magic number -1 ，因為 blackBox 給的是那個 step 移動後的狀態（才能夠讓最後一步顯示 final 狀態），所以要 -1 取得移動前的狀態
+                    chesses: convertBattleProcess[newValue - 1].currentBoard,
+                    currentSide: newValue % 2 === 1 ? 0 : 1, //初始旗子side red:0 yellow:1
+                    latestMoveChessName: null, // 最新移动的棋子的名称
+                },
+            ]);
+            if (newValue !== convertBattleProcess.length) {
+                setWinnerSide(null);
+            }
+            setYellow([...beEatenZero]);
+            setRed([...beEatenOne]);
+            setValue(newValue);
         }
-        setValue(newValue);
-        // setPick(true);
-        setSpecifedStep(newValue);
-        setIsToSpecifedStep(true);
     };
 
     return (
@@ -85,9 +105,7 @@ export default function InputSlider(prop) {
                         max={Number(max)}
                     />
                 </Grid>
-                <Grid item id={_id}>
-                    {value}
-                </Grid>
+                <Grid item>{value}</Grid>
             </Grid>
         </div>
     );

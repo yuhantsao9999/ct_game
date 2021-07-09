@@ -77,7 +77,7 @@ const TeamList = (props) => {
                 <div className="winner">
                     <span>獲勝方是：</span>
                     {winnerSide === -1 ? (
-                        <div>平手</div>
+                        <div> 平手</div>
                     ) : (
                         <button
                             style={{
@@ -93,6 +93,7 @@ const TeamList = (props) => {
                     <TeamListItem teamColor="#d80f0f"></TeamListItem>
                     {playerA}
                 </div>
+                {/* 置入紅色方吃到的黃棋子 */}
                 <BeEatenChessesWrapper>
                     {result.yellow.map((item, i) => (
                         <BeEatenYellowChesses key={`beEatenYellowChesses-${item}-${i}`}></BeEatenYellowChesses>
@@ -104,6 +105,7 @@ const TeamList = (props) => {
                     <TeamListItem teamColor="#f5f516"></TeamListItem>
                     {playerB}
                 </div>
+                {/* 置入黃色方吃到的紅棋子 */}
                 <BeEatenChessesWrapper>
                     {result.red.map((item, i) => (
                         <BeEatenRedChesses key={`beEatenRedChesses-${item}-${i}`}></BeEatenRedChesses>

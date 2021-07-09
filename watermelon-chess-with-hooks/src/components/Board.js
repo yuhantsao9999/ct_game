@@ -38,7 +38,6 @@ function Board(props) {
                 }
 
                 let dotWidth = 10;
-
                 return (
                     <div
                         className="chess-wrap"
@@ -49,9 +48,9 @@ function Board(props) {
                             top: chessTop + 'px',
                             left: chessLeft + 'px',
                         }}
-                        onClick={() => {
-                            handleClickChessWrap(chessData);
-                        }}
+                        // onClick={() => {
+                        //     handleClickChessWrap(chessData);
+                        // }}
                     >
                         {(chessData.side === 0 || chessData.side === 1) && (
                             <Chess
