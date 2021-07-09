@@ -1,33 +1,73 @@
 let globalData;
+let activityName;
+let totalTeamNum;
 (() => {
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
-    const activityName = urlParams.get('id');
+    activityName = urlParams.get('id');
     document.getElementById('activityName').innerHTML = `${activityName}`;
 })();
 
+const fetchTotalTeamNum = async (activityName) => {
+    const data = {
+        activityName,
+    };
+    try {
+        return fetch('/api/findTotalTeamNum', {
+            method: 'post',
+            body: JSON.stringify(data),
+            headers: {
+                'content-type': 'application/json',
+            },
+        })
+            .then((response) => {
+                return response.json();
+            })
+            .then((response) => {
+                return response.length;
+            })
+            .catch((error) => console.error('Error:', error));
+    } catch (error) {
+        return;
+    }
+};
+
 // data initialize
 const dataGenerate = (teamNum) => {
+    let powNum;
+    for (let i = 0; i <= 6; i++) {
+        if (Math.pow(2, i) >= teamNum) {
+            powNum = Math.pow(2, i);
+            break;
+        }
+    }
     const data = {
         teams: [],
         results: [],
-        size: teamNum,
+        size: powNum,
         round: 1,
     };
-    const randomTeam = getRandomTeam(teamNum);
+    const randomTeam = getRandomTeam(powNum);
 
     // round init
-    for (let i = 0; Math.pow(2, i) <= 16; i++) {
+    for (let i = 0; Math.pow(2, i) <= powNum; i++) {
         data['results'][i] = [];
     }
 
     // teams init
-    for (let i = 0; i < teamNum; i += 2) {
-        if (i + 1 == teamNum) {
+    for (let i = 0; i < powNum; i += 2) {
+        // if (i + 1 == teamNum) {
+        //     data['teams'].push([randomTeam[i], null]);
+        //     break;
+        // }
+        if (i + 2 > teamNum && teamNum % 2 == 0) {
+            data['teams'].push([null, null]);
+        } else if (i + 2 > teamNum && teamNum % 2 !== 0) {
             data['teams'].push([randomTeam[i], null]);
-            break;
+        } else {
+            data['teams'].push([randomTeam[i], randomTeam[i + 1]]);
         }
-        data['teams'].push([randomTeam[i], randomTeam[i + 1]]);
+        console.log(i, teamNum, teamNum % 2 == 0, data['teams']);
 
         // results init of first round
         data['results'][0].push([, , { round: 0, match: i / 2 }]);
@@ -222,7 +262,7 @@ const battleOfTwoTeam = async (data) => {
     //         },
     //     ],
     //     totalSteps: 3,
-    //     win: 'Yellow',
+    //     win: 'Red',
     // };
     const getUrlString = location.href;
     const url = new URL(getUrlString);
@@ -260,38 +300,45 @@ const resultsInit = (size, nextRound) => {
     return scoreArr;
 };
 
+function getBaseLog(x, y) {
+    return Math.log(y) / Math.log(x);
+}
+
 // TODO: need auto generate the logic function of each round
-const firstRound = () => {
-    globalData['results'][0] = battleOfTheRest(globalData['size'], 0);
-    globalData['results'][1] = resultsInit(globalData['size'], 1);
-    globalData['results'][2] = [];
+// const firstRound = () => {
+//     globalData['results'][0] = battleOfTheRest(globalData['size'], 0);
+//     globalData['results'][1] = resultsInit(globalData['size'], 1);
+//     plot(globalData);
+//     document.getElementById('first').disabled = true;
+// };
+
+// const secondRound = () => {
+//     globalData['results'][1] = battleOfTheRest(globalData['size'], 1);
+//     globalData['results'][2] = resultsInit(globalData['size'], 2);
+//     plot(globalData);
+//     document.getElementById('second').disabled = true;
+// };
+
+// const thirdRound = () => {
+//     globalData['results'][2] = battleOfTheRest(globalData['size'], 2);
+//     globalData['results'][3] = resultsInit(globalData['size'], 3); // set 2 because of the third place and the forth place
+//     plot(globalData);
+//     document.getElementById('third').disabled = true;
+// };
+
+const xRound = (round) => {
+    if (globalData['results'][round].length == 0) return; // ?
+    globalData['results'][round] = battleOfTheRest(globalData['size'], round);
+    globalData['results'][round + 1] = resultsInit(globalData['size'], round + 1);
     plot(globalData);
-    document.getElementById('first').disable = true;
+    document.getElementById('round' + round).disable = true;
 };
 
-const secondRound = () => {
-    globalData['results'][1] = battleOfTheRest(globalData['size'], 1);
-    globalData['results'][2] = resultsInit(globalData['size'], 2);
-    plot(globalData);
-    document.getElementById('second').disable = true;
-};
-
-const thirdRound = () => {
-    globalData['results'][2] = battleOfTheRest(globalData['size'], 2);
-    globalData['results'][3] = resultsInit(globalData['size'], 2); // set 2 because of the third place and the forth place
-    plot(globalData);
-    document.getElementById('third').disable = true;
-};
-
-const finalRound = () => {
-    globalData['results'][3] = battleOfTheRest(globalData['size'], 2);
-    plot(globalData);
-    document.getElementById('final').disable = true;
-};
-
-const getRandomInt = (max) => {
-    return Math.floor(Math.random() * Math.floor(max));
-};
+// const finalRound = () => {
+//     globalData['results'][3] = battleOfTheRest(globalData['size'], 2);
+//     plot(globalData);
+//     document.getElementById('final').disable = true;
+// };
 
 // edited mode
 const setUp = () => {
@@ -349,11 +396,31 @@ const plot = (data, edit = false) => {
     }
 };
 
-const teamGenerate = (defaultTeamNum = 8) => {
-    globalData = dataGenerate(defaultTeamNum);
+const teamGenerate = (totalTeamNum = 8) => {
+    globalData = dataGenerate(totalTeamNum);
     plot(globalData);
+
+    const mappingButtonTitle = {
+        0: '第一回合',
+        1: '第二回合',
+        2: '第三回合',
+        3: '第四回合',
+        4: '第五回合',
+    };
+
+    //創造剩餘組別對戰的button
+    for (let i = 0; i < parseInt(getBaseLog(2, totalTeamNum)); i++) {
+        const xRoundButton = document.createElement('button');
+        xRoundButton.id = 'round' + i;
+        xRoundButton.className = 'roundButton';
+        xRoundButton.innerHTML = mappingButtonTitle[i];
+        xRoundButton.setAttribute('onClick', 'xRound(' + i + ')');
+        document.getElementById('roundButtons').appendChild(xRoundButton);
+    }
 };
-//TODO:取得這個活動有幾組
-window.onload = () => {
-    teamGenerate();
+
+//取得這個活動有幾組
+window.onload = async () => {
+    totalTeamNum = await fetchTotalTeamNum(activityName);
+    teamGenerate(totalTeamNum);
 };
