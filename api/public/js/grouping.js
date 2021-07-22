@@ -134,6 +134,9 @@ const battleOfTheRest = (size, round) => {
     let scoreArr = [];
 
     for (let i = 0; i < size / Math.pow(2, round); i += 2) {
+        if (!globalData['results'][round][i / 2]) {
+            window.alert('請先完成上一回合的晉級，在使用本按鈕');
+        }
         const hasBattled = Number.isInteger(globalData['results'][round][i / 2][0]);
         const tmpData = {
             round: round,
@@ -247,10 +250,10 @@ const battleOfTwoTeam = async (data) => {
         document.getElementsByClassName('round')[round].childNodes[match].childNodes[0].childNodes[1].childNodes[0]
             .innerText;
 
-    if (team1 === 'TBD' || team2 === 'TBD') {
-        window.alert("Can't battle with TBD team.");
-        return;
-    }
+    // if (team1 === 'TBD' || team2 === 'TBD') {
+    //     window.alert("Can't battle with TBD team.");
+    //     return;
+    // }
     // fetch python code of battle and fetch battle process
     // POST to node.js (node.js call python and get result of two team)
     // node.js save result (score included) to db
@@ -300,7 +303,7 @@ const battleOfTwoTeam = async (data) => {
     // get socreI, scoreII from db through team1, team2
     await fetchInsertBattleProcess(fetchBattleProcessDataResult, activityName, team1, team2);
 
-    if (!notShow) {
+    if (!notShow && team1 !== 'TBD' && team2 !== 'TBD' && team1 !== 'BYE' && team2 !== 'BYE') {
         viewDetailOrShowResult(team1, team2);
     }
 
