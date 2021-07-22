@@ -264,26 +264,43 @@ function Game() {
     }
 
     // 处理 点击 返回上一步
-    // function goBack() {
-    //     setIndex(index - 1);
-    //     setClickedChess(null);
-    //     setAbleReceive([]);
-    //     setWinnerSide(null);
+    function goBack() {
+        if (index > 0) {
+            // setIndex(index - 1);
+            // setClickedChess(null);
+            // setAbleReceive([]);
+            // setWinnerSide(null);
 
-    //     let newHistory = _.cloneDeep(history);
-    //     newHistory.pop();
-    //     setHistory(newHistory);
-    // }
+            // let newHistory = _.cloneDeep(history);
+            // newHistory.pop();
+            // setHistory(newHistory);
 
-    // useEffect(() => {
-    //     const script = document.createElement('script');
-    //     script.src = '/scripts/autoPlay.js';
-    //     script.async = true;
-    //     document.body.appendChild(script);
-    //     return () => {
-    //         document.body.removeChild(script);
-    //     };
-    // }, []);
+            let everyChessSizeInCurrentBoard = actions[index - 2].currentBoard.map((item) => item.side);
+            //TODO:refactor 更好的寫法
+            let beEatenZero = ['0', '0', '0', '0', '0', '0'];
+            let beEatenOne = ['1', '1', '1', '1', '1', '1'];
+
+            for (let i = 0; i < everyChessSizeInCurrentBoard.length; i++) {
+                if (everyChessSizeInCurrentBoard[i] == 0) {
+                    beEatenZero.pop();
+                }
+                if (everyChessSizeInCurrentBoard[i] == 1) {
+                    beEatenOne.pop();
+                }
+            }
+            setIndex(index - 1);
+            setHistory([
+                {
+                    //magic number -1 ，因為 blackBox 給的是那個 step 移動後的狀態（才能夠讓最後一步顯示 final 狀態），所以要 -1 取得移動前的狀態
+                    chesses: actions[index - 2].currentBoard,
+                    currentSide: (index - 1) % 2 === 1 ? 0 : 1, //初始旗子side red:0 yellow:1
+                    latestMoveChessName: null, // 最新移动的棋子的名称
+                },
+            ]);
+            setYellow([...beEatenZero]);
+            setRed([...beEatenOne]);
+        }
+    }
 
     return (
         <div className="game">
@@ -303,6 +320,7 @@ function Game() {
 
             <div className="buttonBlock">
                 <Buttons
+                    goBack={goBack}
                     move={move}
                     play={play}
                     stop={stop}
@@ -334,6 +352,9 @@ const ButtonWapper = styled.div`
 const RestartWapper = styled.div`
     display: flex;
 `;
+const GoBackWapper = styled.div`
+    display: flex;
+`;
 const NextWapper = styled.div`
     display: flex;
 `;
@@ -346,8 +367,20 @@ const StopWapper = styled.div`
 `;
 
 const Buttons = (props) => {
-    let { move, play, stop, totalStep, setIndex, setHistory, setWinnerSide, winnerSide, index, setYellow, setRed } =
-        props;
+    let {
+        goBack,
+        move,
+        play,
+        stop,
+        totalStep,
+        setIndex,
+        setHistory,
+        setWinnerSide,
+        winnerSide,
+        index,
+        setYellow,
+        setRed,
+    } = props;
     function replay() {
         window.location.reload();
     }
@@ -384,6 +417,7 @@ const Buttons = (props) => {
                         class="bi bi-arrow-repeat"
                         viewBox="0 0 16 16"
                     >
+                        <title>重頭</title>
                         <path d="M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41zm-11 2h3.932a.25.25 0 0 0 .192-.41L2.692 6.23a.25.25 0 0 0-.384 0L.342 8.59A.25.25 0 0 0 .534 9z" />
                         <path
                             fill-rule="evenodd"
@@ -391,20 +425,26 @@ const Buttons = (props) => {
                         />
                     </svg>
                 </RestartWapper>
-                <NextWapper onClick={() => move()}>
+                <GoBackWapper onClick={goBack}>
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
                         width="50"
                         height="50"
                         fill="currentColor"
-                        class="bi bi-skip-end-btn-fill"
+                        class="bi bi-skip-start-btn-fill"
                         viewBox="0 0 16 16"
                     >
-                        <path d="M0 12V4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm6.79-6.907A.5.5 0 0 0 6 5.5v5a.5.5 0 0 0 .79.407L9.5 8.972V10.5a.5.5 0 0 0 1 0v-5a.5.5 0 0 0-1 0v1.528L6.79 5.093z" />
+                        <path d="M0 12V4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm9.71-6.907L7 7.028V5.5a.5.5 0 0 0-1 0v5a.5.5 0 0 0 1 0V8.972l2.71 1.935a.5.5 0 0 0 .79-.407v-5a.5.5 0 0 0-.79-.407z" />
+
+                        <title>上一步</title>
+                        <path d="M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41zm-11 2h3.932a.25.25 0 0 0 .192-.41L2.692 6.23a.25.25 0 0 0-.384 0L.342 8.59A.25.25 0 0 0 .534 9z" />
+                        <path
+                            fill-rule="evenodd"
+                            d="M8 3c-1.552 0-2.94.707-3.857 1.818a.5.5 0 1 1-.771-.636A6.002 6.002 0 0 1 13.917 7H12.9A5.002 5.002 0 0 0 8 3zM3.1 9a5.002 5.002 0 0 0 8.757 2.182.5.5 0 1 1 .771.636A6.002 6.002 0 0 1 2.083 9H3.1z"
+                        />
                     </svg>
-                </NextWapper>
+                </GoBackWapper>
                 {/* 播放 */}
-                {/* {this.state.check ? <button onClick={this.timer}></button> : <div>button not showing </div>} */}
                 <PlayWapper onClick={play}>
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -414,9 +454,23 @@ const Buttons = (props) => {
                         class="bi bi-play-btn-fill"
                         viewBox="0 0 16 16"
                     >
+                        <title>播放</title>
                         <path d="M0 12V4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm6.79-6.907A.5.5 0 0 0 6 5.5v5a.5.5 0 0 0 .79.407l3.5-2.5a.5.5 0 0 0 0-.814l-3.5-2.5z" />
                     </svg>
                 </PlayWapper>
+                <NextWapper onClick={() => move()}>
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="50"
+                        height="50"
+                        fill="currentColor"
+                        class="bi bi-skip-end-btn-fill"
+                        viewBox="0 0 16 16"
+                    >
+                        <title>下一步</title>
+                        <path d="M0 12V4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm6.79-6.907A.5.5 0 0 0 6 5.5v5a.5.5 0 0 0 .79.407L9.5 8.972V10.5a.5.5 0 0 0 1 0v-5a.5.5 0 0 0-1 0v1.528L6.79 5.093z" />
+                    </svg>
+                </NextWapper>
                 <StopWapper onClick={stop}>
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -426,6 +480,7 @@ const Buttons = (props) => {
                         class="bi bi-pause-btn-fill"
                         viewBox="0 0 16 16"
                     >
+                        <title>暫停</title>
                         <path d="M0 12V4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm6.25-7C5.56 5 5 5.56 5 6.25v3.5a1.25 1.25 0 1 0 2.5 0v-3.5C7.5 5.56 6.94 5 6.25 5zm3.5 0c-.69 0-1.25.56-1.25 1.25v3.5a1.25 1.25 0 1 0 2.5 0v-3.5C11 5.56 10.44 5 9.75 5z" />
                     </svg>
                 </StopWapper>

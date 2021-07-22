@@ -31,6 +31,37 @@ const fetchTotalTeamNum = async (activityName) => {
         return;
     }
 };
+// 2, 2
+// 2, 3
+// 3, 3
+// 3, 4
+// ...
+// 8 + 9
+// 9 + 9
+//
+
+// 9  = 4 + 5
+// 25 = 12 + 13
+//    = 6 + 6 + 6 + 7
+// 23 = 11 + 12
+//    = 5 + 6 + 6 + 6
+//    = 2 + 3 + 3 + 3 + 3 + 3 + 3 + 3
+
+// 17 = 8 + 9
+//    = 4 + 4 + 4 + 5 (5 = 2 + 3)
+//    = 4 + 4 + 4 + 2 + 3
+
+// fair team generate
+const getFairTeams = (num, magic = false) => {
+    const magicTeam = [9, 17, 18, 19];
+    if (magicTeam.includes(num)) magic = true;
+    if (num == 2) return [1, 1, null, null];
+    else if (num == 3) return [1, 1, 1, null];
+    else if (num == 4 && magic == false) return [1, 1, 1, 1];
+    else if (num == 4 && magic == true)
+        return getFairTeams(Math.floor(num / 2)).concat(getFairTeams(Math.ceil(num / 2)));
+    else return getFairTeams(Math.floor(num / 2), magic).concat(getFairTeams(Math.ceil(num / 2), magic));
+};
 
 // data initialize
 const dataGenerate = (teamNum) => {
@@ -47,32 +78,31 @@ const dataGenerate = (teamNum) => {
         size: powNum,
         round: 1,
     };
-    const randomTeam = getRandomTeam(powNum);
 
+    const randomTeam = getRandomTeam(teamNum);
+    const fairTeams = getFairTeams(teamNum);
+    let randomTeamIndex = 0;
+
+    for (let i = 4; i <= 32; i++) {
+        console.log('teamNum', i, 'fairTeams', getFairTeams(i));
+    }
     // round init
     for (let i = 0; Math.pow(2, i) <= powNum; i++) {
         data['results'][i] = [];
     }
-
     // teams init
     for (let i = 0; i < powNum; i += 2) {
-        // if (i + 1 == teamNum) {
-        //     data['teams'].push([randomTeam[i], null]);
-        //     break;
-        // }
-        if (i + 2 > teamNum && teamNum % 2 == 0) {
-            data['teams'].push([null, null]);
-        } else if (i + 2 > teamNum && teamNum % 2 !== 0) {
-            data['teams'].push([randomTeam[i], null]);
+        if (fairTeams[i] == 1 && fairTeams[i + 1] == 1) {
+            data['teams'].push([randomTeam[randomTeamIndex], randomTeam[randomTeamIndex + 1]]);
+            randomTeamIndex += 2;
+        } else if (fairTeams[i] == 1 && fairTeams[i + 1] == null) {
+            data['teams'].push([randomTeam[randomTeamIndex], null]);
+            randomTeamIndex += 1;
         } else {
-            data['teams'].push([randomTeam[i], randomTeam[i + 1]]);
+            data['teams'].push([null, null]);
         }
-        console.log(i, teamNum, teamNum % 2 == 0, data['teams']);
-
-        // results init of first round
         data['results'][0].push([, , { round: 0, match: i / 2 }]);
     }
-
     return data;
 };
 
