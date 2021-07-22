@@ -297,6 +297,7 @@ function Game() {
                     latestMoveChessName: null, // 最新移动的棋子的名称
                 },
             ]);
+            setWinnerSide(null);
             setYellow([...beEatenZero]);
             setRed([...beEatenOne]);
         }
