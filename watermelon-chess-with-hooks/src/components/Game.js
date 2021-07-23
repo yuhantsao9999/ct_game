@@ -40,6 +40,7 @@ function Game() {
 
     useEffect(() => {
         const convertBattleProcess = matchBattleProcessData(battleData.process);
+        console.log('convertBattleProcess', convertBattleProcess);
         setActions(convertBattleProcess);
 
         if (battleData.process.length !== 0 && index === battleData.process.length) {
