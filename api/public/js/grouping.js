@@ -83,9 +83,9 @@ const dataGenerate = (teamNum) => {
     const fairTeams = getFairTeams(teamNum);
     let randomTeamIndex = 0;
 
-    for (let i = 4; i <= 32; i++) {
-        console.log('teamNum', i, 'fairTeams', getFairTeams(i));
-    }
+    // for (let i = 4; i <= 32; i++) {
+    //     console.log('teamNum', i, 'fairTeams', getFairTeams(i));
+    // }
     // round init
     for (let i = 0; Math.pow(2, i) <= powNum; i++) {
         data['results'][i] = [];
@@ -203,7 +203,7 @@ const fetchBattleProcess = async (pythonCodeData) => {
                     return response.json();
                 })
                 .then((response) => {
-                    console.log('battle response', response);
+                    // console.log('battle response', response);
                     return response;
                 })
                 .catch((error) => console.error('Error:', error));
@@ -249,13 +249,10 @@ const battleOfTwoTeam = async (data) => {
     const team2 =
         document.getElementsByClassName('round')[round].childNodes[match].childNodes[0].childNodes[1].childNodes[0]
             .innerText;
-
-    // if (team1 === 'TBD' || team2 === 'TBD') {
-    //     window.alert("Can't battle with TBD team.");
-    //     return;
-    // }
-    // fetch python code of battle and fetch battle process
-    // POST to node.js (node.js call python and get result of two team)
+    if (team1 === 'TBD' || team2 === 'TBD' || team1 === 'BYE' || team2 === 'BYE') {
+        // window.alert("Can't battle with TBD team.");
+        return;
+    }
     // node.js save result (score included) to db
     //TODO:錯誤處理：fetchPythonCode 有誤要跳 alert
     const fetchPythonCodeDataResultOfPlayerA = await fetchPythonCode(team1).then((response) => response);
@@ -338,34 +335,34 @@ function getBaseLog(x, y) {
 }
 
 // TODO: need auto generate the logic function of each round
-// const firstRound = () => {
-//     globalData['results'][0] = battleOfTheRest(globalData['size'], 0);
-//     globalData['results'][1] = resultsInit(globalData['size'], 1);
-//     plot(globalData);
-//     document.getElementById('first').disabled = true;
-// };
-
-// const secondRound = () => {
-//     globalData['results'][1] = battleOfTheRest(globalData['size'], 1);
-//     globalData['results'][2] = resultsInit(globalData['size'], 2);
-//     plot(globalData);
-//     document.getElementById('second').disabled = true;
-// };
-
-// const thirdRound = () => {
-//     globalData['results'][2] = battleOfTheRest(globalData['size'], 2);
-//     globalData['results'][3] = resultsInit(globalData['size'], 3); // set 2 because of the third place and the forth place
-//     plot(globalData);
-//     document.getElementById('third').disabled = true;
-// };
-
-const xRound = (round) => {
-    if (globalData['results'][round].length == 0) return; // ?
-    globalData['results'][round] = battleOfTheRest(globalData['size'], round);
-    globalData['results'][round + 1] = resultsInit(globalData['size'], round + 1);
+const firstRound = () => {
+    globalData['results'][0] = battleOfTheRest(globalData['size'], 0);
+    globalData['results'][1] = resultsInit(globalData['size'], 1);
     plot(globalData);
-    document.getElementById('round' + round).disable = true;
+    document.getElementById('first').disabled = true;
 };
+
+const secondRound = () => {
+    globalData['results'][1] = battleOfTheRest(globalData['size'], 1);
+    globalData['results'][2] = resultsInit(globalData['size'], 2);
+    plot(globalData);
+    document.getElementById('second').disabled = true;
+};
+
+const thirdRound = () => {
+    globalData['results'][2] = battleOfTheRest(globalData['size'], 2);
+    globalData['results'][3] = resultsInit(globalData['size'], 3); // set 2 because of the third place and the forth place
+    plot(globalData);
+    document.getElementById('third').disabled = true;
+};
+
+// const xRound = (round) => {
+//     if (globalData['results'][round].length == 0) return; // ?
+//     globalData['results'][round] = battleOfTheRest(globalData['size'], round);
+//     globalData['results'][round + 1] = resultsInit(globalData['size'], round + 1);
+//     plot(globalData);
+//     document.getElementById('round' + round).disable = true;
+// };
 
 // const finalRound = () => {
 //     globalData['results'][3] = battleOfTheRest(globalData['size'], 2);
@@ -433,23 +430,23 @@ const teamGenerate = (totalTeamNum = 8) => {
     globalData = dataGenerate(totalTeamNum);
     plot(globalData);
 
-    const mappingButtonTitle = {
-        0: '第一回合',
-        1: '第二回合',
-        2: '第三回合',
-        3: '第四回合',
-        4: '第五回合',
-    };
+    // const mappingButtonTitle = {
+    //     0: '第一回合',
+    //     1: '第二回合',
+    //     2: '第三回合',
+    //     3: '第四回合',
+    //     4: '第五回合',
+    // };
 
     //創造剩餘組別對戰的button
-    for (let i = 0; i < parseInt(getBaseLog(2, totalTeamNum)); i++) {
-        const xRoundButton = document.createElement('button');
-        xRoundButton.id = 'round' + i;
-        xRoundButton.className = 'roundButton';
-        xRoundButton.innerHTML = mappingButtonTitle[i];
-        xRoundButton.setAttribute('onClick', 'xRound(' + i + ')');
-        document.getElementById('roundButtons').appendChild(xRoundButton);
-    }
+    // for (let i = 0; i < parseInt(getBaseLog(2, totalTeamNum)); i++) {
+    //     const xRoundButton = document.createElement('button');
+    //     xRoundButton.id = 'round' + i;
+    //     xRoundButton.className = 'roundButton';
+    //     xRoundButton.innerHTML = mappingButtonTitle[i];
+    //     xRoundButton.setAttribute('onClick', 'xRound(' + i + ')');
+    //     document.getElementById('roundButtons').appendChild(xRoundButton);
+    // }
 };
 
 //取得這個活動有幾組
