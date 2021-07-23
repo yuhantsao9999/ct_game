@@ -203,7 +203,7 @@ const fetchBattleProcess = async (pythonCodeData) => {
                     return response.json();
                 })
                 .then((response) => {
-                    // console.log('battle response', response);
+                    console.log('battle response', response);
                     return response;
                 })
                 .catch((error) => console.error('Error:', error));
