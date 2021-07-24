@@ -162,7 +162,7 @@ const viewDetailOrShowResult = (team1, team2) => {
             window.location.protocol +
                 '//' +
                 window.location.hostname +
-                `:3000/watermelonChess/${activityName}/${team1}/${team2}`
+                `:3080/watermelonChess/${activityName}/${team1}/${team2}`
         );
     }
 };
