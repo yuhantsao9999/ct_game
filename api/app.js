@@ -15,22 +15,6 @@ app.use(bodyParser.urlencoded({ limit: '50000mb', extended: true }));
 app.use(express.static(path.join(__dirname, '../watermelon-chess-with-hooks/build')));
 app.use(express.static(path.join(__dirname, 'public/assets/image/')));
 
-// app.get('/api/users', (req, res) => {
-//     console.log('api/users called!!!!');
-//     res.json(users);
-// });
-
-// app.post('/api/user', (req, res) => {
-//     const user = req.body.user;
-//     console.log('Adding user::::::::', user);
-//     users.push(user);
-//     res.json('user addedd');
-// });
-
-// app.get('/', (req, res) => {
-//     res.send('App Works hihihihi !!!!');
-// });
-
 const { pages, publicApi } = require('./router');
 
 app.use(express.static('public', { extensions: ['html'] }));
@@ -43,7 +27,7 @@ app.use('/api', pages.grouping);
 app.use('/api', publicApi.convertCode);
 app.use('/api', publicApi.battleProcess);
 
-app.get('/watermelonChess', (req, res) => {
+app.get('/watermelonChess/:activityName/:playerA/:playerB', (req, res) => {
     res.sendFile(path.join(__dirname, '../watermelon-chess-with-hooks/build/index.html'));
 });
 

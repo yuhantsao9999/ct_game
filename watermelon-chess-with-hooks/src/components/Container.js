@@ -34,7 +34,7 @@ const BattleProcessContent = () => {
 };
 const Container = () => {
     return (
-        <Route path="/watermelonChess/:activityName/:playerA/:playerB">
+        <Route path="/:activityName/:playerA/:playerB">
             <Wrapper>
                 <Header />
                 <ContentWapper>
