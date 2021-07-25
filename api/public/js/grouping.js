@@ -184,8 +184,8 @@ const fetchPythonCode = async (player) => {
         return;
     }
 };
-const fetchBattleProcess = async (team1, team2, pythonCodeData) => {
-    if (team1 && team2 && pythonCodeData) {
+const fetchBattleProcess = async (pythonCodeData) => {
+    if (pythonCodeData) {
         const formData = new FormData();
         formData.append('pythonCodeData', JSON.stringify(pythonCodeData));
         try {
@@ -203,9 +203,7 @@ const fetchBattleProcess = async (team1, team2, pythonCodeData) => {
                 })
                 .catch((error) => console.error('Error:', error));
         } catch (error) {
-            alert(`${team1},${team2} 程式碼有誤，請檢查程式`);
-            // console.log(response.status, response.statusText);
-            return false;
+            return;
         }
     }
 };
@@ -259,10 +257,17 @@ const battleOfTwoTeam = async (data) => {
         pythonCodeB: fetchPythonCodeDataResultOfPlayerB,
     };
     //利用 python code 取得對戰過程
-    const fetchBattleProcessDataResult = await fetchBattleProcess(team1, team2, pythonCodeData).then(
-        (response) => response
-    );
+    const fetchBattleProcessDataResult = await fetchBattleProcess(pythonCodeData).then((response) => response);
     console.log(team1, team2 + '的結果:' + fetchBattleProcessDataResult);
+    if (fetchBattleProcessDataResult === 'undefined') {
+        alert(`${team1},${team2} 程式碼有誤，請檢查程式`);
+        document.getElementsByClassName('round')[round].getElementsByClassName('match')[
+            match
+        ].childNodes[0].childNodes[0].style.backgroundColor = 'red';
+        document.getElementsByClassName('round')[round].getElementsByClassName('match')[
+            match
+        ].childNodes[0].childNodes[1].style.backgroundColor = 'red';
+    }
     // Hint: fetchBattleProcessDataResult 上方是線上版，下方是測試資料
     // const fetchBattleProcessDataResult = {
     //     process: [
