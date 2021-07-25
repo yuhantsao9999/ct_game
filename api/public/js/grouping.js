@@ -83,10 +83,6 @@ const dataGenerate = (teamNum) => {
     const fairTeams = getFairTeams(teamNum);
     let randomTeamIndex = 0;
 
-    // for (let i = 4; i <= 32; i++) {
-    //     console.log('teamNum', i, 'fairTeams', getFairTeams(i));
-    // }
-    // round init
     for (let i = 0; Math.pow(2, i) <= powNum; i++) {
         data['results'][i] = [];
     }
@@ -154,7 +150,6 @@ const battleOfTheRest = (size, round) => {
 
 const viewDetailOrShowResult = (team1, team2) => {
     if (confirm(`觀看 ${team1} 和 ${team2} 的對戰過程嗎？`)) {
-        // window.open(`/watermelonChess/${team1}/${team2}`);
         const getUrlString = location.href;
         const url = new URL(getUrlString);
         const activityName = url.searchParams.get('id');
@@ -189,8 +184,8 @@ const fetchPythonCode = async (player) => {
         return;
     }
 };
-const fetchBattleProcess = async (pythonCodeData) => {
-    if (pythonCodeData) {
+const fetchBattleProcess = async (team1, team2, pythonCodeData) => {
+    if (team1 && team2 && pythonCodeData) {
         const formData = new FormData();
         formData.append('pythonCodeData', JSON.stringify(pythonCodeData));
         try {
@@ -208,7 +203,9 @@ const fetchBattleProcess = async (pythonCodeData) => {
                 })
                 .catch((error) => console.error('Error:', error));
         } catch (error) {
-            return;
+            alert(`${team1},${team2} 程式碼有誤，請檢查程式`);
+            // console.log(response.status, response.statusText);
+            return false;
         }
     }
 };
@@ -262,7 +259,10 @@ const battleOfTwoTeam = async (data) => {
         pythonCodeB: fetchPythonCodeDataResultOfPlayerB,
     };
     //利用 python code 取得對戰過程
-    const fetchBattleProcessDataResult = await fetchBattleProcess(pythonCodeData).then((response) => response);
+    const fetchBattleProcessDataResult = await fetchBattleProcess(team1, team2, pythonCodeData).then(
+        (response) => response
+    );
+    console.log(team1, team2 + '的結果:' + fetchBattleProcessDataResult);
     // Hint: fetchBattleProcessDataResult 上方是線上版，下方是測試資料
     // const fetchBattleProcessDataResult = {
     //     process: [
@@ -309,8 +309,8 @@ const battleOfTwoTeam = async (data) => {
 
     // update result of this round
     globalData['results'][round][match] = [
-        scoreI >= scoreII ? 1 : 0,
-        scoreII >= scoreI ? 1 : 0,
+        scoreI > scoreII ? 1 : 0,
+        scoreII > scoreI ? 1 : 0,
         { round: round, match: match },
     ];
 
@@ -364,11 +364,11 @@ const thirdRound = () => {
 //     document.getElementById('round' + round).disable = true;
 // };
 
-// const finalRound = () => {
-//     globalData['results'][3] = battleOfTheRest(globalData['size'], 2);
-//     plot(globalData);
-//     document.getElementById('final').disable = true;
-// };
+const finalRound = () => {
+    globalData['results'][3] = battleOfTheRest(globalData['size'], 2);
+    plot(globalData);
+    document.getElementById('final').disable = true;
+};
 
 // edited mode
 const setUp = () => {
