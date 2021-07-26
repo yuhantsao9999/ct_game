@@ -16,15 +16,14 @@ const insertOneProcess = async (req) => {
 
 const findLatestProcess = async (req) => {
     const data = req.body;
-    const cursor = await Battle.find(data);
-    const sortCursor = cursor.sort({ created_at: -1 }).limit(1);
-    console.log('sortCursor', sortCursor.next());
+    const cursor = await Battle.findOne(data, { created_at: -1 });
+    // const sortCursor = cursor.sort({ created_at: -1 }).limit(1);
     // while (cursor.hasNext()) {
     //     console.log('findLatestProcess', await cursor.next());
     // }
-    // const latestDoc = await cursor.next();
-    // console.log('latestDoc', latestDoc);
-    // return latestDoc ? { error: false, data: latestDoc } : { error: true };
+    const latestDoc = await cursor.next();
+    console.log('latestDoc', latestDoc);
+    return latestDoc ? { error: false, data: latestDoc } : { error: true };
 };
 
 module.exports = {
