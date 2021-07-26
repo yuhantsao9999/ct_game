@@ -47,9 +47,9 @@ class Model {
         return collection.find(query, options);
     }
 
-    static async findLatest(query = {}, options = {}, callback = R.identity) {
+    static async findOne(query = {}, options = {}, callback = R.identity) {
         const collection = await this.collection();
-        return collection.find(query, options).limit(1);
+        return collection.findOne(query, options);
     }
 
     static async updateOne(query = {}, updates = {}, options = {}) {
