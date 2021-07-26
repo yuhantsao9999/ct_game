@@ -16,8 +16,12 @@ const insertOneProcess = async (req) => {
 
 const findLatestProcess = async (req) => {
     const data = req.body;
-    const latestDoc = await Battle.findOne(data, { $orderby: { created_at: -1 } });
-    return latestDoc ? { error: false, data: latestDoc } : { error: true };
+    const cursor = await Battle.find(data, { $orderby: { created_at: -1 } });
+    // const latestDoc = await cursor.next();
+    while (cursor.hasNext()) {
+        console.log(await cursor.next());
+    }
+    // return latestDoc ? { error: false, data: latestDoc } : { error: true };
 };
 
 module.exports = {
