@@ -245,6 +245,8 @@ const battleOfTwoTeam = async (data) => {
         document.getElementsByClassName('round')[round].childNodes[match].childNodes[0].childNodes[1].childNodes[1]
             .innerText;
     if (oldScoreI > 0 && oldscoreII > 0) {
+        alert('已對戰過無法重複對戰');
+    } else {
         const team1 =
             document.getElementsByClassName('round')[round].childNodes[match].childNodes[0].childNodes[0].childNodes[0]
                 .innerText;
@@ -330,8 +332,6 @@ const battleOfTwoTeam = async (data) => {
                 match
             ].childNodes[0].childNodes[1].style.backgroundColor = 'red';
         }
-    } else {
-        alert('已對戰過無法重複對戰');
     }
 };
 
