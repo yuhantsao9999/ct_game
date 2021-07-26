@@ -244,7 +244,7 @@ const battleOfTwoTeam = async (data) => {
     const oldscoreII =
         document.getElementsByClassName('round')[round].childNodes[match].childNodes[0].childNodes[1].childNodes[1]
             .innerText;
-    if (oldScoreI === '--' && oldscoreII === '--') {
+    if (oldScoreI !== '--' && oldscoreII !== '--') {
         alert('已對戰過無法重複對戰');
     } else {
         const team1 =
