@@ -8,10 +8,10 @@ const port = 3080;
 
 // place holder for the data
 const users = [];
-app.use(bodyParser.json());
+// app.use(bodyParser.json());
 
-app.use(bodyParser.json({ limit: '50000mb' }));
-app.use(bodyParser.urlencoded({ limit: '50000mb', extended: true }));
+app.use(express.json({ limit: '50000mb' }));
+app.use(express.urlencoded({ limit: '50000mb', extended: true }));
 app.use(express.static(path.join(__dirname, '../watermelon-chess-with-hooks/build')));
 app.use(express.static(path.join(__dirname, 'public/assets/image/')));
 
