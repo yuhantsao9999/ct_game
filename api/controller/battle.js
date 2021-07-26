@@ -19,9 +19,9 @@ const findLatestProcess = async (req) => {
     const cursor = await Battle.find(data);
     // const sortCursor = cursor.sort({ created_at: -1 });
     // console.log('sortCursor', sortCursor);
-    // while (cursor.hasNext()) {
-    //     console.log('findLatestProcess', await cursor.next());
-    // }
+    while (cursor.hasNext()) {
+        console.log('findLatestProcess', await cursor.next());
+    }
     const latestDoc = await cursor.next();
     console.log('latestDoc', latestDoc);
     return latestDoc ? { error: false, data: latestDoc } : { error: true };
