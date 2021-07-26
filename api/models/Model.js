@@ -47,6 +47,11 @@ class Model {
         return collection.find(query, options);
     }
 
+    static async findLatest(query = {}, options = {}, callback = R.identity) {
+        const collection = await this.collection();
+        return collection.find(query, options).limit(1);
+    }
+
     static async updateOne(query = {}, updates = {}, options = {}) {
         const collection = await this.collection();
         const update = R.mergeDeepRight({ $currentDate: { updated_at: true } }, updates);
