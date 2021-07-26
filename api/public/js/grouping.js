@@ -298,7 +298,6 @@ const battleOfTwoTeam = async (data) => {
         //     totalSteps: 3,
         //     win: 'Red',
         // };
-        console.log(team1, team2 + '的結果:' + json.stringify(fetchBattleProcessDataResult));
         if (fetchBattleProcessDataResult) {
             const getUrlString = location.href;
             const url = new URL(getUrlString);
