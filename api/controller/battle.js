@@ -16,9 +16,9 @@ const insertOneProcess = async (req) => {
 
 const findLatestProcess = async (req) => {
     const data = req.body;
-    const cursor = await Battle.findOne(data, { $sort: { created_at: -1 } });
-    // const latestDoc = await cursor.next();
-    console.log('cursor', cursor);
+    const cursor = await Battle.find(data);
+    const latestDoc = cursor.sort({ created_at: -1 });
+    console.log('latestDoc', latestDoc);
     while (cursor.hasNext()) {
         console.log('findLatestProcess', await cursor.next());
     }
