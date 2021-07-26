@@ -238,91 +238,101 @@ const fetchInsertBattleProcess = async (fetchBattleProcessDataResult, activityNa
 // simulate battle result from calling api
 const battleOfTwoTeam = async (data) => {
     const { round, match, notShow } = data;
-    const team1 =
-        document.getElementsByClassName('round')[round].childNodes[match].childNodes[0].childNodes[0].childNodes[0]
+    const oldScoreI =
+        document.getElementsByClassName('round')[round].childNodes[match].childNodes[0].childNodes[0].childNodes[1]
             .innerText;
-    const team2 =
-        document.getElementsByClassName('round')[round].childNodes[match].childNodes[0].childNodes[1].childNodes[0]
+    const oldscoreII =
+        document.getElementsByClassName('round')[round].childNodes[match].childNodes[0].childNodes[1].childNodes[1]
             .innerText;
-    if (team1 === 'TBD' || team2 === 'TBD' || team1 === 'BYE' || team2 === 'BYE') {
-        // window.alert("Can't battle with TBD team.");
-        return;
-    }
-    // node.js save result (score included) to db
-    //TODO:錯誤處理：fetchPythonCode 有誤要跳 alert
-    const fetchPythonCodeDataResultOfPlayerA = await fetchPythonCode(team1).then((response) => response);
-    const fetchPythonCodeDataResultOfPlayerB = await fetchPythonCode(team2).then((response) => response);
-    const pythonCodeData = {
-        pythonCodeA: fetchPythonCodeDataResultOfPlayerA,
-        pythonCodeB: fetchPythonCodeDataResultOfPlayerB,
-    };
-    //利用 python code 取得對戰過程
-    const fetchBattleProcessDataResult = await fetchBattleProcess(pythonCodeData).then((response) => response);
-    // Hint: fetchBattleProcessDataResult 上方是線上版，下方是測試資料
-    // const fetchBattleProcessDataResult = {
-    //     process: [
-    //         {
-    //             step: 1,
-    //             moving: 'Red',
-    //             movingBoardIndex: 4,
-    //             movingTo: 6,
-    //             movingChessIndex: 3,
-    //             kill: [],
-    //         },
-    //         {
-    //             step: 2,
-    //             moving: 'Yellow',
-    //             movingBoardIndex: 17,
-    //             movingTo: 13,
-    //             movingChessIndex: 1,
-    //             kill: [],
-    //         },
-    //         {
-    //             step: 3,
-    //             moving: 'Red',
-    //             movingBoardIndex: 5,
-    //             movingTo: 8,
-    //             movingChessIndex: 4,
-    //             kill: [],
-    //         },
-    //     ],
-    //     totalSteps: 3,
-    //     win: 'Red',
-    // };
-    console.log(team1, team2 + '的結果:' + fetchBattleProcessDataResult);
-    if (fetchBattleProcessDataResult) {
-        const getUrlString = location.href;
-        const url = new URL(getUrlString);
-        const activityName = url.searchParams.get('id');
-        // get socreI, scoreII from db through team1, team2
-        await fetchInsertBattleProcess(fetchBattleProcessDataResult, activityName, team1, team2);
-
-        if (!notShow && team1 !== 'TBD' && team2 !== 'TBD' && team1 !== 'BYE' && team2 !== 'BYE') {
-            viewDetailOrShowResult(team1, team2);
-        }
-
-        const scoreI = fetchBattleProcessDataResult.win === 'Red' ? 1 : 0;
-        const scoreII = fetchBattleProcessDataResult.win === 'Yellow' ? 1 : 0;
-
-        // update result of this round
-        globalData['results'][round][match] = [
-            scoreI > scoreII ? 1 : 0,
-            scoreII > scoreI ? 1 : 0,
-            { round: round, match: match },
-        ];
-
-        // initialize result of next round
-        globalData['results'][round + 1][match] = [, , { round: round + 1, match: match }];
-
-        plot(globalData, false);
+    if (oldScoreI === '--' && oldscoreII === '--') {
+        alert('已對戰過無法重複對戰');
     } else {
-        alert(`${team1},${team2} 程式碼有誤，請檢查程式`);
-        document.getElementsByClassName('round')[round].getElementsByClassName('match')[
-            match
-        ].childNodes[0].childNodes[0].style.backgroundColor = 'red';
-        document.getElementsByClassName('round')[round].getElementsByClassName('match')[
-            match
-        ].childNodes[0].childNodes[1].style.backgroundColor = 'red';
+        const team1 =
+            document.getElementsByClassName('round')[round].childNodes[match].childNodes[0].childNodes[0].childNodes[0]
+                .innerText;
+        const team2 =
+            document.getElementsByClassName('round')[round].childNodes[match].childNodes[0].childNodes[1].childNodes[0]
+                .innerText;
+        if (team1 === 'TBD' || team2 === 'TBD' || team1 === 'BYE' || team2 === 'BYE') {
+            // window.alert("Can't battle with TBD team.");
+            return;
+        }
+        // node.js save result (score included) to db
+        //TODO:錯誤處理：fetchPythonCode 有誤要跳 alert
+        const fetchPythonCodeDataResultOfPlayerA = await fetchPythonCode(team1).then((response) => response);
+        const fetchPythonCodeDataResultOfPlayerB = await fetchPythonCode(team2).then((response) => response);
+        const pythonCodeData = {
+            pythonCodeA: fetchPythonCodeDataResultOfPlayerA,
+            pythonCodeB: fetchPythonCodeDataResultOfPlayerB,
+        };
+        //利用 python code 取得對戰過程
+        const fetchBattleProcessDataResult = await fetchBattleProcess(pythonCodeData).then((response) => response);
+        // Hint: fetchBattleProcessDataResult 上方是線上版，下方是測試資料
+        // const fetchBattleProcessDataResult = {
+        //     process: [
+        //         {
+        //             step: 1,
+        //             moving: 'Red',
+        //             movingBoardIndex: 4,
+        //             movingTo: 6,
+        //             movingChessIndex: 3,
+        //             kill: [],
+        //         },
+        //         {
+        //             step: 2,
+        //             moving: 'Yellow',
+        //             movingBoardIndex: 17,
+        //             movingTo: 13,
+        //             movingChessIndex: 1,
+        //             kill: [],
+        //         },
+        //         {
+        //             step: 3,
+        //             moving: 'Red',
+        //             movingBoardIndex: 5,
+        //             movingTo: 8,
+        //             movingChessIndex: 4,
+        //             kill: [],
+        //         },
+        //     ],
+        //     totalSteps: 3,
+        //     win: 'Red',
+        // };
+        console.log(team1, team2 + '的結果:' + json.stringify(fetchBattleProcessDataResult));
+        if (fetchBattleProcessDataResult) {
+            const getUrlString = location.href;
+            const url = new URL(getUrlString);
+            const activityName = url.searchParams.get('id');
+            // get socreI, scoreII from db through team1, team2
+            await fetchInsertBattleProcess(fetchBattleProcessDataResult, activityName, team1, team2);
+
+            if (!notShow && team1 !== 'TBD' && team2 !== 'TBD' && team1 !== 'BYE' && team2 !== 'BYE') {
+                viewDetailOrShowResult(team1, team2);
+            }
+
+            const scoreI = fetchBattleProcessDataResult.win === 'Red' ? 1 : 0;
+            const scoreII = fetchBattleProcessDataResult.win === 'Yellow' ? 1 : 0;
+
+            // update result of this round
+            globalData['results'][round][match] = [
+                scoreI > scoreII ? 1 : 0,
+                scoreII > scoreI ? 1 : 0,
+                { round: round, match: match },
+            ];
+
+            // initialize result of next round
+            globalData['results'][round + 1][match] = [, , { round: round + 1, match: match }];
+
+            plot(globalData, false);
+        } else {
+            alert(`${team1},${team2} 程式碼有誤，請檢查程式`);
+            document.getElementsByClassName('round')[round].getElementsByClassName('match')[
+                match
+            ].childNodes[0].childNodes[0].style.backgroundColor = 'red';
+            document.getElementsByClassName('round')[round].getElementsByClassName('match')[
+                match
+            ].childNodes[0].childNodes[1].style.backgroundColor = 'red';
+        }
     }
 };
 
