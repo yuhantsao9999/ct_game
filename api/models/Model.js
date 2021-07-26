@@ -49,7 +49,7 @@ class Model {
 
     static async findOne(query = {}, options = {}, callback = R.identity) {
         const collection = await this.collection();
-        return collection.findOne(query, options);
+        return collection.find(query, options);
     }
 
     static async updateOne(query = {}, updates = {}, options = {}) {
