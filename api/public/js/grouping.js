@@ -238,25 +238,28 @@ const fetchInsertBattleProcess = async (fetchBattleProcessDataResult, activityNa
 // simulate battle result from calling api
 const battleOfTwoTeam = async (data) => {
     const { round, match, notShow } = data;
+    const team1 =
+        document.getElementsByClassName('round')[round].childNodes[match].childNodes[0].childNodes[0].childNodes[0]
+            .innerText;
+    const team2 =
+        document.getElementsByClassName('round')[round].childNodes[match].childNodes[0].childNodes[1].childNodes[0]
+            .innerText;
     const oldScoreI =
         document.getElementsByClassName('round')[round].childNodes[match].childNodes[0].childNodes[0].childNodes[1]
             .innerText;
     const oldscoreII =
         document.getElementsByClassName('round')[round].childNodes[match].childNodes[0].childNodes[1].childNodes[1]
             .innerText;
+    if (team1 === 'TBD' || team2 === 'TBD' || team1 === 'BYE' || team2 === 'BYE') {
+        // window.alert("Can't battle with TBD team.");
+        return;
+    }
     if (oldScoreI > 0 || oldscoreII > 0) {
         alert('已對戰過無法重複對戰');
-    } else {
-        const team1 =
-            document.getElementsByClassName('round')[round].childNodes[match].childNodes[0].childNodes[0].childNodes[0]
-                .innerText;
-        const team2 =
-            document.getElementsByClassName('round')[round].childNodes[match].childNodes[0].childNodes[1].childNodes[0]
-                .innerText;
-        if (team1 === 'TBD' || team2 === 'TBD' || team1 === 'BYE' || team2 === 'BYE') {
-            // window.alert("Can't battle with TBD team.");
-            return;
+        if (!notShow && team1 !== 'TBD' && team2 !== 'TBD' && team1 !== 'BYE' && team2 !== 'BYE') {
+            viewDetailOrShowResult(team1, team2);
         }
+    } else {
         // node.js save result (score included) to db
         //TODO:錯誤處理：fetchPythonCode 有誤要跳 alert
         const fetchPythonCodeDataResultOfPlayerA = await fetchPythonCode(team1).then((response) => response);
