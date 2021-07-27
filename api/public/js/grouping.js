@@ -147,7 +147,6 @@ const battleOfTheRest = async (size, round) => {
         if (!hasBattled) {
             battleOfTwoTeam(tmpData);
         }
-        await sleep(500);
         console.log('bye', i);
     }
     scoreArr = globalData['results'][round];
@@ -268,6 +267,7 @@ const battleOfTwoTeam = async (data) => {
     } else {
         // node.js save result (score included) to db
         //TODO:錯誤處理：fetchPythonCode 有誤要跳 alert
+        await sleep(500);
         const fetchPythonCodeDataResultOfPlayerA = await fetchPythonCode(team1).then((response) => response);
         const fetchPythonCodeDataResultOfPlayerB = await fetchPythonCode(team2).then((response) => response);
         const pythonCodeData = {
