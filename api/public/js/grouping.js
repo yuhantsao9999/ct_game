@@ -124,11 +124,9 @@ const getRandomTeam = (teamNum) => {
 
     return array;
 };
-const sleep = (milliseconds) => {
-    return new Promise((resolve) => setTimeout(resolve, milliseconds));
-};
+
 // simulate battle result of all team from calling api
-const battleOfTheRest = async (size, round) => {
+const battleOfTheRest = (size, round) => {
     let scoreArr = [];
 
     for (let i = 0; i < size / Math.pow(2, round); i += 2) {
@@ -145,8 +143,6 @@ const battleOfTheRest = async (size, round) => {
         if (!hasBattled) {
             battleOfTwoTeam(tmpData);
         }
-        await sleep(1000);
-        console.log('slow down battleOfTwoTeam', i);
     }
     scoreArr = globalData['results'][round];
     return scoreArr;
@@ -273,38 +269,38 @@ const battleOfTwoTeam = async (data) => {
             pythonCodeB: fetchPythonCodeDataResultOfPlayerB,
         };
         //利用 python code 取得對戰過程
-        const fetchBattleProcessDataResult = await fetchBattleProcess(pythonCodeData).then((response) => response);
+        // const fetchBattleProcessDataResult = await fetchBattleProcess(pythonCodeData).then((response) => response);
         // Hint: fetchBattleProcessDataResult 上方是線上版，下方是測試資料
-        // const fetchBattleProcessDataResult = {
-        //     process: [
-        //         {
-        //             step: 1,
-        //             moving: 'Red',
-        //             movingBoardIndex: 4,
-        //             movingTo: 6,
-        //             movingChessIndex: 3,
-        //             kill: [],
-        //         },
-        //         {
-        //             step: 2,
-        //             moving: 'Yellow',
-        //             movingBoardIndex: 17,
-        //             movingTo: 13,
-        //             movingChessIndex: 1,
-        //             kill: [],
-        //         },
-        //         {
-        //             step: 3,
-        //             moving: 'Red',
-        //             movingBoardIndex: 5,
-        //             movingTo: 8,
-        //             movingChessIndex: 4,
-        //             kill: [],
-        //         },
-        //     ],
-        //     totalSteps: 3,
-        //     win: 'Red',
-        // };
+        const fetchBattleProcessDataResult = {
+            process: [
+                {
+                    step: 1,
+                    moving: 'Red',
+                    movingBoardIndex: 4,
+                    movingTo: 6,
+                    movingChessIndex: 3,
+                    kill: [],
+                },
+                {
+                    step: 2,
+                    moving: 'Yellow',
+                    movingBoardIndex: 17,
+                    movingTo: 13,
+                    movingChessIndex: 1,
+                    kill: [],
+                },
+                {
+                    step: 3,
+                    moving: 'Red',
+                    movingBoardIndex: 5,
+                    movingTo: 8,
+                    movingChessIndex: 4,
+                    kill: [],
+                },
+            ],
+            totalSteps: 3,
+            win: 'Red',
+        };
         if (fetchBattleProcessDataResult) {
             const getUrlString = location.href;
             const url = new URL(getUrlString);
