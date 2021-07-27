@@ -125,15 +125,11 @@ const getRandomTeam = (teamNum) => {
     return array;
 };
 
-const sleep = (milliseconds) => {
-    return new Promise((resolve) => setTimeout(resolve, milliseconds));
-};
 // simulate battle result of all team from calling api
-const battleOfTheRest = async (size, round) => {
+const battleOfTheRest = (size, round) => {
     let scoreArr = [];
 
     for (let i = 0; i < size / Math.pow(2, round); i += 2) {
-        console.log('hi', i);
         if (!globalData['results'][round][i / 2]) {
             window.alert('請先完成上一回合的晉級，再使用本按鈕');
         }
@@ -147,7 +143,6 @@ const battleOfTheRest = async (size, round) => {
         if (!hasBattled) {
             battleOfTwoTeam(tmpData);
         }
-        console.log('bye', i);
     }
     scoreArr = globalData['results'][round];
     return scoreArr;
@@ -267,7 +262,6 @@ const battleOfTwoTeam = async (data) => {
     } else {
         // node.js save result (score included) to db
         //TODO:錯誤處理：fetchPythonCode 有誤要跳 alert
-        await sleep(500);
         const fetchPythonCodeDataResultOfPlayerA = await fetchPythonCode(team1).then((response) => response);
         const fetchPythonCodeDataResultOfPlayerB = await fetchPythonCode(team2).then((response) => response);
         const pythonCodeData = {
