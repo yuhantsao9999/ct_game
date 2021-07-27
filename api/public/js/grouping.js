@@ -147,7 +147,7 @@ const battleOfTheRest = async (size, round) => {
         if (!hasBattled) {
             battleOfTwoTeam(tmpData);
         }
-        await sleep(1000);
+        await sleep(500);
         console.log('bye', i);
     }
     scoreArr = globalData['results'][round];
