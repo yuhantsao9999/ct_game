@@ -129,7 +129,7 @@ const sleep = (milliseconds) => {
     return new Promise((resolve) => setTimeout(resolve, milliseconds));
 };
 // simulate battle result of all team from calling api
-const battleOfTheRest = (size, round) => {
+const battleOfTheRest = async (size, round) => {
     let scoreArr = [];
 
     for (let i = 0; i < size / Math.pow(2, round); i += 2) {
