@@ -124,14 +124,16 @@ const getRandomTeam = (teamNum) => {
 
     return array;
 };
-
+const sleep = (milliseconds) => {
+    return new Promise((resolve) => setTimeout(resolve, milliseconds));
+};
 // simulate battle result of all team from calling api
 const battleOfTheRest = (size, round) => {
     let scoreArr = [];
 
     for (let i = 0; i < size / Math.pow(2, round); i += 2) {
         if (!globalData['results'][round][i / 2]) {
-            window.alert('請先完成上一回合的晉級，在使用本按鈕');
+            window.alert('請先完成上一回合的晉級，再使用本按鈕');
         }
         const hasBattled = Number.isInteger(globalData['results'][round][i / 2][0]);
         const tmpData = {
@@ -143,6 +145,8 @@ const battleOfTheRest = (size, round) => {
         if (!hasBattled) {
             battleOfTwoTeam(tmpData);
         }
+        await sleep(1000);
+        console.log('slow down battleOfTwoTeam', i);
     }
     scoreArr = globalData['results'][round];
     return scoreArr;
