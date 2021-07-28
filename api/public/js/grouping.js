@@ -331,14 +331,17 @@ const battleOfTwoTeam = async (data) => {
             plot(globalData, false);
         } else {
             alert(`${team1},${team2} 程式碼有誤，請檢查程式`);
+            console.log('round', round);
             errorTeamRound.push(round);
-            errorTeamRound.push(match);
-            // document.getElementsByClassName('round')[round].getElementsByClassName('match')[
-            //     match
-            // ].childNodes[0].childNodes[0].style.backgroundColor = 'red';
-            // document.getElementsByClassName('round')[round].getElementsByClassName('match')[
-            //     match
-            // ].childNodes[0].childNodes[1].style.backgroundColor = 'red';
+            errorTeamMatch.push(match);
+            document.getElementsByClassName('round')[round].getElementsByClassName('match')[
+                match
+            ].childNodes[0].childNodes[0].style.backgroundColor = 'red';
+            document.getElementsByClassName('round')[round].getElementsByClassName('match')[
+                match
+            ].childNodes[0].childNodes[1].style.backgroundColor = 'red';
+            console.log('errorTeamRound', errorTeamRound);
+            console.log('errorTeamMatch', errorTeamMatch);
         }
     }
 };
@@ -447,6 +450,8 @@ const plot = (data, edit = false) => {
                 matchMargin: 50,
             });
         });
+        console.log('errorTeamRound', errorTeamRound);
+        console.log('errorTeamMatch', errorTeamMatch);
         for (i = 0; i < errorTeamRound.length; i++) {
             document.getElementsByClassName('round')[errorTeamRound[i]].getElementsByClassName('match')[
                 errorTeamMatch[i]

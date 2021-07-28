@@ -266,10 +266,10 @@ textarea {
     display: inline-block;
 }
 
-.roundButtons {
+/* .roundButtons {
     text-align: center;
     display: inline-flex;
-}
+} */
 .roundButton {
     width: 100px;
     margin-right: 8vh;
@@ -284,4 +284,14 @@ textarea {
     -webkit-appearance: none;
     padding: 5px;
     height: fit-content;
+}
+.roundButton:hover:enabled {
+    background: #cfba17;
+}
+
+button:disabled,
+button[disabled] {
+    border: 1px solid #999999;
+    background-color: #cccccc;
+    color: #666666;
 }
