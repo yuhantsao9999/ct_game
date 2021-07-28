@@ -1,6 +1,8 @@
 let globalData;
 let activityName;
 let totalTeamNum;
+let errorTeamRound = [];
+let errorTeamMatch = [];
 (() => {
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
@@ -324,16 +326,19 @@ const battleOfTwoTeam = async (data) => {
 
             // initialize result of next round
             globalData['results'][round + 1][match] = [, , { round: round + 1, match: match }];
-
+            errorTeamRound = [];
+            errorTeamMatch = [];
             plot(globalData, false);
         } else {
             alert(`${team1},${team2} 程式碼有誤，請檢查程式`);
-            document.getElementsByClassName('round')[round].getElementsByClassName('match')[
-                match
-            ].childNodes[0].childNodes[0].style.backgroundColor = 'red';
-            document.getElementsByClassName('round')[round].getElementsByClassName('match')[
-                match
-            ].childNodes[0].childNodes[1].style.backgroundColor = 'red';
+            errorTeamRound.push(round);
+            errorTeamRound.push(match);
+            // document.getElementsByClassName('round')[round].getElementsByClassName('match')[
+            //     match
+            // ].childNodes[0].childNodes[0].style.backgroundColor = 'red';
+            // document.getElementsByClassName('round')[round].getElementsByClassName('match')[
+            //     match
+            // ].childNodes[0].childNodes[1].style.backgroundColor = 'red';
         }
     }
 };
@@ -357,21 +362,21 @@ const firstRound = () => {
     globalData['results'][0] = battleOfTheRest(globalData['size'], 0);
     globalData['results'][1] = resultsInit(globalData['size'], 1);
     plot(globalData);
-    document.getElementById('first').disabled = true;
+    document.getElementById('round0').disabled = true;
 };
 
 const secondRound = () => {
     globalData['results'][1] = battleOfTheRest(globalData['size'], 1);
     globalData['results'][2] = resultsInit(globalData['size'], 2);
     plot(globalData);
-    document.getElementById('second').disabled = true;
+    document.getElementById('round1').disabled = true;
 };
 
 const thirdRound = () => {
     globalData['results'][2] = battleOfTheRest(globalData['size'], 2);
     globalData['results'][3] = resultsInit(globalData['size'], 3); // set 2 because of the third place and the forth place
     plot(globalData);
-    document.getElementById('third').disabled = true;
+    document.getElementById('round2').disabled = true;
 };
 
 // const xRound = (round) => {
@@ -385,7 +390,7 @@ const thirdRound = () => {
 const finalRound = () => {
     globalData['results'][3] = battleOfTheRest(globalData['size'], 2);
     plot(globalData);
-    document.getElementById('final').disable = true;
+    document.getElementById('round3').disable = true;
 };
 
 // edited mode
@@ -412,6 +417,7 @@ const saveFn = (data, userData) => {
 };
 
 const plot = (data, edit = false) => {
+    console.log('plot data', data);
     if (edit) {
         $(function () {
             const container = $('#team');
@@ -441,6 +447,14 @@ const plot = (data, edit = false) => {
                 matchMargin: 50,
             });
         });
+        for (i = 0; i < errorTeamRound.length; i++) {
+            document.getElementsByClassName('round')[errorTeamRound[i]].getElementsByClassName('match')[
+                errorTeamMatch[i]
+            ].childNodes[0].childNodes[0].style.backgroundColor = 'red';
+            document.getElementsByClassName('round')[errorTeamRound[i]].getElementsByClassName('match')[
+                errorTeamMatch[i]
+            ].childNodes[0].childNodes[1].style.backgroundColor = 'red';
+        }
     }
 };
 
@@ -448,23 +462,30 @@ const teamGenerate = (totalTeamNum = 8) => {
     globalData = dataGenerate(totalTeamNum);
     plot(globalData);
 
-    // const mappingButtonTitle = {
-    //     0: '第一回合',
-    //     1: '第二回合',
-    //     2: '第三回合',
-    //     3: '第四回合',
-    //     4: '第五回合',
-    // };
+    const mappingButtonTitle = {
+        0: '第一回合',
+        1: '第二回合',
+        2: '第三回合',
+        3: '第四回合',
+        4: '第五回合',
+    };
+    const mappingButtonFunction = {
+        0: 'firstRound()',
+        1: 'secondRound()',
+        2: 'thirdRound()',
+        3: 'finalRound()',
+        4: '第五回合',
+    };
 
-    //創造剩餘組別對戰的button
-    // for (let i = 0; i < parseInt(getBaseLog(2, totalTeamNum)); i++) {
-    //     const xRoundButton = document.createElement('button');
-    //     xRoundButton.id = 'round' + i;
-    //     xRoundButton.className = 'roundButton';
-    //     xRoundButton.innerHTML = mappingButtonTitle[i];
-    //     xRoundButton.setAttribute('onClick', 'xRound(' + i + ')');
-    //     document.getElementById('roundButtons').appendChild(xRoundButton);
-    // }
+    // 創造剩餘組別對戰的button;
+    for (let i = 0; i < parseInt(getBaseLog(2, totalTeamNum)); i++) {
+        const xRoundButton = document.createElement('button');
+        xRoundButton.id = 'round' + i;
+        xRoundButton.className = 'roundButton';
+        xRoundButton.innerHTML = mappingButtonTitle[i];
+        xRoundButton.setAttribute('onClick', mappingButtonFunction[i]);
+        document.getElementById('roundButtons').appendChild(xRoundButton);
+    }
 };
 
 //取得這個活動有幾組
