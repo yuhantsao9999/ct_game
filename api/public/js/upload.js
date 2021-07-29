@@ -27,6 +27,9 @@ const uploadTeamFile = () => {
         })
             .then((response) => {
                 console.log('upload response', response);
+                if (response.status !== 200) {
+                    alert('伺服器錯誤，請聯絡開發人員');
+                }
                 return response.text();
             })
             .then((response) => {
@@ -60,10 +63,9 @@ const uploadTeamFile = () => {
                     body: newFormData,
                 })
                     .then((response) => {
-                        console.log('enter battle');
                         console.log('battle response', response);
                         if (response.status === 500) {
-                            alert('500 ERROR:上傳程式碼有誤，請檢查後再重新上傳');
+                            alert('上傳程式碼有誤，請檢查後再重新上傳');
                         }
                         return response.json();
                     })
