@@ -363,6 +363,7 @@ function getBaseLog(x, y) {
 
 // TODO: need auto generate the logic function of each round
 const firstRound = () => {
+    console.log('readyToBattle', readyToBattle);
     if (readyToBattle) {
         globalData['results'][0] = battleOfTheRest(globalData['size'], 0);
         globalData['results'][1] = resultsInit(globalData['size'], 1);
