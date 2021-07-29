@@ -55,7 +55,7 @@ const uploadTeamFile = () => {
                 fetch('http://140.122.164.194:5000/battle', {
                     mode: 'cors',
                     method: 'post',
-                    body: formData,
+                    body: newFormData,
                 })
                     .then((response) => {
                         if (response.status === 500) {
@@ -64,6 +64,7 @@ const uploadTeamFile = () => {
                         return response.json();
                     })
                     .then((response) => {
+                        console.log('error proof battle process', response);
                         if (response) {
                             fetch('/api/insertPythonCode', {
                                 method: 'post',
