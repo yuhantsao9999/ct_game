@@ -1,8 +1,9 @@
 let globalData;
 let activityName;
 let totalTeamNum;
-let errorTeamRound = [];
-let errorTeamMatch = [];
+let readyToBattle;
+// let errorTeamRound = [];
+// let errorTeamMatch = [];
 (() => {
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
@@ -166,6 +167,7 @@ const viewDetailOrShowResult = (team1, team2) => {
 const fetchPythonCode = async (player) => {
     const data = {
         teamName: player,
+        activityName: activityName,
     };
     try {
         return fetch('/api/findOnePythonCode', {
@@ -181,7 +183,9 @@ const fetchPythonCode = async (player) => {
             .then((response) => {
                 return response.pythonCode;
             })
-            .catch((error) => console.error('Error:', error));
+            .catch((error) => {
+                console.error(`Error: ${player} PythonCode not found`);
+            });
     } catch (error) {
         return;
     }
@@ -326,24 +330,20 @@ const battleOfTwoTeam = async (data) => {
 
             // initialize result of next round
             globalData['results'][round + 1][match] = [, , { round: round + 1, match: match }];
-            errorTeamRound = [];
-            errorTeamMatch = [];
             plot(globalData, false);
         } else {
             alert(`${team1},${team2} 程式碼有誤，請檢查程式`);
-            console.log('round', round);
-            errorTeamRound.push(round);
-            errorTeamMatch.push(match);
             document.getElementsByClassName('round')[round].getElementsByClassName('match')[
                 match
             ].childNodes[0].childNodes[0].style.backgroundColor = 'red';
             document.getElementsByClassName('round')[round].getElementsByClassName('match')[
                 match
             ].childNodes[0].childNodes[1].style.backgroundColor = 'red';
-            console.log('errorTeamRound', errorTeamRound);
-            console.log('errorTeamMatch', errorTeamMatch);
         }
     }
+};
+const perpareHint = () => {
+    alert('請等所有組別準備好');
 };
 
 // initialize next round match info
@@ -362,10 +362,14 @@ function getBaseLog(x, y) {
 
 // TODO: need auto generate the logic function of each round
 const firstRound = () => {
-    globalData['results'][0] = battleOfTheRest(globalData['size'], 0);
-    globalData['results'][1] = resultsInit(globalData['size'], 1);
-    plot(globalData);
-    document.getElementById('round0').disabled = true;
+    if (readyToBattle) {
+        globalData['results'][0] = battleOfTheRest(globalData['size'], 0);
+        globalData['results'][1] = resultsInit(globalData['size'], 1);
+        plot(globalData);
+        document.getElementById('round0').disabled = true;
+    } else {
+        alert('請等所有組別準備好');
+    }
 };
 
 const secondRound = () => {
@@ -442,7 +446,7 @@ const plot = (data, edit = false) => {
             container.bracket({
                 init: data,
                 centerConnectors: true,
-                onMatchClick: battleOfTwoTeam,
+                onMatchClick: readyToBattle ? battleOfTwoTeam : perpareHint,
                 //onMatchHover
                 teamWidth: 90,
                 scoreWidth: 20,
@@ -450,16 +454,16 @@ const plot = (data, edit = false) => {
                 matchMargin: 50,
             });
         });
-        console.log('errorTeamRound', errorTeamRound);
-        console.log('errorTeamMatch', errorTeamMatch);
-        for (i = 0; i < errorTeamRound.length; i++) {
-            document.getElementsByClassName('round')[errorTeamRound[i]].getElementsByClassName('match')[
-                errorTeamMatch[i]
-            ].childNodes[0].childNodes[0].style.backgroundColor = 'red';
-            document.getElementsByClassName('round')[errorTeamRound[i]].getElementsByClassName('match')[
-                errorTeamMatch[i]
-            ].childNodes[0].childNodes[1].style.backgroundColor = 'red';
-        }
+        // console.log('errorTeamRound', errorTeamRound);
+        // console.log('errorTeamMatch', errorTeamMatch);
+        // for (i = 0; i < errorTeamRound.length; i++) {
+        //     document.getElementsByClassName('round')[errorTeamRound[i]].getElementsByClassName('match')[
+        //         errorTeamMatch[i]
+        //     ].childNodes[0].childNodes[0].style.backgroundColor = 'red';
+        //     document.getElementsByClassName('round')[errorTeamRound[i]].getElementsByClassName('match')[
+        //         errorTeamMatch[i]
+        //     ].childNodes[0].childNodes[1].style.backgroundColor = 'red';
+        // }
     }
 };
 
@@ -497,4 +501,17 @@ const teamGenerate = (totalTeamNum = 8) => {
 window.onload = async () => {
     totalTeamNum = await fetchTotalTeamNum(activityName);
     teamGenerate(totalTeamNum);
+    for (let i = 0; i < totalTeamNum; i++) {
+        const teamName = document.getElementsByClassName('label')[i].innerText;
+        const checkPythonCode = await fetchPythonCode(teamName).then((response) => response);
+        console.log(checkPythonCode);
+        if (!checkPythonCode) {
+            document.getElementsByClassName('round')[0].getElementsByClassName('match')[
+                parseInt(i / 2)
+            ].childNodes[0].style.color = 'red';
+            readyToBattle = false;
+        } else {
+            readyToBattle = true;
+        }
+    }
 };
