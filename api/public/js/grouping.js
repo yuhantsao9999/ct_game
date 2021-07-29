@@ -1,7 +1,7 @@
 let globalData;
 let activityName;
 // let totalTeamNum;
-let readyToBattle;
+let readyToBattle = true;
 // let errorTeamRound = [];
 // let errorTeamMatch = [];
 (() => {
