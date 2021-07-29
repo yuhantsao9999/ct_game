@@ -54,62 +54,64 @@ const uploadTeamFile = () => {
                 const newFormData = new FormData();
                 newFormData.append('pythonCodeData', JSON.stringify(pythonCodeData));
 
-                // fetch('http://140.122.164.194:5000/battle', {
-                //     mode: 'cors',
-                //     method: 'post',
-                //     body: newFormData,
-                // })
-                //     .then((response) => {
-                //         if (response.status === 500) {
-                //             alert('500 ERROR:上傳程式碼有誤，請檢查後再重新上傳');
-                //         }
-                //         return response.json();
-                //     })
-                //     .then((response) => {
-                //         console.log('error proof battle process', response);
-                //         if (response) {
-                fetch('/api/insertPythonCode', {
+                fetch('http://140.122.164.194:5000/battle', {
+                    mode: 'cors',
                     method: 'post',
-                    body: JSON.stringify({
-                        teamId,
-                        activityName,
-                        teamName,
-                        pythonCode: code,
-                    }),
-                    headers: {
-                        'content-type': 'application/json',
-                    },
+                    body: newFormData,
                 })
                     .then((response) => {
-                        return response;
+                        console.log('enter battle');
+                        console.log('battle response', response);
+                        if (response.status === 500) {
+                            alert('500 ERROR:上傳程式碼有誤，請檢查後再重新上傳');
+                        }
+                        return response.json();
                     })
                     .then((response) => {
-                        console.log(response);
-                        fetch('/api/uploadFileName', {
+                        //         console.log('error proof battle process', response);
+                        //         if (response) {
+                        fetch('/api/insertPythonCode', {
                             method: 'post',
-                            body: formData,
+                            body: JSON.stringify({
+                                teamId,
+                                activityName,
+                                teamName,
+                                pythonCode: code,
+                            }),
+                            headers: {
+                                'content-type': 'application/json',
+                            },
                         })
                             .then((response) => {
-                                console.log('uploadFileName response', response);
                                 return response;
                             })
                             .then((response) => {
-                                if (response.status == 200) {
-                                    console.log('Success:', response);
-                                    alert(`完成提交！`);
-                                }
+                                console.log(response);
+                                fetch('/api/uploadFileName', {
+                                    method: 'post',
+                                    body: formData,
+                                })
+                                    .then((response) => {
+                                        console.log('uploadFileName response', response);
+                                        return response;
+                                    })
+                                    .then((response) => {
+                                        if (response.status == 200) {
+                                            console.log('Success:', response);
+                                            alert(`完成提交！`);
+                                        }
+                                    })
+                                    .catch((error) => {
+                                        alert(`上傳失敗請重新上傳`);
+                                        console.error('Error:', error);
+                                    });
                             })
-                            .catch((error) => {
-                                alert(`上傳失敗請重新上傳`);
-                                console.error('Error:', error);
-                            });
+                            .catch((error) => console.error('Error:', error));
+                        // } else {
+                        //     alert('上傳程式碼有誤，請檢查後再重新上傳');
+                        // }
                     })
-                    .catch((error) => console.error('Error:', error));
-                //     } else {
-                //         alert('上傳程式碼有誤，請檢查後再重新上傳');
-                //     }
-                // })
-                // .catch((error) => console.error('Error:', JSON.stringify(error)));
+                    .catch((error) => console.error('Error:', JSON.stringify(error)));
             });
     } else {
         alert('請登入');
