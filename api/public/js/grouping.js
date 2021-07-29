@@ -260,6 +260,7 @@ const battleOfTwoTeam = async (data) => {
         // window.alert("Can't battle with TBD team.");
         return;
     }
+    console.log('readyToBattle in battleOfTwoTeam', readyToBattle);
     if (readyToBattle) {
         if (oldScoreI > 0 || oldscoreII > 0) {
             alert('已對戰過無法重複對戰');
