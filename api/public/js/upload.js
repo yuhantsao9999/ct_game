@@ -41,7 +41,7 @@ const uploadTeamFile = () => {
 
                 code = Blockly.Python.workspaceToCode(demoWorkspace);
                 // code =
-                //     "C0C1 = None\nC2C3 = None\nC4C5 = None\n\n\nfor C0C1 in board[yellow_player]:\n  if C0C1 != 0:\n    for C2C3 in Neighbor(C0C1):\n      if Exist_Chess(C2C3) == 0:\n        score = (score + 20)\n      elif Exist_Chess(C2C3) == 2:\n        score = (score + 15)\n      else:\n        score = (score - 20)\n"
+                //     'C0C1 = None\nC2C3 = None\nC4C5 = None\n\n\nfor C0C1 in board[yellow_player]:\n  if C0C1 != 0:\n    for C2C3 in Neighbor(C0C1):\n      if Exist_Chess(C2C3) == 0:\n        score = (score + 20)\n      elif Exist_Chess(C2C3) == 2:\n        score = (score + 15)\n      else:\n        score = (score - 20)\n';
                 standardCode =
                     'C0C1 = None\nC2C3 = None\nC4C5 = None\n\n\nfor C0C1 in board[yellow_player]:\n  if C0C1 != 0:\n    for C2C3 in Neighbor(C0C1):\n      if Exist_Chess(C2C3) == 0:\n        score = (score + 20)\n      elif Exist_Chess(C2C3) == 2:\n        score = (score + 15)\n      else:\n        score = (score - 20)\n';
 
@@ -49,8 +49,8 @@ const uploadTeamFile = () => {
                     pythonCodeA: code,
                     pythonCodeB: standardCode,
                 };
-                const formData = new FormData();
-                formData.append('pythonCodeData', JSON.stringify(pythonCodeData));
+                const newFormData = new FormData();
+                newFormData.append('pythonCodeData', JSON.stringify(pythonCodeData));
 
                 fetch('http://140.122.164.194:5000/battle', {
                     mode: 'cors',
@@ -58,10 +58,12 @@ const uploadTeamFile = () => {
                     body: formData,
                 })
                     .then((response) => {
+                        if (response.status === 500) {
+                            alert('500 ERROR:上傳程式碼有誤，請檢查後再重新上傳');
+                        }
                         return response.json();
                     })
                     .then((response) => {
-                        console.log('Error Proof battle response', response);
                         if (response) {
                             fetch('/api/insertPythonCode', {
                                 method: 'post',
@@ -104,7 +106,7 @@ const uploadTeamFile = () => {
                             alert('上傳程式碼有誤，請檢查後再重新上傳');
                         }
                     })
-                    .catch((error) => console.error('Error:', error));
+                    .catch((error) => console.error('Error:', JSON.stringify(error)));
             });
     } else {
         alert('請登入');
