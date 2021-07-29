@@ -1,7 +1,7 @@
 let globalData;
 let activityName;
 let totalTeamNum;
-let readyToBattle;
+let readyToBattle = true;
 // let errorTeamRound = [];
 // let errorTeamMatch = [];
 (() => {
@@ -441,6 +441,7 @@ const plot = (data, edit = false) => {
         });
     } else {
         // onMatchClick can't implement with edit mode (jQuery)
+        console.log('readyToBattle in plot', readyToBattle);
         $(function () {
             const container = $('#team');
             container.bracket({
