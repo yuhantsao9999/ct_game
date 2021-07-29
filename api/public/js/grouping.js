@@ -518,8 +518,6 @@ window.onload = async () => {
                 ].childNodes[0].childNodes[1].style.color = 'red';
             }
             readyToBattle = false;
-        } else {
-            readyToBattle = true;
         }
     }
 };
