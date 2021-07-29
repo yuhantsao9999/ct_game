@@ -500,6 +500,9 @@ window.onload = async () => {
     }
     for (let i = 0; i < powNum; i++) {
         const teamName = document.getElementsByClassName('label')[i].innerText;
+        if (teamName === 'BYE') {
+            continue;
+        }
         const checkPythonCode = await fetchPythonCode(teamName).then((response) => response);
         console.log('i', i);
         if (!checkPythonCode) {
