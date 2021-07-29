@@ -441,7 +441,6 @@ const plot = async (data, edit = false) => {
         });
     } else {
         // onMatchClick can't implement with edit mode (jQuery)
-        console.log('readyToBattle in plot', readyToBattle);
         $(function () {
             const container = $('#team');
             container.bracket({
@@ -455,16 +454,6 @@ const plot = async (data, edit = false) => {
                 matchMargin: 50,
             });
         });
-        // console.log('errorTeamRound', errorTeamRound);
-        // console.log('errorTeamMatch', errorTeamMatch);
-        // for (i = 0; i < errorTeamRound.length; i++) {
-        //     document.getElementsByClassName('round')[errorTeamRound[i]].getElementsByClassName('match')[
-        //         errorTeamMatch[i]
-        //     ].childNodes[0].childNodes[0].style.backgroundColor = 'red';
-        //     document.getElementsByClassName('round')[errorTeamRound[i]].getElementsByClassName('match')[
-        //         errorTeamMatch[i]
-        //     ].childNodes[0].childNodes[1].style.backgroundColor = 'red';
-        // }
     }
 };
 
@@ -502,13 +491,27 @@ const teamGenerate = (totalTeamNum = 8) => {
 window.onload = async () => {
     totalTeamNum = await fetchTotalTeamNum(activityName);
     teamGenerate(totalTeamNum);
-    for (let i = 0; i < totalTeamNum; i++) {
+    let powNum;
+    for (let i = 0; i <= 6; i++) {
+        if (Math.pow(2, i) >= totalTeamNum) {
+            powNum = Math.pow(2, i);
+            break;
+        }
+    }
+    for (let i = 0; i < powNum; i++) {
         const teamName = document.getElementsByClassName('label')[i].innerText;
         const checkPythonCode = await fetchPythonCode(teamName).then((response) => response);
+        console.log('i', i);
         if (!checkPythonCode) {
-            document.getElementsByClassName('round')[0].getElementsByClassName('match')[
-                parseInt(i / 2)
-            ].childNodes[0].style.color = 'red';
+            if (i % 2 === 0) {
+                document.getElementsByClassName('round')[0].getElementsByClassName('match')[
+                    parseInt(i / 2)
+                ].childNodes[0].childNodes[0].style.color = 'red';
+            } else {
+                document.getElementsByClassName('round')[0].getElementsByClassName('match')[
+                    parseInt(i / 2)
+                ].childNodes[0].childNodes[1].style.color = 'red';
+            }
             readyToBattle = false;
         } else {
             readyToBattle = true;
