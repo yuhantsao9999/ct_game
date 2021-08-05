@@ -14,7 +14,7 @@ const insertOneCode = async (req) => {
 const findLatestCode = async (req) => {
     const data = req.body;
     console.log('data', data);
-    const doc = await Code.find(data,{ $orderby: { teamName: teamName } };
+    const doc = await Code.findOne(data, { created_at: -1 });
     const latestDoc = await doc.next();
     return latestDoc ? { error: false, data: latestDoc } : { error: true };
 };
