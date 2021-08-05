@@ -21,5 +21,5 @@ const findLatestCode = async (req) => {
 
 module.exports = {
     insertOneCode,
-    findCode,
+    findLatestCode,
 };
