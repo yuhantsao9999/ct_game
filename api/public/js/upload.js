@@ -50,6 +50,7 @@ const uploadTeamFile = () => {
                 //     'C0C1 = None\nC2C3 = None\nC4C5 = None\n\n\nfor C0C1 in board[yellow_player]:\n  if C0C1 != 0:\n    for C2C3 in Neighbor(C0C1):\n      if Exist_Chess(C2C3) == 0:\n        score = (score + 20)\n      elif Exist_Chess(C2C3) == 2:\n        score = (score + 15)\n      else:\n        score = (score - 20)\n';
                 if (code === '') {
                     alert('上傳程式碼有誤，請檢查後再重新上傳');
+                    return;
                 }
                 const pythonCodeData = {
                     pythonCodeA: code,
