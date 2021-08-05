@@ -406,6 +406,7 @@ const finalRound = () => {
 // edited mode
 const setUp = () => {
     plot(globalData, true);
+    readyToBattle = true;
     document.getElementById('status').innerHTML = '編輯模式';
     document.getElementById('saveButton').style.background = '#d1d1d1';
     document.getElementById('saveButton').style.color = 'black';
