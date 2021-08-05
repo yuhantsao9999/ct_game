@@ -28,7 +28,7 @@ const uploadTeamFile = () => {
             .then((response) => {
                 console.log('upload response', response);
                 if (response.status !== 200) {
-                    alert('伺服器錯誤，請聯絡開發人員');
+                    alert('伺服器未開機，請聯絡開發人員');
                 }
                 return response.text();
             })
@@ -48,7 +48,9 @@ const uploadTeamFile = () => {
                 //     'C0C1 = None\nC2C3 = None\nC4C5 = None\n\n\nfor C0C1 in board[yellow_player]:\n  if C0C1 != 0:\n    for C2C3 in Neighbor(C0C1):\n      if Exist_Chess(C2C3) == 0:\n        score = (score + 20)\n      elif Exist_Chess(C2C3) == 2:\n        score = (score + 15)\n      else:\n        score = (score - 20)\n';
                 // const standardCode =
                 //     'C0C1 = None\nC2C3 = None\nC4C5 = None\n\n\nfor C0C1 in board[yellow_player]:\n  if C0C1 != 0:\n    for C2C3 in Neighbor(C0C1):\n      if Exist_Chess(C2C3) == 0:\n        score = (score + 20)\n      elif Exist_Chess(C2C3) == 2:\n        score = (score + 15)\n      else:\n        score = (score - 20)\n';
-
+                if (code === '') {
+                    alert('上傳程式碼有誤，請檢查後再重新上傳');
+                }
                 const pythonCodeData = {
                     pythonCodeA: code,
                     pythonCodeB: '',
@@ -114,7 +116,8 @@ const uploadTeamFile = () => {
                         // }
                     })
                     .catch((error) => console.error('Error:', JSON.stringify(error)));
-            });
+            })
+            .catch((error) => alert('伺服器問題，請聯絡開發人員:' + error));
     } else {
         alert('請登入');
         window.location.href = './main';
