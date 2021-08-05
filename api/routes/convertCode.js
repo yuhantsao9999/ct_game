@@ -1,5 +1,5 @@
 const express = require('express');
-const { findCode, insertOneCode } = require('../controller/convertPythonCode');
+const { findLatestCode, insertOneCode } = require('../controller/convertPythonCode');
 const router = express.Router();
 
 router.post('/insertPythonCode', async (req, res) => {
@@ -10,7 +10,7 @@ router.post('/insertPythonCode', async (req, res) => {
 });
 
 router.post('/findOnePythonCode', async (req, res) => {
-    const result = await findCode(req);
+    const result = await findLatestCode(req);
     if (result.error) {
         res.status(404).send('Not found');
     } else res.send(result.data);
