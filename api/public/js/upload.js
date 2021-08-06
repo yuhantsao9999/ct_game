@@ -110,12 +110,18 @@ const uploadTeamFile = () => {
                                         console.error('Error:', error);
                                     });
                             })
-                            .catch((error) => console.error('Error:', error));
+                            .catch((error) => {
+                                console.error('Error:', error);
+                                alert('上傳程式碼有誤，請檢查後再重新上傳');
+                            });
                         // } else {
                         //     alert('上傳程式碼有誤，請檢查後再重新上傳');
                         // }
                     })
-                    .catch((error) => console.error('Error:', JSON.stringify(error)));
+                    .catch((error) => {
+                        console.error('Error:', JSON.stringify(error));
+                        alert('上傳程式碼有誤，請檢查後再重新上傳');
+                    });
             })
             .catch((error) => alert('上傳程式碼有誤，請檢查後再重新上傳'));
     } else {
