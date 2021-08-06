@@ -29,6 +29,7 @@ const uploadTeamFile = () => {
                 console.log('upload response', response);
                 if (response.status !== 200) {
                     alert('伺服器未開機，請聯絡開發人員');
+                    return;
                 }
                 return response.text();
             })
