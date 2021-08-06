@@ -28,7 +28,7 @@ const uploadTeamFile = () => {
             .then((response) => {
                 console.log('upload response', response);
                 if (response.status !== 200) {
-                    alert('伺服器未開機，請聯絡開發人員');
+                    alert('上傳程式碼有誤，請檢查後再重新上傳');
                     return;
                 }
                 return response.text();
@@ -119,7 +119,7 @@ const uploadTeamFile = () => {
                     })
                     .catch((error) => console.error('Error:', JSON.stringify(error)));
             })
-            .catch((error) => alert('伺服器問題，請聯絡開發人員:' + error));
+            .catch((error) => alert('上傳程式碼有誤，請檢查後再重新上傳'));
     } else {
         alert('請登入');
         window.location.href = './main';
