@@ -28,8 +28,7 @@ const uploadTeamFile = () => {
             .then((response) => {
                 console.log('upload response', response);
                 if (response.status !== 200) {
-                    alert('上傳程式碼有誤，請檢查後再重新上傳');
-                    return;
+                    throw error;
                 }
                 return response.text();
             })
