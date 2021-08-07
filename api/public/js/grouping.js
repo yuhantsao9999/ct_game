@@ -144,7 +144,7 @@ const battleOfTheRest = (size, round) => {
         };
 
         if (!hasBattled) {
-            battleOfTwoTeam(tmpData);
+            await battleOfTwoTeam(tmpData);
         }
     }
     scoreArr = globalData['results'][round];
@@ -369,7 +369,7 @@ const firstRound = () => {
         globalData['results'][0] = battleOfTheRest(globalData['size'], 0);
         globalData['results'][1] = resultsInit(globalData['size'], 1);
         plot(globalData);
-        document.getElementById('round0').disabled = true;
+        // document.getElementById('round0').disabled = true;
     } else {
         alert('請等所有組別上傳完成檔案');
     }
@@ -379,14 +379,14 @@ const secondRound = () => {
     globalData['results'][1] = battleOfTheRest(globalData['size'], 1);
     globalData['results'][2] = resultsInit(globalData['size'], 2);
     plot(globalData);
-    document.getElementById('round1').disabled = true;
+    // document.getElementById('round1').disabled = true;
 };
 
 const thirdRound = () => {
     globalData['results'][2] = battleOfTheRest(globalData['size'], 2);
     globalData['results'][3] = resultsInit(globalData['size'], 3); // set 2 because of the third place and the forth place
     plot(globalData);
-    document.getElementById('round2').disabled = true;
+    // document.getElementById('round2').disabled = true;
 };
 
 // const xRound = (round) => {
@@ -400,7 +400,7 @@ const thirdRound = () => {
 const finalRound = () => {
     globalData['results'][3] = battleOfTheRest(globalData['size'], 2);
     plot(globalData);
-    document.getElementById('round3').disable = true;
+    // document.getElementById('round3').disable = true;
 };
 
 // edited mode
