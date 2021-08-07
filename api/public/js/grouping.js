@@ -144,7 +144,7 @@ const battleOfTheRest = (size, round) => {
         };
 
         if (!hasBattled) {
-            await battleOfTwoTeam(tmpData);
+            battleOfTwoTeam(tmpData);
         }
     }
     scoreArr = globalData['results'][round];
