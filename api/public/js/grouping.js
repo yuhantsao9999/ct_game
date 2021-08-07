@@ -136,6 +136,8 @@ const battleOfTheRest = (size, round) => {
         if (!globalData['results'][round][i / 2]) {
             window.alert('請先完成上一回合的晉級，再使用本按鈕');
         }
+        const isEven =
+            Number(globalData['results'][round][i / 2][0]) + Number(globalData['results'][round][i / 2][1]) == 0;
         const hasBattled = Number.isInteger(globalData['results'][round][i / 2][0]);
         const tmpData = {
             round: round,
@@ -143,7 +145,7 @@ const battleOfTheRest = (size, round) => {
             notShow: true,
         };
 
-        if (!hasBattled) {
+        if (!hasBattled || isEven) {
             battleOfTwoTeam(tmpData);
         }
     }
