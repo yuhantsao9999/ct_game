@@ -503,7 +503,7 @@ window.onload = async () => {
     totalTeamNum = await fetchTotalTeamNum(activityName);
     teamGenerate(totalTeamNum);
     let powNum;
-    for (let i = 0; i <= 6; i++) {
+    for (let i = 0; i <= totalTeamNum; i++) {
         if (Math.pow(2, i) >= totalTeamNum) {
             powNum = Math.pow(2, i);
             break;
