@@ -276,7 +276,6 @@ const battleOfTwoTeam = async (data) => {
             pythonCodeB: fetchPythonCodeDataResultOfPlayerB,
         };
         //利用 python code 取得對戰過程
-        const fetchBattleProcessDataResult = await fetchBattleProcess(pythonCodeData).then((response) => response);
         // Hint: fetchBattleProcessDataResult 上方是線上版，下方是測試資料
         // const fetchBattleProcessDataResult = {
         //     process: [
@@ -308,7 +307,8 @@ const battleOfTwoTeam = async (data) => {
         //     totalSteps: 3,
         //     win: 'Red',
         // };
-        if (fetchBattleProcessDataResult) {
+        if (fetchPythonCodeDataResultOfPlayerA && fetchPythonCodeDataResultOfPlayerB) {
+            const fetchBattleProcessDataResult = await fetchBattleProcess(pythonCodeData).then((response) => response);
             const getUrlString = location.href;
             const url = new URL(getUrlString);
             const activityName = url.searchParams.get('id');
@@ -333,9 +333,6 @@ const battleOfTwoTeam = async (data) => {
             globalData['results'][round + 1][match] = [, , { round: round + 1, match: match }];
             plot(globalData, false);
         } else if (fetchPythonCodeDataResultOfPlayerA || fetchPythonCodeDataResultOfPlayerB) {
-            // const scoreI = fetchBattleProcessDataResult.win === 'Red' ? 1 : 0;
-            // const scoreII = fetchBattleProcessDataResult.win === 'Yellow' ? 1 : 0;
-            // update result of this round
             globalData['results'][round][match] = [
                 fetchPythonCodeDataResultOfPlayerA ? 1 : 0,
                 fetchPythonCodeDataResultOfPlayerB ? 1 : 0,
