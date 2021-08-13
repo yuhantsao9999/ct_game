@@ -1,9 +1,6 @@
 let globalData;
 let activityName;
-// let totalTeamNum;
-// let readyToBattle = true;
-// let errorTeamRound = [];
-// let errorTeamMatch = [];
+
 (() => {
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
@@ -329,6 +326,19 @@ const battleOfTwoTeam = async (data) => {
             globalData['results'][round][match] = [
                 scoreI > scoreII ? 1 : 0,
                 scoreII > scoreI ? 1 : 0,
+                { round: round, match: match },
+            ];
+
+            // initialize result of next round
+            globalData['results'][round + 1][match] = [, , { round: round + 1, match: match }];
+            plot(globalData, false);
+        } else if (fetchPythonCodeDataResultOfPlayerA || fetchPythonCodeDataResultOfPlayerB) {
+            // const scoreI = fetchBattleProcessDataResult.win === 'Red' ? 1 : 0;
+            // const scoreII = fetchBattleProcessDataResult.win === 'Yellow' ? 1 : 0;
+            // update result of this round
+            globalData['results'][round][match] = [
+                fetchPythonCodeDataResultOfPlayerA ? 1 : 0,
+                fetchPythonCodeDataResultOfPlayerB ? 1 : 0,
                 { round: round, match: match },
             ];
 
