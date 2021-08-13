@@ -150,8 +150,11 @@ const battleOfTheRest = (size, round) => {
     return scoreArr;
 };
 
-const viewDetailOrShowResult = (team1, team2) => {
-    if (confirm(`觀看 ${team1} 和 ${team2} 的對戰過程嗎？`)) {
+const viewDetailOrShowResult = (team1, team2, isEven) => {
+    const copywriting = isEven
+        ? `因為平手，所以開始新的一局，觀看 ${team1} 和 ${team2} 的新的對戰過程嗎？`
+        : `觀看 ${team1} 和 ${team2} 的對戰過程嗎？`;
+    if (confirm(copywriting)) {
         const getUrlString = location.href;
         const url = new URL(getUrlString);
         const activityName = url.searchParams.get('id');
@@ -259,14 +262,15 @@ const battleOfTwoTeam = async (data) => {
         // window.alert("Can't battle with TBD team.");
         return;
     }
-    // console.log('readyToBattle in battleOfTwoTeam', readyToBattle);
-    // if (readyToBattle) {
     if (oldScoreI > 0 || oldscoreII > 0) {
-        alert('已對戰過無法重複對戰');
+        // alert('已對戰過無法重複對戰');
         if (!notShow && team1 !== 'TBD' && team2 !== 'TBD' && team1 !== 'BYE' && team2 !== 'BYE') {
-            viewDetailOrShowResult(team1, team2);
+            viewDetailOrShowResult(team1, team2, false);
         }
     } else {
+        if (oldScoreI == 0 && oldscoreII == 0) {
+            viewDetailOrShowResult(team1, team2, true);
+        }
         // node.js save result (score included) to db
         //TODO:錯誤處理：fetchPythonCode 有誤要跳 alert
         const fetchPythonCodeDataResultOfPlayerA = await fetchPythonCode(team1).then((response) => response);
@@ -307,8 +311,6 @@ const battleOfTwoTeam = async (data) => {
         //     totalSteps: 3,
         //     win: 'Red',
         // };
-        console.log('fetchPythonCodeDataResultOfPlayerA', fetchPythonCodeDataResultOfPlayerA);
-        console.log('fetchPythonCodeDataResultOfPlayerB', fetchPythonCodeDataResultOfPlayerB);
         if (fetchPythonCodeDataResultOfPlayerA && fetchPythonCodeDataResultOfPlayerB) {
             const fetchBattleProcessDataResult = await fetchBattleProcess(pythonCodeData).then((response) => response);
             const getUrlString = location.href;
@@ -318,7 +320,7 @@ const battleOfTwoTeam = async (data) => {
             await fetchInsertBattleProcess(fetchBattleProcessDataResult, activityName, team1, team2);
 
             if (!notShow && team1 !== 'TBD' && team2 !== 'TBD' && team1 !== 'BYE' && team2 !== 'BYE') {
-                viewDetailOrShowResult(team1, team2);
+                viewDetailOrShowResult(team1, team2, false);
             }
 
             const scoreI = fetchBattleProcessDataResult.win === 'Red' ? 1 : 0;
@@ -375,15 +377,9 @@ function getBaseLog(x, y) {
 
 // TODO: need auto generate the logic function of each round
 const firstRound = () => {
-    // console.log('readyToBattle', readyToBattle);
-    // if (readyToBattle) {
     globalData['results'][0] = battleOfTheRest(globalData['size'], 0);
     globalData['results'][1] = resultsInit(globalData['size'], 1);
     plot(globalData);
-    // document.getElementById('round0').disabled = true;
-    // } else {
-    //     alert('請等所有組別上傳完成檔案');
-    // }
 };
 
 const secondRound = () => {
@@ -417,7 +413,6 @@ const finalRound = () => {
 // edited mode
 const setUp = () => {
     plot(globalData, true);
-    readyToBattle = true;
     document.getElementById('status').innerHTML = '編輯模式';
     document.getElementById('saveButton').style.background = '#d1d1d1';
     document.getElementById('saveButton').style.color = 'black';
@@ -529,7 +524,6 @@ window.onload = async () => {
                     parseInt(i / 2)
                 ].childNodes[0].childNodes[1].style.color = 'red';
             }
-            // readyToBattle = false;
         }
     }
 };
