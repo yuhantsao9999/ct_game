@@ -66,6 +66,7 @@ const getFairTeams = (num, magic = false) => {
 // data initialize
 const dataGenerate = (teamNum) => {
     let powNum;
+    // max round is six
     for (let i = 0; i <= 6; i++) {
         if (Math.pow(2, i) >= teamNum) {
             powNum = Math.pow(2, i);
@@ -503,7 +504,8 @@ window.onload = async () => {
     totalTeamNum = await fetchTotalTeamNum(activityName);
     teamGenerate(totalTeamNum);
     let powNum;
-    for (let i = 0; i <= totalTeamNum; i++) {
+    // max round is six
+    for (let i = 0; i <= 6; i++) {
         if (Math.pow(2, i) >= totalTeamNum) {
             powNum = Math.pow(2, i);
             break;
