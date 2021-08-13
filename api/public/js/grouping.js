@@ -307,6 +307,8 @@ const battleOfTwoTeam = async (data) => {
         //     totalSteps: 3,
         //     win: 'Red',
         // };
+        console.log('fetchPythonCodeDataResultOfPlayerA', fetchPythonCodeDataResultOfPlayerA);
+        console.log('fetchPythonCodeDataResultOfPlayerB', fetchPythonCodeDataResultOfPlayerB);
         if (fetchPythonCodeDataResultOfPlayerA && fetchPythonCodeDataResultOfPlayerB) {
             const fetchBattleProcessDataResult = await fetchBattleProcess(pythonCodeData).then((response) => response);
             const getUrlString = location.href;
