@@ -262,15 +262,14 @@ const battleOfTwoTeam = async (data) => {
         // window.alert("Can't battle with TBD team.");
         return;
     }
+    //已有對戰輸贏不再重新對戰
     if (oldScoreI > 0 || oldscoreII > 0) {
         // alert('已對戰過無法重複對戰');
         if (!notShow && team1 !== 'TBD' && team2 !== 'TBD' && team1 !== 'BYE' && team2 !== 'BYE') {
             viewDetailOrShowResult(team1, team2, false);
         }
     } else {
-        if (oldScoreI == 0 && oldscoreII == 0) {
-            viewDetailOrShowResult(team1, team2, true);
-        }
+        //尚未有輸贏需要重新對戰
         // node.js save result (score included) to db
         //TODO:錯誤處理：fetchPythonCode 有誤要跳 alert
         const fetchPythonCodeDataResultOfPlayerA = await fetchPythonCode(team1).then((response) => response);
@@ -320,7 +319,13 @@ const battleOfTwoTeam = async (data) => {
             await fetchInsertBattleProcess(fetchBattleProcessDataResult, activityName, team1, team2);
 
             if (!notShow && team1 !== 'TBD' && team2 !== 'TBD' && team1 !== 'BYE' && team2 !== 'BYE') {
-                viewDetailOrShowResult(team1, team2, false);
+                //原本對戰結果為平手，所以詢問是否觀看新的過程
+                if (oldScoreI == 0 && oldscoreII == 0) {
+                    viewDetailOrShowResult(team1, team2, true);
+                } else {
+                    //原先沒有對戰過，所以詢問是否觀看新的過程
+                    viewDetailOrShowResult(team1, team2, false);
+                }
             }
 
             const scoreI = fetchBattleProcessDataResult.win === 'Red' ? 1 : 0;
