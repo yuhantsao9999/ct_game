@@ -338,7 +338,7 @@ const battleOfTwoTeam = async (data) => {
             ];
 
             // initialize result of next round
-            globalData['results'][round + 1][match] = [, , { round: round + 1, match: match }];
+            globalData['results'][round + 1][match / 2] = [, , { round: round + 1, match: match / 2 }];
             plot(globalData, false);
         } else if (fetchPythonCodeDataResultOfPlayerA || fetchPythonCodeDataResultOfPlayerB) {
             //兩組中有一組沒有上傳檔案
@@ -349,7 +349,7 @@ const battleOfTwoTeam = async (data) => {
             ];
 
             // initialize result of next round
-            globalData['results'][round + 1][match] = [, , { round: round + 1, match: match }];
+            globalData['results'][round + 1][match / 2] = [, , { round: round + 1, match: match / 2 }];
             plot(globalData, false);
         } else {
             alert(`${team1},${team2} 程式碼有誤，請檢查程式`);
