@@ -152,7 +152,9 @@ const battleOfTheRest = (size, round) => {
 
 const viewDetailOrShowResult = (team1, team2, isEven) => {
     const copywriting = isEven
-        ? `因為平手，所以開始新的一局，觀看 ${team1} 和 ${team2} 的新的對戰過程嗎？`
+        ? `雙方平手，重開新局。
+
+        是否觀看 ${team1} 和${team2} 新一局的對戰過程過程嗎？`
         : `觀看 ${team1} 和 ${team2} 的對戰過程嗎？`;
     if (confirm(copywriting)) {
         const getUrlString = location.href;
@@ -245,6 +247,7 @@ const fetchInsertBattleProcess = async (fetchBattleProcessDataResult, activityNa
 };
 // simulate battle result from calling api
 const battleOfTwoTeam = async (data) => {
+    console.log('data', data);
     const { round, match, notShow } = data;
     const team1 =
         document.getElementsByClassName('round')[round].childNodes[match].childNodes[0].childNodes[0].childNodes[0]
@@ -259,19 +262,15 @@ const battleOfTwoTeam = async (data) => {
         document.getElementsByClassName('round')[round].childNodes[match].childNodes[0].childNodes[1].childNodes[1]
             .innerText;
     if (team1 === 'TBD' || team2 === 'TBD' || team1 === 'BYE' || team2 === 'BYE') {
-        // window.alert("Can't battle with TBD team.");
         return;
     }
     //已有對戰輸贏不再重新對戰
     if (oldScoreI > 0 || oldscoreII > 0) {
-        // alert('已對戰過無法重複對戰');
         if (!notShow && team1 !== 'TBD' && team2 !== 'TBD' && team1 !== 'BYE' && team2 !== 'BYE') {
             viewDetailOrShowResult(team1, team2, false);
         }
     } else {
         //尚未有輸贏需要重新對戰
-        // node.js save result (score included) to db
-        //TODO:錯誤處理：fetchPythonCode 有誤要跳 alert
         const fetchPythonCodeDataResultOfPlayerA = await fetchPythonCode(team1).then((response) => response);
         const fetchPythonCodeDataResultOfPlayerB = await fetchPythonCode(team2).then((response) => response);
         const pythonCodeData = {
@@ -342,6 +341,7 @@ const battleOfTwoTeam = async (data) => {
             globalData['results'][round + 1][match] = [, , { round: round + 1, match: match }];
             plot(globalData, false);
         } else if (fetchPythonCodeDataResultOfPlayerA || fetchPythonCodeDataResultOfPlayerB) {
+            //兩組中有一組沒有上傳檔案
             globalData['results'][round][match] = [
                 fetchPythonCodeDataResultOfPlayerA ? 1 : 0,
                 fetchPythonCodeDataResultOfPlayerB ? 1 : 0,
@@ -361,9 +361,6 @@ const battleOfTwoTeam = async (data) => {
             ].childNodes[0].childNodes[1].style.backgroundColor = 'red';
         }
     }
-    // } else {
-    //     alert('請等所有組別上傳完成檔案');
-    // }
 };
 
 // initialize next round match info
@@ -518,7 +515,6 @@ window.onload = async () => {
             continue;
         }
         const checkPythonCode = await fetchPythonCode(teamName).then((response) => response);
-        console.log('i', i);
         if (!checkPythonCode) {
             if (i % 2 === 0) {
                 document.getElementsByClassName('round')[0].getElementsByClassName('match')[
