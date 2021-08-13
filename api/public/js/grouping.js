@@ -1,7 +1,7 @@
 let globalData;
 let activityName;
 // let totalTeamNum;
-let readyToBattle = true;
+// let readyToBattle = true;
 // let errorTeamRound = [];
 // let errorTeamMatch = [];
 (() => {
@@ -262,92 +262,92 @@ const battleOfTwoTeam = async (data) => {
         // window.alert("Can't battle with TBD team.");
         return;
     }
-    console.log('readyToBattle in battleOfTwoTeam', readyToBattle);
-    if (readyToBattle) {
-        if (oldScoreI > 0 || oldscoreII > 0) {
-            alert('已對戰過無法重複對戰');
+    // console.log('readyToBattle in battleOfTwoTeam', readyToBattle);
+    // if (readyToBattle) {
+    if (oldScoreI > 0 || oldscoreII > 0) {
+        alert('已對戰過無法重複對戰');
+        if (!notShow && team1 !== 'TBD' && team2 !== 'TBD' && team1 !== 'BYE' && team2 !== 'BYE') {
+            viewDetailOrShowResult(team1, team2);
+        }
+    } else {
+        // node.js save result (score included) to db
+        //TODO:錯誤處理：fetchPythonCode 有誤要跳 alert
+        const fetchPythonCodeDataResultOfPlayerA = await fetchPythonCode(team1).then((response) => response);
+        const fetchPythonCodeDataResultOfPlayerB = await fetchPythonCode(team2).then((response) => response);
+        const pythonCodeData = {
+            pythonCodeA: fetchPythonCodeDataResultOfPlayerA,
+            pythonCodeB: fetchPythonCodeDataResultOfPlayerB,
+        };
+        //利用 python code 取得對戰過程
+        const fetchBattleProcessDataResult = await fetchBattleProcess(pythonCodeData).then((response) => response);
+        // Hint: fetchBattleProcessDataResult 上方是線上版，下方是測試資料
+        // const fetchBattleProcessDataResult = {
+        //     process: [
+        //         {
+        //             step: 1,
+        //             moving: 'Red',
+        //             movingBoardIndex: 4,
+        //             movingTo: 6,
+        //             movingChessIndex: 3,
+        //             kill: [],
+        //         },
+        //         {
+        //             step: 2,
+        //             moving: 'Yellow',
+        //             movingBoardIndex: 17,
+        //             movingTo: 13,
+        //             movingChessIndex: 1,
+        //             kill: [],
+        //         },
+        //         {
+        //             step: 3,
+        //             moving: 'Red',
+        //             movingBoardIndex: 5,
+        //             movingTo: 8,
+        //             movingChessIndex: 4,
+        //             kill: [],
+        //         },
+        //     ],
+        //     totalSteps: 3,
+        //     win: 'Red',
+        // };
+        if (fetchBattleProcessDataResult) {
+            const getUrlString = location.href;
+            const url = new URL(getUrlString);
+            const activityName = url.searchParams.get('id');
+            // get socreI, scoreII from db through team1, team2
+            await fetchInsertBattleProcess(fetchBattleProcessDataResult, activityName, team1, team2);
+
             if (!notShow && team1 !== 'TBD' && team2 !== 'TBD' && team1 !== 'BYE' && team2 !== 'BYE') {
                 viewDetailOrShowResult(team1, team2);
             }
+
+            const scoreI = fetchBattleProcessDataResult.win === 'Red' ? 1 : 0;
+            const scoreII = fetchBattleProcessDataResult.win === 'Yellow' ? 1 : 0;
+
+            // update result of this round
+            globalData['results'][round][match] = [
+                scoreI > scoreII ? 1 : 0,
+                scoreII > scoreI ? 1 : 0,
+                { round: round, match: match },
+            ];
+
+            // initialize result of next round
+            globalData['results'][round + 1][match] = [, , { round: round + 1, match: match }];
+            plot(globalData, false);
         } else {
-            // node.js save result (score included) to db
-            //TODO:錯誤處理：fetchPythonCode 有誤要跳 alert
-            const fetchPythonCodeDataResultOfPlayerA = await fetchPythonCode(team1).then((response) => response);
-            const fetchPythonCodeDataResultOfPlayerB = await fetchPythonCode(team2).then((response) => response);
-            const pythonCodeData = {
-                pythonCodeA: fetchPythonCodeDataResultOfPlayerA,
-                pythonCodeB: fetchPythonCodeDataResultOfPlayerB,
-            };
-            //利用 python code 取得對戰過程
-            const fetchBattleProcessDataResult = await fetchBattleProcess(pythonCodeData).then((response) => response);
-            // Hint: fetchBattleProcessDataResult 上方是線上版，下方是測試資料
-            // const fetchBattleProcessDataResult = {
-            //     process: [
-            //         {
-            //             step: 1,
-            //             moving: 'Red',
-            //             movingBoardIndex: 4,
-            //             movingTo: 6,
-            //             movingChessIndex: 3,
-            //             kill: [],
-            //         },
-            //         {
-            //             step: 2,
-            //             moving: 'Yellow',
-            //             movingBoardIndex: 17,
-            //             movingTo: 13,
-            //             movingChessIndex: 1,
-            //             kill: [],
-            //         },
-            //         {
-            //             step: 3,
-            //             moving: 'Red',
-            //             movingBoardIndex: 5,
-            //             movingTo: 8,
-            //             movingChessIndex: 4,
-            //             kill: [],
-            //         },
-            //     ],
-            //     totalSteps: 3,
-            //     win: 'Red',
-            // };
-            if (fetchBattleProcessDataResult) {
-                const getUrlString = location.href;
-                const url = new URL(getUrlString);
-                const activityName = url.searchParams.get('id');
-                // get socreI, scoreII from db through team1, team2
-                await fetchInsertBattleProcess(fetchBattleProcessDataResult, activityName, team1, team2);
-
-                if (!notShow && team1 !== 'TBD' && team2 !== 'TBD' && team1 !== 'BYE' && team2 !== 'BYE') {
-                    viewDetailOrShowResult(team1, team2);
-                }
-
-                const scoreI = fetchBattleProcessDataResult.win === 'Red' ? 1 : 0;
-                const scoreII = fetchBattleProcessDataResult.win === 'Yellow' ? 1 : 0;
-
-                // update result of this round
-                globalData['results'][round][match] = [
-                    scoreI > scoreII ? 1 : 0,
-                    scoreII > scoreI ? 1 : 0,
-                    { round: round, match: match },
-                ];
-
-                // initialize result of next round
-                globalData['results'][round + 1][match] = [, , { round: round + 1, match: match }];
-                plot(globalData, false);
-            } else {
-                alert(`${team1},${team2} 程式碼有誤，請檢查程式`);
-                document.getElementsByClassName('round')[round].getElementsByClassName('match')[
-                    match
-                ].childNodes[0].childNodes[0].style.backgroundColor = 'red';
-                document.getElementsByClassName('round')[round].getElementsByClassName('match')[
-                    match
-                ].childNodes[0].childNodes[1].style.backgroundColor = 'red';
-            }
+            alert(`${team1},${team2} 程式碼有誤，請檢查程式`);
+            document.getElementsByClassName('round')[round].getElementsByClassName('match')[
+                match
+            ].childNodes[0].childNodes[0].style.backgroundColor = 'red';
+            document.getElementsByClassName('round')[round].getElementsByClassName('match')[
+                match
+            ].childNodes[0].childNodes[1].style.backgroundColor = 'red';
         }
-    } else {
-        alert('請等所有組別上傳完成檔案');
     }
+    // } else {
+    //     alert('請等所有組別上傳完成檔案');
+    // }
 };
 
 // initialize next round match info
@@ -366,15 +366,15 @@ function getBaseLog(x, y) {
 
 // TODO: need auto generate the logic function of each round
 const firstRound = () => {
-    console.log('readyToBattle', readyToBattle);
-    if (readyToBattle) {
-        globalData['results'][0] = battleOfTheRest(globalData['size'], 0);
-        globalData['results'][1] = resultsInit(globalData['size'], 1);
-        plot(globalData);
-        // document.getElementById('round0').disabled = true;
-    } else {
-        alert('請等所有組別上傳完成檔案');
-    }
+    // console.log('readyToBattle', readyToBattle);
+    // if (readyToBattle) {
+    globalData['results'][0] = battleOfTheRest(globalData['size'], 0);
+    globalData['results'][1] = resultsInit(globalData['size'], 1);
+    plot(globalData);
+    // document.getElementById('round0').disabled = true;
+    // } else {
+    //     alert('請等所有組別上傳完成檔案');
+    // }
 };
 
 const secondRound = () => {
@@ -520,7 +520,7 @@ window.onload = async () => {
                     parseInt(i / 2)
                 ].childNodes[0].childNodes[1].style.color = 'red';
             }
-            readyToBattle = false;
+            // readyToBattle = false;
         }
     }
 };
