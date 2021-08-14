@@ -248,7 +248,6 @@ const fetchInsertBattleProcess = async (fetchBattleProcessDataResult, activityNa
 };
 // simulate battle result from calling api
 const battleOfTwoTeam = async (data) => {
-    console.log('data', data);
     const { round, match, notShow } = data;
     const team1 =
         document.getElementsByClassName('round')[round].childNodes[match].childNodes[0].childNodes[0].childNodes[0]
@@ -311,7 +310,12 @@ const battleOfTwoTeam = async (data) => {
         //     win: 'Red',
         // };
         if (fetchPythonCodeDataResultOfPlayerA && fetchPythonCodeDataResultOfPlayerB) {
-            const fetchBattleProcessDataResult = await fetchBattleProcess(pythonCodeData).then((response) => response);
+            const fetchBattleProcessDataResult = await fetchBattleProcess(pythonCodeData).then((response) => 
+                {
+                console.log(round, match)
+                console.log(response['process'])
+                return response
+                });
             const getUrlString = location.href;
             const url = new URL(getUrlString);
             const activityName = url.searchParams.get('id');
