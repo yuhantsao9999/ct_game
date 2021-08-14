@@ -1,5 +1,6 @@
 let globalData;
 let activityName;
+let noFileTeams = {};
 
 (() => {
     const queryString = window.location.search;
@@ -66,18 +67,20 @@ const getFairTeams = (num, magic = false) => {
 // data initialize
 const dataGenerate = (teamNum) => {
     let powNum;
+    let round;
     // max round is six
     for (let i = 0; i <= 6; i++) {
         if (Math.pow(2, i) >= teamNum) {
             powNum = Math.pow(2, i);
             break;
         }
+        round = i + 1;
     }
     const data = {
         teams: [],
         results: [],
         size: powNum,
-        round: 1,
+        round: round,
     };
 
     const randomTeam = getRandomTeam(teamNum);
@@ -209,12 +212,14 @@ const fetchBattleProcess = async (pythonCodeData) => {
                     return response.json();
                 })
                 .then((response) => {
-                    console.log('battle response', response);
                     return response;
                 })
-                .catch((error) => console.error('Error:', error));
+                .catch(async (error) => {
+                    console.error('Error:', error)
+                    return await fetchBattleProcess(pythonCodeData)    
+                });
         } catch (error) {
-            return;
+          return;
         }
     }
 };
@@ -312,9 +317,7 @@ const battleOfTwoTeam = async (data) => {
         if (fetchPythonCodeDataResultOfPlayerA && fetchPythonCodeDataResultOfPlayerB) {
             const fetchBattleProcessDataResult = await fetchBattleProcess(pythonCodeData).then((response) => 
                 {
-                console.log(round, match)
-                console.log(response['process'])
-                return response
+                    return response
                 });
             const getUrlString = location.href;
             const url = new URL(getUrlString);
@@ -369,12 +372,13 @@ const battleOfTwoTeam = async (data) => {
 };
 
 // initialize next round match info
-const resultsInit = (size, nextRound) => {
+const resultsInit = (size, nextRound, finalRound = false) => {
     const scoreArr = [];
 
     for (let i = 0; i < size / Math.pow(2, nextRound); i += 2) {
         scoreArr.push([, , { round: nextRound, match: i / 2 }]);
     }
+
     return scoreArr;
 };
 
@@ -398,7 +402,7 @@ const secondRound = () => {
 
 const thirdRound = () => {
     globalData['results'][2] = battleOfTheRest(globalData['size'], 2);
-    globalData['results'][3] = resultsInit(globalData['size'], 3); // set 2 because of the third place and the forth place
+    globalData['results'][3] = resultsInit(globalData['size'], 3);
     plot(globalData);
     // document.getElementById('round2').disabled = true;
 };
@@ -412,7 +416,10 @@ const thirdRound = () => {
 // };
 
 const finalRound = () => {
-    globalData['results'][3] = battleOfTheRest(globalData['size'], 2);
+    globalData['results'][3] = battleOfTheRest(globalData['size'], 3);
+    globalData['results'][4] = resultsInit(globalData['size'], 4);
+    
+
     plot(globalData);
     // document.getElementById('round3').disable = true;
 };
@@ -448,6 +455,7 @@ const plot = async (data, edit = false) => {
                 init: data,
                 disableToolbar: true,
                 centerConnectors: true,
+                skipConsolationRound: true,
                 save: saveFn,
                 teamWidth: 90,
                 scoreWidth: 20,
@@ -455,14 +463,16 @@ const plot = async (data, edit = false) => {
                 matchMargin: 40,
             });
         });
+        await checkFileExists()
     } else {
-        // onMatchClick can't implement with edit mode (jQuery)
+        // onMatchClick can't impliment with edit mode (jQuery)
         $(function () {
             const container = $('#team');
             container.bracket({
                 init: data,
                 centerConnectors: true,
                 onMatchClick: battleOfTwoTeam,
+                skipConsolationRound: true,
                 //onMatchHover
                 teamWidth: 90,
                 scoreWidth: 20,
@@ -471,9 +481,38 @@ const plot = async (data, edit = false) => {
             });
         });
     }
+    
+    noFileTeamsToRed()
 };
 
-const teamGenerate = (totalTeamNum = 8) => {
+const noFileTeamsToRed = () => {
+    // no file teams need to be red
+    let index = 0
+    for (let i=globalData['round']; i>0; i--) {
+        for (let j=0; j<Math.pow(2, i); j++, index++) {
+            let round = globalData['round'] - i;
+            
+            // use index because of the following command will get 1-D array
+            const teamName = document.getElementsByClassName('label')[index].innerText;
+
+            if (noFileTeams[teamName]) {
+                if (j % 2 === 0) {
+                    document.getElementsByClassName('round')[round].getElementsByClassName('match')[
+                        parseInt(j / 2)
+                    ].childNodes[0].childNodes[0].style.color = 'red';
+                } else {
+                    document.getElementsByClassName('round')[round].getElementsByClassName('match')[
+                        parseInt(j / 2)
+                    ].childNodes[0].childNodes[1].style.color = 'red';
+                }
+
+            }
+        }      
+    }
+
+}
+
+const teamGenerate = async (totalTeamNum) => {
     globalData = dataGenerate(totalTeamNum);
     plot(globalData);
 
@@ -493,7 +532,7 @@ const teamGenerate = (totalTeamNum = 8) => {
     };
 
     // 創造剩餘組別對戰的button;
-    for (let i = 0; i < parseInt(getBaseLog(2, totalTeamNum)); i++) {
+    for (let i = 0; i < globalData['round']; i++) {
         const xRoundButton = document.createElement('button');
         xRoundButton.id = 'round' + i;
         xRoundButton.className = 'roundButton';
@@ -501,9 +540,27 @@ const teamGenerate = (totalTeamNum = 8) => {
         xRoundButton.setAttribute('onClick', mappingButtonFunction[i]);
         document.getElementById('roundButtons').appendChild(xRoundButton);
     }
+
 };
 
+const checkFileExists = async () => {
+    let powNum = globalData['round']
+
+    for (let i = 0; i < Math.pow(2, powNum); i++) {
+        const teamName = document.getElementsByClassName('label')[i].innerText;
+        if (teamName === 'BYE') {
+            continue;
+        }
+        const checkPythonCode = await fetchPythonCode(teamName).then((response) => response);
+        if (!checkPythonCode) {
+            noFileTeams[teamName] = true
+        }
+    }
+
+}
+
 //取得這個活動有幾組
+
 window.onload = async () => {
     totalTeamNum = await fetchTotalTeamNum(activityName);
     teamGenerate(totalTeamNum);
@@ -515,22 +572,8 @@ window.onload = async () => {
             break;
         }
     }
-    for (let i = 0; i < powNum; i++) {
-        const teamName = document.getElementsByClassName('label')[i].innerText;
-        if (teamName === 'BYE') {
-            continue;
-        }
-        const checkPythonCode = await fetchPythonCode(teamName).then((response) => response);
-        if (!checkPythonCode) {
-            if (i % 2 === 0) {
-                document.getElementsByClassName('round')[0].getElementsByClassName('match')[
-                    parseInt(i / 2)
-                ].childNodes[0].childNodes[0].style.color = 'red';
-            } else {
-                document.getElementsByClassName('round')[0].getElementsByClassName('match')[
-                    parseInt(i / 2)
-                ].childNodes[0].childNodes[1].style.color = 'red';
-            }
-        }
-    }
+
+    await checkFileExists();
+    noFileTeamsToRed();
+
 };
