@@ -157,8 +157,7 @@ const battleOfTheRest = (size, round) => {
 const viewDetailOrShowResult = (team1, team2, isEven) => {
     const copywriting = isEven
         ? `雙方平手，重開新局。
-
-        是否觀看 ${team1} 和${team2} 新一局的對戰過程過程嗎？`
+      是否觀看 ${team1} 和${team2} 新一局的對戰過程過程嗎？`
         : `觀看 ${team1} 和 ${team2} 的對戰過程嗎？`;
     if (confirm(copywriting)) {
         const getUrlString = location.href;
