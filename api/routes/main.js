@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { find, findTeamName } = require('../controller/teamData');
+const { find, findOne } = require('../controller/teamData');
 
 router.post('/checkUser', async (req, res) => {
     try {
@@ -23,7 +23,7 @@ router.post('/checkUser', async (req, res) => {
 });
 
 router.post('/findTeamName', async (req, res) => {
-    const result = await findTeamName(req);
+    const result = await findOne(req);
     if (result.error) {
         res.status(404).send('Not found');
     } else {

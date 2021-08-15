@@ -11,11 +11,12 @@ const uploadFile = async (req) => {
     return doc ? { error: false } : { error: true };
 };
 const insertOne = async (req) => {
-    const { teamID, activityName, teamName, originalname } = req.body;
+    const { teamID, activityName, teamName, originalname, uploadFileDeadline } = req.body;
     const insertData = {
         activityName,
         teamName,
         teamId: teamID,
+        uploadFileDeadline,
         originalname,
         game: '西瓜棋',
     };
@@ -23,20 +24,11 @@ const insertOne = async (req) => {
     return doc ? { error: false } : { error: true };
 };
 
-const findTeamName = async (req) => {
+const findOne = async (req) => {
     const data = req.body;
-    const { teamId } = data;
-    const cursor = await Users.find(data, { $orderby: { teamId: teamId } });
+    const cursor = await Users.find(data, { $orderby: { orderby: data.orderby } });
     const docArr = await cursor.next();
     return docArr ? { error: false, data: docArr } : { error: true };
-};
-
-const findActivityName = async (req) => {
-    const data = req.body;
-    const { activityName } = req.body;
-    const cursor = await Users.find(data, { $orderby: { activityName: activityName } });
-    const latestDoc = await cursor.next();
-    return latestDoc ? { error: false, data: latestDoc } : { error: true };
 };
 
 const find = async (req) => {
@@ -49,7 +41,6 @@ const find = async (req) => {
 module.exports = {
     uploadFile,
     insertOne,
-    findTeamName,
-    findActivityName,
+    findOne,
     find,
 };
