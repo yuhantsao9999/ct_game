@@ -9,11 +9,15 @@ const generateShortKey = (length) => {
         return result;
     }
 };
-function removeAllChildNodes(parent) {
+const removeAllChildNodes = (parent) => {
     while (parent.firstChild) {
         parent.removeChild(parent.firstChild);
     }
-}
+};
+
+document.getElementById('activityName').addEventListener('click', function () {
+    document.getElementById('generateTeamId').disabled = true;
+});
 
 const copyToText = () => {
     var TextRange = document.createRange();
@@ -66,14 +70,11 @@ const getHint = async () => {
     if (!(await isActivityNameExist(activityName))) {
         document.getElementById('hint').innerHTML = `恭禧您！${activityName} 可以使用`;
         document.getElementById('hint').style = 'color: green';
-        document.getElementById('generateTeamId').disabled = '';
-        document.getElementById('generateTeamId').style = '';
-        // alert(`恭禧您！${activityName} 可以使用`);
+        document.getElementById('generateTeamId').disabled = false;
     } else {
         document.getElementById('hint').innerHTML = `此活動名稱 ${activityName} 已被使用，請選擇其他活動名稱`;
         document.getElementById('hint').style = 'color: red';
-        // alert(`此活動名稱 ${activityName} 已被使用，請選擇其他活動名稱`);
-        // window.location.href = './set';
+        document.getElementById('generateTeamId').disabled = true;
     }
 };
 

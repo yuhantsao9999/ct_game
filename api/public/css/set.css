@@ -229,9 +229,14 @@ textarea {
     border-radius: 10px;
     -webkit-appearance: none;
 }
-.button:hover,
-.button:focus {
+.button:hover:enabled,
+.button:focus:enabled {
     background: #5c8f3a;
+}
+
+button:disabled,
+button[disabled] {
+    background: gray;
 }
 
 .button-block {
