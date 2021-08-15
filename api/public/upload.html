@@ -41,7 +41,6 @@
                             <p>檔案格式僅支援 aia</p>
                             <p id="file-return"></p>
                         </div>
-                        <!-- //傳給品逵解壓縮 -->
                         <button onclick="uploadTeamFile()" type="submit" class="button button-block">上傳</button>
                     </div>
                 </div>
@@ -84,27 +83,4 @@
     <script src="./js/convertToPython/google-blockly/generators/python/variables.js"></script>
     <script src="./js/convertToPython/google-blockly/generators/python/procedures.js"></script>
     <script src="./js/convertToPython/google-blockly/msg/js/en.js"></script>
-    <script>
-        function generate() {
-            // Parse the XML into a tree.
-            // xmlText 檔案解壓縮後拿到 xml
-            // var xmlText = document.getElementById('xml_input').value;
-            const xmlText = '';
-            // console.log('xmlText', xmlText);
-            try {
-                var xml = Blockly.Xml.textToDom(xmlText);
-            } catch (e) {
-                alert(e);
-                return;
-            }
-            // Create a headless workspace.
-            var demoWorkspace = new Blockly.Workspace();
-            Blockly.Xml.domToWorkspace(xml, demoWorkspace);
-            // 傳 code 給後端
-            var code = Blockly.Python.workspaceToCode(demoWorkspace);
-            // console.log('code', code);
-            // fetch 給後端
-            // document.getElementById('code_output').value = code;
-        }
-    </script>
 </html>

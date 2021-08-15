@@ -15,7 +15,6 @@ const loginActivity = () => {
                 console.log(error);
                 document.getElementById('error_Activity').innerHTML = error;
             } else {
-                // window.location = `./grouping?id=${activityName}`;
                 return response.json();
             }
         })
