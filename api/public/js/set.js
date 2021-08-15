@@ -1,3 +1,19 @@
+(() => {
+    let today = new Date();
+    let dd = today.getDate();
+    let mm = today.getMonth() + 1; //January is 0!
+    let yyyy = today.getFullYear();
+    if (dd < 10) {
+        dd = '0' + dd;
+    }
+    if (mm < 10) {
+        mm = '0' + mm;
+    }
+
+    let now = yyyy + '-' + mm + '-' + dd + 'T00:00';
+    document.getElementById('uploadDeadline').setAttribute('min', now);
+})();
+
 const generateShortKey = (length) => {
     {
         let result = '';
@@ -20,18 +36,12 @@ document.getElementById('activityName').addEventListener('click', function () {
 });
 
 const copyToText = () => {
-    var TextRange = document.createRange();
-
+    let TextRange = document.createRange();
     TextRange.selectNode(document.getElementById('random-team-id-list'));
-
     sel = window.getSelection();
-
     sel.removeAllRanges();
-
     sel.addRange(TextRange);
-
     document.execCommand('copy');
-
     alert('複製完成！');
 };
 
@@ -85,10 +95,10 @@ const insertTeamId = async () => {
         removeAllChildNodes(container);
 
         const activityName = document.getElementById('activityName').value;
-
+        const uploadFileDeadline = document.querySelector('input[type="datetime-local"]').value;
         const teamTotalNumber = Number(document.getElementById('total-team-number').value);
 
-        if (!activityName || !teamTotalNumber) {
+        if (!activityName || !teamTotalNumber || !uploadFileDeadline) {
             alert('請輸入資料');
         } else {
             const dateDiv = document.createElement('div');
@@ -99,16 +109,12 @@ const insertTeamId = async () => {
                 const teamID = generateShortKey(5);
                 //給予隊伍隨機代號
                 const teamDiv = document.createElement('div');
-
                 const teamLi = document.createElement('li');
-
                 const teamNameContent = document.createTextNode('Team ' + i + ' : ' + teamID);
-
                 teamDiv.appendChild(teamNameContent);
-
                 teamLi.appendChild(teamDiv);
 
-                if (i < 16) {
+                if (i < 20) {
                     document.getElementById('random-team-id-list').appendChild(teamLi);
                 } else {
                     document.getElementById('random-team-id-list2').appendChild(teamLi);
@@ -116,7 +122,7 @@ const insertTeamId = async () => {
 
                 fetch('/api/insertTeamId', {
                     method: 'post',
-                    body: JSON.stringify({ teamID, teamName: `Team ${i}`, activityName }),
+                    body: JSON.stringify({ teamID, teamName: `Team ${i}`, activityName, uploadFileDeadline }),
                     headers: {
                         'content-type': 'application/json',
                     },

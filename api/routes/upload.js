@@ -1,7 +1,6 @@
 const express = require('express');
 const multer = require('multer');
-const { uploadFile } = require('../controller/teamData');
-const { insertOneCode } = require('../controller/convertPythonCode');
+const { uploadFile, findOne } = require('../controller/teamData');
 const router = express.Router();
 
 const upload = multer({
@@ -11,6 +10,16 @@ const upload = multer({
         }
         cb(null, true);
     },
+});
+
+router.post('/findUploadDealine', async (req, res) => {
+    const userData = await findOne(req);
+    if (userData.error) {
+        res.status(404).send('Not found');
+    } else {
+        console.log('userData.data', userData.data);
+        res.send(userData.data);
+    }
 });
 
 router.post('/uploadFileName', upload.single('files'), async (req, res) => {

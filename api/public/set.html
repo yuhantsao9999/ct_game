@@ -28,12 +28,14 @@
                                 <input id="activityName" placeholder="請輸入活動名稱" required style="width: 60%" />
                                 <button class="copy start-block" onclick="getHint()">檢查活動名稱</button>
                             </div>
-                            <p>請先檢查活動名稱是否有效，再產出小組代碼，避免與其他活動重複產出代碼</p>
                             <p id="hint"></p>
-
+                            <div class="subtitle">截止上傳時間</div>
+                            <input type="datetime-local" id="uploadDeadline" name="deadline" value="請輸入截止時間" 
+                            min="2000-06-07T00:00" max="2100-03-13T00:00"></input>
                             <div class="subtitle">小組數量</div>
                             <div class="field-wrap">
                                 <input id="total-team-number" placeholder="請輸入參與小組數量" required />
+                                <p>請先檢查活動名稱是否有效，再產出小組代碼，避免與其他活動重複產出代碼</p>
                             </div>
                             <button
                                 id="generateTeamId"
