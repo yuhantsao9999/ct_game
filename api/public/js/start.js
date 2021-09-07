@@ -1,25 +1,20 @@
 const loginActivity = () => {
-    const data = {
-        activityName: document.getElementById('activityName').value,
-    };
-    fetch('/checkActivityExist', {
+    const activityName = document.getElementById('activityName').value;
+    fetch('/api/checkActivityExist', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify({ activityName: activityName }),
     })
         .then(async (response) => {
             if (!response.ok) {
                 const error = await response.text();
                 console.log(error);
-                document.getElementById('error_Activity').innerHTML = error;
+                document.getElementById('error_Activity').innerHTML = '無此活動名稱';
             } else {
-                return response.json();
+                window.location = `./grouping?id=${activityName}`;
             }
-        })
-        .then((data) => {
-            window.location = `./grouping?id=${data.activityName}`;
         })
         .catch((err) => {
             console.log(err);

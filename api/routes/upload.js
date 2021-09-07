@@ -1,6 +1,6 @@
 const express = require('express');
 const multer = require('multer');
-const { uploadFile, findOne } = require('../controller/teamData');
+const { checkUploadDeadline, uploadFileName } = require('../controller/file');
 const router = express.Router();
 
 const upload = multer({
@@ -12,18 +12,18 @@ const upload = multer({
     },
 });
 
-router.post('/findUploadDealine', async (req, res) => {
-    const userData = await findOne(req);
-    if (userData.error) {
-        res.status(404).send('Not found');
+router.post('/getfileUploadDeadline', async (req, res) => {
+    const { teamId } = req.body;
+    const dealine = await checkUploadDeadline(teamId);
+    if (dealine.error) {
+        res.status(404).send('Upload has closed');
     } else {
-        console.log('userData.data', userData.data);
-        res.send(userData.data);
+        res.send(dealine);
     }
 });
 
 router.post('/uploadFileName', upload.single('files'), async (req, res) => {
-    const result = await uploadFile(req);
+    const result = await uploadFileName(req.file, req.body);
     if (result.error) {
         console.log(`upload error`);
         res.status(404).send('upload error');

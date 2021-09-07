@@ -1,33 +1,23 @@
 const express = require('express');
 const router = express.Router();
-const { find, findOne } = require('../controller/teamData');
+const { signIn } = require('../controller/account');
 
-router.post('/checkUser', async (req, res) => {
+router.post('/signIn', async (req, res) => {
     try {
         let { userId } = req.body;
         if (userId === 'ta' || userId === 'teacher') {
             res.send({ userId });
         } else {
-            const data = { body: { teamId: userId } };
-            const result = await find(data);
+            const data = req.body;
+            const result = await signIn(data);
             if (result.error) {
                 res.status(404).send('查無此使用者');
             } else {
-                res.send({ userId });
-                // res.redirect(`/upload?userId=${userId}`);
+                res.send(result);
             }
         }
     } catch (err) {
         return res.status(500);
-    }
-});
-
-router.post('/findTeamName', async (req, res) => {
-    const result = await findOne(req);
-    if (result.error) {
-        res.status(404).send('Not found');
-    } else {
-        res.send(result.data);
     }
 });
 

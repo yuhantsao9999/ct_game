@@ -10,8 +10,8 @@ const fetchUploadDealine = async (teamId, activityName, teamName) => {
         teamName,
     };
     try {
-        return fetch('/api/findUploadDealine', {
-            method: 'post',
+        return fetch('/api/getfileUploadDeadline', {
+            method: 'POST',
             body: JSON.stringify(data),
             headers: {
                 'content-type': 'application/json',
@@ -44,13 +44,8 @@ const uploadTeamFile = async () => {
     const activityName = url.searchParams.get('activityName');
     const input = document.querySelector('input[type="file"]');
     if (teamId && teamName) {
-        const data = {
-            teamId,
-            teamName,
-        };
         const deadline = await fetchUploadDealine(teamId, activityName, teamName);
         let now = new Date();
-        console.log('deadline', deadline);
         if (timeToFormat(deadline) < timeToFormat(now)) {
             alert('上傳時間已截止');
             window.location.href = './main';
@@ -59,7 +54,7 @@ const uploadTeamFile = async () => {
             for (file of input.files) {
                 formData.append('files', file, file.name);
             }
-            formData.append('data', JSON.stringify(data));
+            formData.append('teamId', JSON.stringify(teamId));
             fetch('http://140.122.164.194:5000/upload', {
                 mode: 'cors',
                 method: 'post',
@@ -112,7 +107,7 @@ const uploadTeamFile = async () => {
                         })
                         .then((response) => {
                             fetch('/api/insertPythonCode', {
-                                method: 'post',
+                                method: 'POST',
                                 body: JSON.stringify({
                                     teamId,
                                     activityName,
@@ -129,16 +124,14 @@ const uploadTeamFile = async () => {
                                 .then((response) => {
                                     console.log(response);
                                     fetch('/api/uploadFileName', {
-                                        method: 'post',
+                                        method: 'POST',
                                         body: formData,
                                     })
                                         .then((response) => {
-                                            console.log('uploadFileName response', response);
                                             return response;
                                         })
                                         .then((response) => {
                                             if (response.status == 200) {
-                                                console.log('Success:', response);
                                                 alert(`完成提交！`);
                                             }
                                         })

@@ -1,24 +1,42 @@
-const Code = require('../models/PythonCode');
+const mysql = require('../module/db');
 
-const insertOneCode = async (req) => {
-    const { teamId, activityName, teamName, pythonCode } = req.body;
-    const insertData = {
-        teamId,
-        activityName,
-        teamName,
-        pythonCode,
-    };
-    const doc = await Code.insertOne(insertData);
-    return doc ? { error: false } : { error: true };
+const insertPythonCode = async (teamData) => {
+    try {
+        const { teamId, activityName, pythonCode } = teamData;
+        const sql = `INSERT INTO CODE (userId, activityName, pythonCode) VALUES ('${teamId}', '${activityName}', '${pythonCode}') ON DUPLICATE KEY UPDATE pythonCode = '${pythonCode}'`;
+        const result = await mysql.query(sql).catch((err) => {
+            console.log(err);
+            return false;
+        });
+        if (result) {
+            return { error: false };
+        }
+        return { error: true };
+    } catch (err) {
+        return err;
+    }
 };
-const findLatestCode = async (req) => {
-    const data = req.body;
-    const doc = await Code.findOne(data, { created_at: -1 });
-    const latestDoc = await doc.next();
-    return latestDoc ? { error: false, data: latestDoc } : { error: true };
+
+const findPythonCode = async (teamData) => {
+    try {
+        const { teamName, activityName } = teamData;
+        const sql = `SELECT pythonCode FROM CODE NATURAL JOIN USERS WHERE teamName = '${teamName}' and activityName = '${activityName}'`;
+        const result = await mysql.query(sql).catch((err) => {
+            console.log(err);
+            return false;
+        });
+        if (result.length > 0) {
+            const { pythonCode } = result[0];
+            return { error: false, pythonCode };
+        } else {
+            return { error: true };
+        }
+    } catch (err) {
+        return err;
+    }
 };
 
 module.exports = {
-    insertOneCode,
-    findLatestCode,
+    insertPythonCode,
+    findPythonCode,
 };

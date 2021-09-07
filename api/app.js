@@ -1,4 +1,3 @@
-require('./models/Model.js');
 require('dotenv').config();
 const express = require('express');
 const path = require('path');
@@ -20,7 +19,6 @@ const { pages, publicApi } = require('./router');
 app.use(express.static('public', { extensions: ['html'] }));
 
 app.use('/', pages.main);
-app.use('/', pages.start);
 app.use('/api', pages.set);
 app.use('/api', pages.upload);
 app.use('/api', pages.grouping);

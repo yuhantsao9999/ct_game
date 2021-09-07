@@ -48,8 +48,8 @@ const copyToText = () => {
 const isActivityNameExist = async (activityName) => {
     let bool;
     if (activityName) {
-        bool = await fetch('/api/checkActivityName', {
-            method: 'post',
+        bool = await fetch('/api/checkActivityExist', {
+            method: 'POST',
             body: JSON.stringify({ activityName: activityName }),
             headers: {
                 'content-type': 'application/json',
@@ -59,8 +59,7 @@ const isActivityNameExist = async (activityName) => {
                 return response;
             })
             .then((response) => {
-                console.log('set response', response);
-                if (response.status == 409) {
+                if (response.status == 404) {
                     return false;
                 } else {
                     return true;
@@ -77,6 +76,7 @@ const isActivityNameExist = async (activityName) => {
 };
 const getHint = async () => {
     const activityName = document.getElementById('activityName').value;
+    if (!activityName) return;
     if (!(await isActivityNameExist(activityName))) {
         document.getElementById('hint').innerHTML = `恭禧您！${activityName} 可以使用`;
         document.getElementById('hint').style = 'color: green';
@@ -98,8 +98,10 @@ const insertTeamId = async () => {
         const uploadFileDeadline = document.querySelector('input[type="datetime-local"]').value;
         const teamTotalNumber = Number(document.getElementById('total-team-number').value);
 
-        if (!activityName || !teamTotalNumber || !uploadFileDeadline) {
-            alert('請輸入資料');
+        if (!activityName || !uploadFileDeadline) {
+            alert('請輸入完整資料');
+        } else if (!teamTotalNumber || teamTotalNumber < 4) {
+            alert('小組數量需大於四組');
         } else {
             const dateDiv = document.createElement('div');
             const activityNameContent = document.createTextNode(activityName);
@@ -121,8 +123,14 @@ const insertTeamId = async () => {
                 }
 
                 fetch('/api/insertTeamId', {
-                    method: 'post',
-                    body: JSON.stringify({ teamID, teamName: `Team ${i}`, activityName, uploadFileDeadline }),
+                    method: 'POST',
+                    body: JSON.stringify({
+                        teamID,
+                        teamName: `Team ${i}`,
+                        activityName,
+                        uploadFileDeadline,
+                        game: '西瓜棋',
+                    }),
                     headers: {
                         'content-type': 'application/json',
                     },

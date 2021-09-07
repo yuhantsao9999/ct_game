@@ -1,16 +1,16 @@
 import { useEffect, useState } from 'react';
-import fetchBattleProcessStream from '../stream/fetchBattleProcess';
+import fetchBattleDataStream from '../stream/fetchBattleProcess';
 
-export const useFetchBattleProcess = (activityName, playerA, playerB) => {
+export const useFetchBattleData = (activityName, playerA, playerB) => {
     const [isLoading, setIsLoading] = useState(false);
-    const [result, setResult] = useState({ activityName: '', playerA: '', playerB: '', winner: '', process: [] });
+    const [result, setResult] = useState({ winner: '', process: [] });
     const [error, setError] = useState('');
 
     useEffect(() => {
         const fetchBattleProcess = async () => {
             setIsLoading(true);
             try {
-                const battleProcessResult = await fetchBattleProcessStream(activityName, playerA, playerB).then(
+                const battleProcessResult = await fetchBattleDataStream(activityName, playerA, playerB).then(
                     (response) => response
                 );
                 setResult(battleProcessResult);

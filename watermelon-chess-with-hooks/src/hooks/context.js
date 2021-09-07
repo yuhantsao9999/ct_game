@@ -1,50 +1,44 @@
 import * as React from 'react';
 import { useState, createContext, useEffect, useMemo } from 'react';
 import { blackBoxData } from '../constant/chessIndex';
-import { useFetchBattleProcess } from './useFetchBattleProcess';
+import { useFetchBattleData } from './useFetchBattleProcess';
 
 //建立對戰過程的 context
 export const BattleProcessContext = createContext({
     activityName: '',
     playerA: '',
     playerB: '',
-    winner: '',
+    result: {
+        winner: '',
+        process: [],
+    },
     totalSteps: -1,
-    process: [],
 });
 
 export const BattleProcessProvider = ({ children }) => {
     const [activityName, setActivityName] = useState('');
     const [playerA, setPlayerA] = useState('');
     const [playerB, setPlayerB] = useState('');
-    //TODO:之後要補上 winner
-    const [winner, setWinner] = useState('');
     const [result, setResult] = useState({
-        activityName: '',
-        playerA: '',
-        playerB: '',
         winner: '',
-        totalSteps: -1,
         process: [],
     });
     //dummydata 就是 blackBoxData
-    // const processData = blackBoxData;
-    const { result: processData } = useFetchBattleProcess(activityName, playerA, playerB);
+    // const processResult = blackBoxData;
+    const { result: processResult } = useFetchBattleData(activityName, playerA, playerB);
     useEffect(() => {
-        setResult(processData);
-    }, [processData]);
+        setResult({ process: processResult.process, winner: processResult.winner });
+    }, [processResult]);
 
     const context = useMemo(
         () => ({
             activityName,
             playerA,
             playerB,
-            winner,
             result,
             setActivityName,
             setPlayerA,
             setPlayerB,
-            setWinner,
             setResult,
         }),
         [activityName, playerA, playerB, result]

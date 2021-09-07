@@ -14,8 +14,8 @@ const fetchTotalTeamNum = async (activityName) => {
         activityName,
     };
     try {
-        return fetch('/api/findTotalTeamNum', {
-            method: 'post',
+        return fetch('/api/getTotalTeamNum', {
+            method: 'POST',
             body: JSON.stringify(data),
             headers: {
                 'content-type': 'application/json',
@@ -25,7 +25,7 @@ const fetchTotalTeamNum = async (activityName) => {
                 return response.json();
             })
             .then((response) => {
-                return response.length;
+                return response.totalTeamNumber;
             })
             .catch((error) => {
                 console.error('Error:', error);
@@ -181,8 +181,8 @@ const fetchPythonCode = async (player) => {
         activityName: activityName,
     };
     try {
-        return fetch('/api/findOnePythonCode', {
-            method: 'post',
+        return fetch('/api/findPythonCode', {
+            method: 'POST',
             body: JSON.stringify(data),
             headers: {
                 'content-type': 'application/json',
@@ -236,16 +236,18 @@ const fetchInsertBattleProcess = async (fetchBattleProcessDataResult, activityNa
         totalSteps,
         //winner 可能會是"Red",'Yellow','Even'
         winner: winner == 'Red' ? team1 : winner == 'Yellow' ? team2 : 'No Team',
+        game: '西瓜棋',
     };
     try {
         return fetch('/api/insertBattleProcess', {
-            method: 'post',
+            method: 'POST',
             body: JSON.stringify(data),
             headers: {
                 'content-type': 'application/json',
             },
         })
             .then((response) => {
+                console.log('insertBattleProcess response', response);
                 return response;
             })
             .then((response) => console.log('Success:', response))
@@ -286,45 +288,45 @@ const battleOfTwoTeam = async (data) => {
             pythonCodeB: fetchPythonCodeDataResultOfPlayerB,
         };
         //利用 python code 取得對戰過程
-        // Hint: fetchBattleProcessDataResult 上方是線上版，下方是測試資料
-        // const fetchBattleProcessDataResult = {
-        //     process: [
-        //         {
-        //             step: 1,
-        //             moving: 'Red',
-        //             movingBoardIndex: 4,
-        //             movingTo: 6,
-        //             movingChessIndex: 3,
-        //             kill: [],
-        //         },
-        //         {
-        //             step: 2,
-        //             moving: 'Yellow',
-        //             movingBoardIndex: 17,
-        //             movingTo: 13,
-        //             movingChessIndex: 1,
-        //             kill: [],
-        //         },
-        //         {
-        //             step: 3,
-        //             moving: 'Red',
-        //             movingBoardIndex: 5,
-        //             movingTo: 8,
-        //             movingChessIndex: 4,
-        //             kill: [],
-        //         },
-        //     ],
-        //     totalSteps: 3,
-        //     win: 'Red',
-        // };
         if (fetchPythonCodeDataResultOfPlayerA && fetchPythonCodeDataResultOfPlayerB) {
-            const fetchBattleProcessDataResult = await fetchBattleProcess(pythonCodeData).then((response) => {
-                return response;
-            });
+            // const fetchBattleProcessDataResult = await fetchBattleProcess(pythonCodeData).then((response) => {
+            //     return response;
+            // });
             const getUrlString = location.href;
             const url = new URL(getUrlString);
             const activityName = url.searchParams.get('id');
             // get socreI, scoreII from db through team1, team2
+            // Hint: fetchBattleProcessDataResult 上方是線上版，下方是測試資料
+            const fetchBattleProcessDataResult = {
+                process: [
+                    {
+                        step: 1,
+                        moving: 'Red',
+                        movingBoardIndex: 4,
+                        movingTo: 6,
+                        movingChessIndex: 3,
+                        kill: [],
+                    },
+                    {
+                        step: 2,
+                        moving: 'Yellow',
+                        movingBoardIndex: 17,
+                        movingTo: 13,
+                        movingChessIndex: 1,
+                        kill: [],
+                    },
+                    {
+                        step: 3,
+                        moving: 'Red',
+                        movingBoardIndex: 5,
+                        movingTo: 8,
+                        movingChessIndex: 4,
+                        kill: [],
+                    },
+                ],
+                totalSteps: 3,
+                win: 'Red',
+            };
             await fetchInsertBattleProcess(fetchBattleProcessDataResult, activityName, team1, team2);
 
             if (!notShow && team1 !== 'TBD' && team2 !== 'TBD' && team1 !== 'BYE' && team2 !== 'BYE') {

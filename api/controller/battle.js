@@ -1,27 +1,44 @@
-const Battle = require('../models/Battle');
+const mysql = require('../module/db');
 
-const insertOneProcess = async (req) => {
-    const { activityName, playerA, playerB, winner, process } = req.body;
-
-    const insertData = {
-        activityName,
-        playerA,
-        playerB,
-        winner,
-        process,
-    };
-    const doc = await Battle.insertOne(insertData);
-    return doc ? { error: false } : { error: true };
+const insertBattleProcess = async (teamData) => {
+    try {
+        const { activityName, playerA, playerB, process, winner, game } = teamData;
+        const sql = `INSERT INTO BATTLE (activityName, playerA, playerB, winner, process, game) VALUES ('${activityName}', '${playerA}', '${playerB}','${winner}','${JSON.stringify(
+            process
+        )}','${game}') ON DUPLICATE KEY UPDATE process = '${process}' AND winner = '${winner}' `;
+        const result = await mysql.query(sql).catch((err) => {
+            console.log(err);
+            return false;
+        });
+        if (result) {
+            return { error: false };
+        }
+        return { error: true };
+    } catch (err) {
+        return err;
+    }
 };
 
-const findLatestProcess = async (req) => {
-    const data = req.body;
-    const cursor = await Battle.findOne(data, { created_at: -1 });
-    const latestDoc = await cursor.next();
-    return latestDoc ? { error: false, data: latestDoc } : { error: true };
+const findBattleData = async (teamData) => {
+    try {
+        const { activityName, playerA, playerB, game } = teamData;
+        const sql = `SELECT * FROM BATTLE WHERE activityName = '${activityName}' AND playerA = '${playerA}' AND playerB='${playerB}' AND game='${game}'`;
+        const result = await mysql.query(sql).catch((err) => {
+            console.log(err);
+            return false;
+        });
+        if (result) {
+            const { process, winner } = result[0];
+            return { error: false, process: JSON.parse(process), winner };
+        } else {
+            return { error: true };
+        }
+    } catch (err) {
+        return err;
+    }
 };
 
 module.exports = {
-    insertOneProcess,
-    findLatestProcess,
+    insertBattleProcess,
+    findBattleData,
 };

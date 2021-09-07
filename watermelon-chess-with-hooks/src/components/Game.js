@@ -30,7 +30,7 @@ function Game() {
             latestMoveChessName: null, // 最新移动的棋子的名称
         },
     ]);
-    const { result: battleData } = useContext(BattleProcessContext);
+    const { result: battleData, playerA, playerB } = useContext(BattleProcessContext);
 
     let [actions, setActions] = useState(initData);
     let [index, setIndex] = useState(0);
@@ -40,11 +40,10 @@ function Game() {
 
     useEffect(() => {
         const convertBattleProcess = matchBattleProcessData(battleData.process);
-        console.log('convertBattleProcess', convertBattleProcess);
         setActions(convertBattleProcess);
 
         if (battleData.process.length !== 0 && index === battleData.process.length) {
-            const winner = mappingWinnerIndex(battleData);
+            const winner = mappingWinnerIndex(battleData, playerA, playerB);
             setWinnerSide(winner);
         }
     }, [battleData, index]);
