@@ -20,7 +20,7 @@ const insertPythonCode = async (teamData) => {
 const findPythonCode = async (teamData) => {
     try {
         const { teamName, activityName } = teamData;
-        const sql = `SELECT pythonCode FROM Code NATURAL JOIN USERS WHERE teamName = '${teamName}' and activityName = '${activityName}'`;
+        const sql = `SELECT pythonCode FROM Code NATURAL JOIN Users WHERE teamName = '${teamName}' and activityName = '${activityName}'`;
         const result = await mysql.query(sql).catch((err) => {
             console.log(err);
             return false;
