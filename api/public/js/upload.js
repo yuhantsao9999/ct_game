@@ -44,6 +44,10 @@ const uploadTeamFile = async () => {
     const activityName = url.searchParams.get('activityName');
     const input = document.querySelector('input[type="file"]');
     if (teamId && teamName) {
+        const data = {
+            teamId,
+            teamName,
+        };
         const deadline = await fetchUploadDealine(teamId, activityName, teamName);
         let now = new Date();
         if (timeToFormat(deadline) < timeToFormat(now)) {
@@ -55,10 +59,15 @@ const uploadTeamFile = async () => {
                 formData.append('files', file, file.name);
             }
             formData.append('teamId', JSON.stringify(teamId));
+            const formDataforUpload = new FormData();
+            for (file of input.files) {
+                formDataforUpload.append('files', file, file.name);
+            }
+            formDataforUpload.append('data', JSON.stringify(data));
             fetch('http://140.122.164.194:5000/upload', {
                 mode: 'cors',
                 method: 'post',
-                body: formData,
+                body: formDataforUpload,
             })
                 .then((response) => {
                     console.log('upload response', response);
