@@ -3,7 +3,7 @@ const mysql = require('../module/db');
 const insertBattleProcess = async (teamData) => {
     try {
         const { activityName, playerA, playerB, process, winner, game } = teamData;
-        const sql = `INSERT INTO BATTLE (activityName, playerA, playerB, winner, process, game) VALUES ('${activityName}', '${playerA}', '${playerB}','${winner}','${JSON.stringify(
+        const sql = `INSERT INTO Battle (activityName, playerA, playerB, winner, process, game) VALUES ('${activityName}', '${playerA}', '${playerB}','${winner}','${JSON.stringify(
             process
         )}','${game}') ON DUPLICATE KEY UPDATE process = '${process}' AND winner = '${winner}' `;
         const result = await mysql.query(sql).catch((err) => {
@@ -22,7 +22,7 @@ const insertBattleProcess = async (teamData) => {
 const findBattleData = async (teamData) => {
     try {
         const { activityName, playerA, playerB, game } = teamData;
-        const sql = `SELECT * FROM BATTLE WHERE activityName = '${activityName}' AND playerA = '${playerA}' AND playerB='${playerB}' AND game='${game}'`;
+        const sql = `SELECT * FROM Battle WHERE activityName = '${activityName}' AND playerA = '${playerA}' AND playerB='${playerB}' AND game='${game}'`;
         const result = await mysql.query(sql).catch((err) => {
             console.log(err);
             return false;

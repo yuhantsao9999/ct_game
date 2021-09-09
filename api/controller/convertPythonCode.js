@@ -3,7 +3,7 @@ const mysql = require('../module/db');
 const insertPythonCode = async (teamData) => {
     try {
         const { teamId, activityName, pythonCode } = teamData;
-        const sql = `INSERT INTO CODE (userId, activityName, pythonCode) VALUES ('${teamId}', '${activityName}', '${pythonCode}') ON DUPLICATE KEY UPDATE pythonCode = '${pythonCode}'`;
+        const sql = `INSERT INTO Code (userId, activityName, pythonCode) VALUES ('${teamId}', '${activityName}', '${pythonCode}') ON DUPLICATE KEY UPDATE pythonCode = '${pythonCode}'`;
         const result = await mysql.query(sql).catch((err) => {
             console.log(err);
             return false;
@@ -20,7 +20,7 @@ const insertPythonCode = async (teamData) => {
 const findPythonCode = async (teamData) => {
     try {
         const { teamName, activityName } = teamData;
-        const sql = `SELECT pythonCode FROM CODE NATURAL JOIN USERS WHERE teamName = '${teamName}' and activityName = '${activityName}'`;
+        const sql = `SELECT pythonCode FROM Code NATURAL JOIN USERS WHERE teamName = '${teamName}' and activityName = '${activityName}'`;
         const result = await mysql.query(sql).catch((err) => {
             console.log(err);
             return false;

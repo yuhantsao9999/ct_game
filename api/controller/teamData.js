@@ -3,7 +3,7 @@ const mysql = require('../module/db');
 const getTotalTeamNum = async (activityData) => {
     try {
         const { activityName } = activityData;
-        const sql = 'SELECT userId FROM USERS WHERE activityName = ?';
+        const sql = 'SELECT userId FROM Users WHERE activityName = ?';
         const userList = await mysql.query(sql, activityName).catch((err) => {
             console.log(err);
             return false;

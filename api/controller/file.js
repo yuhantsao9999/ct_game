@@ -22,7 +22,7 @@ const uploadFileName = async (file, data) => {
     try {
         const { teamId } = data;
         const { originalname } = file;
-        const sql = `UPDATE FILE SET fileName = '${originalname}' WHERE teamId = ${teamId}`;
+        const sql = `UPDATE File SET fileName = '${originalname}' WHERE teamId = ${teamId}`;
         const result = await mysql.query(sql).catch((err) => {
             console.log(err);
             return false;
