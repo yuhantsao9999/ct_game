@@ -13,12 +13,14 @@ const signIn = () => {
                 'content-type': 'application/json',
             },
         })
-            .then((response) => {
-                return response.json();
-            })
-            .then((response) => {
-                localStorage.setItem('userId', response.userId);
-                window.location = `/upload?teamId=${response.userId}&activityName=${response.activityName}&teamName=${response.teamName}`;
+            .then(async (response) => {
+                console.log('response1', response);
+                if (!response.ok) {
+                    document.getElementById('error_signIn').innerHTML = '無此使用者代碼';
+                } else {
+                    localStorage.setItem('userId', response.userId);
+                    window.location = `/upload?teamId=${response.userId}&activityName=${response.activityName}&teamName=${response.teamName}`;
+                }
             })
             .catch((error) => console.error('Error:', error));
     }
