@@ -8,8 +8,9 @@ const signIn = async (account) => {
             console.log(err);
             return false;
         });
-        const { activityName, teamName } = result[0];
+        console.log('result', result);
         if (result.length > 0) {
+            const { activityName, teamName } = result[0];
             return { error: false, userId: userId, activityName: activityName, teamName: teamName };
         } else {
             return { error: true };
