@@ -13,6 +13,7 @@ router.post('/insertBattleProcess', async (req, res) => {
 router.post('/getBattleData', async (req, res) => {
     const data = req.body;
     const result = await findBattleData(data);
+    console.log("result test",result)
     if (result.error) {
         res.status(404).send('Not found');
     } else res.send(result);

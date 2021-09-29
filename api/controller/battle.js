@@ -5,7 +5,7 @@ const insertBattleProcess = async (teamData) => {
         const { activityName, playerA, playerB, process, winner, game } = teamData;
         const sql = `INSERT INTO Battle (activityName, playerA, playerB, winner, process, game) VALUES ('${activityName}', '${playerA}', '${playerB}','${winner}','${JSON.stringify(
             process
-        )}','${game}') ON DUPLICATE KEY UPDATE process = '${process}' AND winner = '${winner}' `;
+        )}','${game}') ON DUPLICATE KEY UPDATE process = '${process}', winner = '${winner}' `;
         const result = await mysql.query(sql).catch((err) => {
             console.log(err);
             return false;
@@ -29,8 +29,8 @@ const findBattleData = async (teamData) => {
         });
         if (result) {
             const { process, winner } = result[0];
-            return { error: false, process: JSON.parse(process), winner };
-        } else {
+            return { error: false, process:JSON.parse(process,JSON), winner };
+        }else{
             return { error: true };
         }
     } catch (err) {
