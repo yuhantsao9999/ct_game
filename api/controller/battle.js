@@ -28,11 +28,7 @@ const insertBattleProcess = async (teamData) => {
         const { activityName, playerA, playerB, process, winner, game } = teamData;
         console.log('typeof process', typeof process);
         console.log('roughSizeOfObject process', roughSizeOfObject(process));
-        console.log('typeof JSON.stringify(process)', typeof JSON.stringify(process));
-        console.log('roughSizeOfObject JSON.stringify(process)', roughSizeOfObject(JSON.stringify(process)));
-        const sql = `INSERT INTO Battle (activityName, playerA, playerB, winner, process, game) VALUES ('${activityName}', '${playerA}', '${playerB}','${winner}','${JSON.stringify(
-            process
-        )}','${game}') ON DUPLICATE KEY UPDATE process = '${process}', winner = '${winner}' `;
+        const sql = `INSERT INTO Battle (activityName, playerA, playerB, winner, process, game) VALUES ('${activityName}', '${playerA}', '${playerB}','${winner}','${process}','${game}') ON DUPLICATE KEY UPDATE process = '${process}', winner = '${winner}' `;
         const result = await mysql.query(sql).catch((err) => {
             console.log(err);
             return false;
