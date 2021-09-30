@@ -271,6 +271,16 @@ const battleOfTwoTeam = async (data) => {
     const oldscoreII =
         document.getElementsByClassName('round')[round].childNodes[match].childNodes[0].childNodes[1].childNodes[1]
             .innerText;
+    const isTeam1Upload =
+        document.getElementsByClassName('round')[round].childNodes[match].childNodes[0].childNodes[0].style.color ==
+        'red'
+            ? false
+            : true;
+    const isTeam2Upload =
+        document.getElementsByClassName('round')[round].childNodes[match].childNodes[0].childNodes[1].style.color ==
+        'red'
+            ? false
+            : true;
     if (team1 === 'TBD' || team2 === 'TBD' || team1 === 'BYE' || team2 === 'BYE') {
         return;
     }
@@ -288,7 +298,7 @@ const battleOfTwoTeam = async (data) => {
             pythonCodeB: fetchPythonCodeDataResultOfPlayerB,
         };
         //利用 python code 取得對戰過程
-        if (fetchPythonCodeDataResultOfPlayerA && fetchPythonCodeDataResultOfPlayerB) {
+        if (isTeam1Upload && isTeam2Upload) {
             const fetchBattleProcessDataResult = await fetchBattleProcess(pythonCodeData).then((response) => {
                 return response;
             });
@@ -3431,8 +3441,13 @@ const battleOfTwoTeam = async (data) => {
             // initialize result of next round
             globalData['results'][round + 1][match / 2] = [, , { round: round + 1, match: match / 2 }];
             plot(globalData, false);
-        } else if (fetchPythonCodeDataResultOfPlayerA || fetchPythonCodeDataResultOfPlayerB) {
+        } else if (isTeam1Upload || isTeam2Upload) {
             //兩組中有一組沒有上傳檔案
+            if (isTeam1Upload) {
+                alert(`${Team2} 棄權本場次，無對戰過程。`);
+            } else {
+                alert(`${Team1}棄權本場次，無對戰過程。`);
+            }
             globalData['results'][round][match] = [
                 fetchPythonCodeDataResultOfPlayerA ? 1 : 0,
                 fetchPythonCodeDataResultOfPlayerB ? 1 : 0,
@@ -3443,7 +3458,7 @@ const battleOfTwoTeam = async (data) => {
             globalData['results'][round + 1][match / 2] = [, , { round: round + 1, match: match / 2 }];
             plot(globalData, false);
         } else {
-            alert(`${team1},${team2} 程式碼有誤，請檢查程式`);
+            alert(`${team1},${team2} 未上傳程式碼，兩隊棄權本場次。`);
             document.getElementsByClassName('round')[round].getElementsByClassName('match')[
                 match
             ].childNodes[0].childNodes[0].style.backgroundColor = 'red';
