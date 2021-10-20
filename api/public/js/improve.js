@@ -99,7 +99,7 @@ const uploadTeamFile = async () => {
             }
             return response.text();
         })
-        .then((response) => {
+        .then(async (response) => {
             let xml, code;
             try {
                 xml = Blockly.Xml.textToDom(response);
