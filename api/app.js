@@ -21,6 +21,7 @@ app.use(express.static('public', { extensions: ['html'] }));
 app.use('/', pages.main);
 app.use('/api', pages.set);
 app.use('/api', pages.upload);
+app.use('/api', pages.improve);
 app.use('/api', pages.grouping);
 app.use('/api', publicApi.convertCode);
 app.use('/api', publicApi.battleProcess);

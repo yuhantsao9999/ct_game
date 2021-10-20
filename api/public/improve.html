@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="./css/upload.css" />
+        <title>CT Game improve</title>
+    </head>
+    <body>
+        <!-- header -->
+        <div class="header-wapper">
+            <div class="logoWapper">
+                <a href="./main"> <img class="logo" src="./assets/image/beaver.png" alt="logo" /></a>
+                <h1>西瓜棋自我測試 challenge</h1>
+            </div>
+        </div>
+        <!-- content -->
+        <div class="content-wapper">
+            <div class="beaver-wapper">
+                <img class="beaver" src="./assets/image/西瓜棋_小海狸.png" alt="" />
+            </div>
+            <div class="login-wapper">
+                <img class="title" src="./assets/image/西瓜棋_標題.png" alt="" />
+                <!-- input -->
+                <div class="form">
+                    <div class="tab-content">
+                        <h1>上傳測試用程式碼</h1>
+                        <div class="field-wrap">
+                            <div class="button-wrapper">
+                                <span class="label"> 選擇檔案 </span>
+                                <input
+                                    type="file"
+                                    name="upload"
+                                    id="upload"
+                                    class="upload-box"
+                                    placeholder="選擇檔案"
+                                    onchange="processSelectedFiles(this)"
+                                    accept=".aia"
+                                />
+                            </div>
+                            <p>檔案格式僅支援 aia</p>
+                            <p id="file-return"></p>
+                        </div>
+                        <button onclick="uploadTeamFile()" type="submit" class="button button-block">挑戰</button>
+                    </div>
+                </div>
+            </div>
+            <div class="robot-wapper">
+                <img class="robot" src="./assets/image/西瓜棋_機器人.png" alt="" />
+            </div>
+        </div>
+
+        <div class="footer-wapper">
+            <div class="footer">
+                <div class="copyright">© 國立臺灣師範大學  資訊工程系  VIPLab</div>
+            </div>
+        </div>
+    </body>
+    <script src="js/improve.js"></script>
+    <script src="./js/convertToPython/google-blockly/blockly_uncompressed.js"></script>
+    <script src="./js/convertToPython/google-blockly/blocks/logic.js"></script>
+    <script src="./js/convertToPython/google-blockly/blocks/loops.js"></script>
+    <script src="./js/convertToPython/google-blockly/blocks/math.js"></script>
+    <script src="./js/convertToPython/google-blockly/blocks/text.js"></script>
+    <script src="./js/convertToPython/google-blockly/blocks/lists.js"></script>
+    <script src="./js/convertToPython/google-blockly/blocks/colour.js"></script>
+    <script src="./js/convertToPython/google-blockly/blocks/variables.js"></script>
+    <script src="./js/convertToPython/google-blockly/blocks/procedures.js"></script>
+    <script src="./js/convertToPython/google-blockly/generators/python.js"></script>
+    <script src="./js/convertToPython/google-blockly/generators/python/logic.js"></script>
+    <script src="./js/convertToPython/google-blockly/generators/python/loops.js"></script>
+    <script src="./js/convertToPython/google-blockly/generators/python/math.js"></script>
+    <script src="./js/convertToPython/google-blockly/generators/python/text.js"></script>
+    <script src="./js/convertToPython/google-blockly/generators/python/lists.js"></script>
+    <script src="./js/convertToPython/google-blockly/generators/python/colour.js"></script>
+    <script src="./js/convertToPython/google-blockly/generators/python/variables.js"></script>
+    <script src="./js/convertToPython/google-blockly/generators/python/procedures.js"></script>
+    <script src="./js/convertToPython/google-blockly/msg/js/en.js"></script>
+</html>

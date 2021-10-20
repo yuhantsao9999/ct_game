@@ -65,8 +65,7 @@ const BeEatenYellowChesses = styled.div`
 const TeamList = (props) => {
     let { sides, winnerSide } = props;
     const result = useContext(ContextStore);
-    // console.log('winner result', result);
-    // let params = queryString.parse(window.location.search);
+    const { activityName } = useParams();
     const { playerA } = useParams();
     const { playerB } = useParams();
 
@@ -90,25 +89,25 @@ const TeamList = (props) => {
             )}
             <div className="nameList">
                 <div className="up">
-                    <TeamListItem teamColor="#d80f0f"></TeamListItem>
-                    {playerA}
-                </div>
-                {/* 置入紅色方吃到的黃棋子 */}
-                <BeEatenChessesWrapper>
-                    {result.yellow.map((item, i) => (
-                        <BeEatenYellowChesses key={`beEatenYellowChesses-${item}-${i}`}></BeEatenYellowChesses>
-                    ))}
-                </BeEatenChessesWrapper>
-            </div>
-            <div className="nameList">
-                <div className="up">
                     <TeamListItem teamColor="#f5f516"></TeamListItem>
-                    {playerB}
+                    {activityName === 'improve' ? '你的對手' : playerB}
                 </div>
                 {/* 置入黃色方吃到的紅棋子 */}
                 <BeEatenChessesWrapper>
                     {result.red.map((item, i) => (
                         <BeEatenRedChesses key={`beEatenRedChesses-${item}-${i}`}></BeEatenRedChesses>
+                    ))}
+                </BeEatenChessesWrapper>
+            </div>
+            <div className="nameList">
+                <div className="up">
+                    <TeamListItem teamColor="#d80f0f"></TeamListItem>
+                    {activityName === 'improve' ? '你的程式' : playerA}
+                </div>
+                {/* 置入紅色方吃到的黃棋子 */}
+                <BeEatenChessesWrapper>
+                    {result.yellow.map((item, i) => (
+                        <BeEatenYellowChesses key={`beEatenYellowChesses-${item}-${i}`}></BeEatenYellowChesses>
                     ))}
                 </BeEatenChessesWrapper>
             </div>

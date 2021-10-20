@@ -35,8 +35,44 @@ const findPythonCode = async (teamData) => {
         return err;
     }
 };
+const insertPretestPythonCode = async (code) => {
+    const { pythonCode } = code;
+    try {
+        const sql = `INSERT INTO PretestCode (pythonCode) VALUES ('${pythonCode}')`;
+        const result = await mysql.query(sql).catch((err) => {
+            console.log(err);
+            return false;
+        });
+        if (result) {
+            return { error: false };
+        }
+        return { error: true };
+    } catch (err) {
+        return err;
+    }
+};
+
+const findOpponentPythonCode = async () => {
+    try {
+        const sql = `SELECT pythonCode FROM PretestCode ORDER BY RAND() LIMIT 1`;
+        const result = await mysql.query(sql).catch((err) => {
+            console.log(err);
+            return false;
+        });
+        if (result.length > 0) {
+            const { pythonCode } = result[0];
+            return { error: false, pythonCode };
+        } else {
+            return { error: true };
+        }
+    } catch (err) {
+        return err;
+    }
+};
 
 module.exports = {
     insertPythonCode,
     findPythonCode,
+    insertPretestPythonCode,
+    findOpponentPythonCode,
 };

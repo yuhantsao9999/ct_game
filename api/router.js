@@ -3,6 +3,7 @@ const pages = {
     grouping: require('./routes/grouping'),
     set: require('./routes/set'),
     main: require('./routes/main'),
+    improve: require('./routes/improve'),
 };
 
 const publicApi = {

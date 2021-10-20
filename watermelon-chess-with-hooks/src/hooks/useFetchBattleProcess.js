@@ -10,10 +10,17 @@ export const useFetchBattleData = (activityName, playerA, playerB) => {
         const fetchBattleProcess = async () => {
             setIsLoading(true);
             try {
-                const battleProcessResult = await fetchBattleDataStream(activityName, playerA, playerB).then(
-                    (response) => response
-                );
-                setResult(battleProcessResult);
+                if (activityName == 'improve') {
+                    const result = JSON.parse(localStorage.getItem('challengeProcess'));
+                    const battleProcessResult = { winner: result.win, ...result };
+                    delete battleProcessResult.win;
+                    setResult(battleProcessResult);
+                } else {
+                    const battleProcessResult = await fetchBattleDataStream(activityName, playerA, playerB).then(
+                        (response) => response
+                    );
+                    setResult(battleProcessResult);
+                }
             } catch (error) {
                 setError(error);
             }

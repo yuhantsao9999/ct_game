@@ -31,12 +31,11 @@ function Game() {
         },
     ]);
     const { result: battleData, playerA, playerB } = useContext(BattleProcessContext);
-
+    console.log('battleData', battleData);
     let [actions, setActions] = useState(initData);
     let [index, setIndex] = useState(0);
     let [pick, setPick] = useState(false);
     const [isPlaying, setPlaying] = useState(false);
-    // const [isToSpecifedStep, setIsToSpecifedStep] = useState(false);
 
     useEffect(() => {
         const convertBattleProcess = matchBattleProcessData(battleData.process);
@@ -58,33 +57,6 @@ function Game() {
         if (sides.includes(winnerSide)) return;
         setPick((prevPick) => !prevPick);
     };
-
-    // useEffect(() => {
-    //     //跳到第i步
-    //     for (let i = 0; i < specifedStep * 2; i++) {
-    //         (function (x) {
-    //             setTimeout(function () {
-    //                 setPick((prevPick) => !prevPick);
-    //             }, 250);
-    //         })(i);
-    //     }
-    // }, [specifedStep]);
-
-    // useInterval(
-    //     () => {
-    //         if (sides.includes(winnerSide)) return;
-    //         setPick((prevPick) => !prevPick);
-    //     },
-
-    //     isToSpecifedStep ? 25 : null
-    // );
-
-    // useEffect(() => {
-    //     if (sides.includes(winnerSide) || index == specifedStep) {
-    //         setIsToSpecifedStep(false);
-    //         setPlaying(false);
-    //     }
-    // }, [index, specifedStep, sides, winnerSide]);
 
     const play = () => {
         // 已經有人勝出了，返回
