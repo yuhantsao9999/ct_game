@@ -32,7 +32,7 @@ const fetchBattleProcess = async (pythonCodeData) => {
         const formData = new FormData();
         formData.append('pythonCodeData', JSON.stringify(pythonCodeData));
         try {
-            return fetch('http:140.122.164.194:5000/battle', {
+            return fetch('http://140.122.164.194:5000/battle', {
                 mode: 'cors',
                 method: 'post',
                 body: formData,
@@ -45,7 +45,8 @@ const fetchBattleProcess = async (pythonCodeData) => {
                 })
                 .catch(async (error) => {
                     console.error('Error:', error);
-                    return await fetchBattleProcess(pythonCodeData);
+                    alert('系統忙碌中，請重新整理網頁，稍後再重新上傳');
+                    document.getElementById('submit').innerHTML = '挑戰';
                 });
         } catch (error) {
             return;
@@ -81,13 +82,19 @@ const insertPretestPythonCode = async (code) => {
 
 //進行檔案上傳與挑戰
 const uploadTeamFile = async () => {
+    document.getElementById('submit').innerHTML = '檔案上傳中請稍候';
     const input = document.querySelector('input[type="file"]');
     const formDataforUpload = new FormData();
     for (file of input.files) {
         formDataforUpload.append('files', file, file.name);
     }
+    const data = {
+        teamId: 'Nan',
+        teamName: 'improve',
+    };
+    formDataforUpload.append('data', JSON.stringify(data));
     //取得檔案轉換出的 xml
-    fetch('http:140.122.164.194:5000/upload', {
+    fetch('http://140.122.164.194:5000/upload', {
         mode: 'cors',
         method: 'post',
         body: formDataforUpload,
@@ -121,7 +128,7 @@ const uploadTeamFile = async () => {
                 throw error;
             }
             const pythonCodeData = {
-                pythonCodeA: pretestOpponentCode,
+                pythonCodeA: pretestOpponentCode, 
                 pythonCodeB: code,
             };
             const newFormData = new FormData();
@@ -3213,12 +3220,11 @@ const uploadTeamFile = async () => {
                 localStorage.removeItem('challengeProcess');
                 localStorage.setItem('challengeProcess', JSON.stringify(fetchBattleProcessDataResult));
                 insertPretestPythonCode(code);
-                window.location.href =
-                    window.location.protocol +
-                    '' +
-                    window.location.hostname +
-                    `:3080/watermelonChess/improve/youself/randomTeam`;
+                window.location.href =`/watermelonChess/improve/youself/randomTeam`;
             }
         })
-        .catch((error) => alert('上傳程式碼有誤，請檢查後再重新挑戰'));
+        .catch((error) => {
+            alert('上傳程式碼有誤，請檢查後再重新挑戰');
+            document.getElementById('submit').innerHTML = '挑戰';
+        });
 };

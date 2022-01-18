@@ -186,10 +186,14 @@ export const matchBoardIndex = (boardNumber) => {
 
 //處理獲勝方的狀況 Red: 0,Yellow: 1 ,平手:-1
 export const mappingWinnerIndex = (battleData, playerA, playerB) => {
-    switch (battleData.winner) {
+  switch (battleData.winner) {
         case playerA:
             return 0;
         case playerB:
+            return 1;
+        case 'Red':
+            return 0;
+        case 'Yellow':
             return 1;
         default:
             return -1;

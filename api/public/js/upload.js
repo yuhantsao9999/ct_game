@@ -37,6 +37,7 @@ const timeToFormat = (time) => {
 };
 
 const uploadTeamFile = async () => {
+    document.getElementById('submit').innerHTML = '檔案上傳中請稍候';
     const getUrlString = location.href;
     const url = new URL(getUrlString);
     const teamId = url.searchParams.get('teamId');
@@ -152,14 +153,19 @@ const uploadTeamFile = async () => {
                                 .catch((error) => {
                                     console.error('Error:', error);
                                     alert('上傳程式碼有誤，請檢查後再重新上傳');
+                                    document.getElementById('submit').innerHTML = '挑戰';
                                 });
                         })
                         .catch((error) => {
                             console.error('Error:', JSON.stringify(error));
                             alert('上傳程式碼有誤，請檢查後再重新上傳');
+                            document.getElementById('submit').innerHTML = '挑戰';
                         });
                 })
-                .catch((error) => alert('上傳程式碼有誤，請檢查後再重新上傳'));
+                .catch((error) => {
+                    alert('上傳程式碼有誤，請檢查後再重新上傳')
+                    document.getElementById('submit').innerHTML = '挑戰';
+                });
         }
     } else {
         alert('請登入');

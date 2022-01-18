@@ -171,7 +171,7 @@ const viewDetailOrShowResult = (team1, team2, isEven) => {
             window.location.protocol +
                 '//' +
                 window.location.hostname +
-                `:3080/watermelonChess/${activityName}/${team1}/${team2}`
+                `/watermelonChess/${activityName}/${team1}/${team2}`
         );
     }
 };
@@ -3443,7 +3443,7 @@ const battleOfTwoTeam = async (data) => {
             globalData['results'][round + 1][match / 2] = [, , { round: round + 1, match: match / 2 }];
             plot(globalData, false);
         } else {
-            alert(`${team1},${team2} 程式碼有誤，請檢查程式`);
+           // alert(`${team1},${team2} 程式碼有誤，請檢查程式`);
             document.getElementsByClassName('round')[round].getElementsByClassName('match')[
                 match
             ].childNodes[0].childNodes[0].style.backgroundColor = 'red';
